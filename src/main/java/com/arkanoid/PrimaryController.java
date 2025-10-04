@@ -1,6 +1,7 @@
-package com.example;
+package com.arkanoid;
 
 import java.io.IOException;
+
 import javafx.fxml.FXML;
 
 public class PrimaryController {
