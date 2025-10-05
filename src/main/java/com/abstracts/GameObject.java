@@ -1,5 +1,7 @@
 package com.abstracts;
 
+import javafx.scene.canvas.GraphicsContext;
+
 public abstract class GameObject {
     private int x;
     private int y;
@@ -20,9 +22,11 @@ public abstract class GameObject {
         this.height = height;
     }
 
-    public void update() {}
+    public void update() {
+    }
 
-    public void render() {}
+    public void render(GraphicsContext gc) {
+    }
 
     public int getX() {
         return x;
