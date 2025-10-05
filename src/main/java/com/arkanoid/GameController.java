@@ -97,9 +97,16 @@ public class GameController {
         // bounce wall
         if (ball.getX() - ball.getRadius() <= 0 || 
             ball.getX() + ball.getRadius() >= WIDTH) {
+            if(ball.getX() > WIDTH / 2) {
+                ball.setX(WIDTH - ball.getRadius());
+            }
+            else {
+                ball.setX(0 + ball.getRadius());
+            }
             ball.reverseDx();
         }
         if (ball.getY() - ball.getRadius() <= 0) {
+            ball.setY(0 + ball.getRadius());
             ball.reverseDy();
         }
 
@@ -146,5 +153,4 @@ public class GameController {
         gameStarted = false;
         paddle.setX(WIDTH / 2 - (paddle.getWidth() / 2));
     }
-
 }

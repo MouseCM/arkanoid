@@ -1,8 +1,8 @@
 package com.abstracts;
 
 public abstract class MovableObject extends GameObject {
-    private int dx;
-    private int dy;
+    private double dx;
+    private double dy;
     private double speed;
 
     public MovableObject() {
@@ -11,13 +11,13 @@ public abstract class MovableObject extends GameObject {
         this.dy = 0;
     }
 
-    public MovableObject(int dx, int dy) {
+    public MovableObject(double dx, double dy) {
         super();
         this.dx = dx;
         this.dy = dy;
     }
 
-    public MovableObject(int x, int y, int width, int height, int dx, int dy, double speed) {
+    public MovableObject(double x, double y, double width, double height, double dx, double dy, double speed) {
         super(x, y, width, height);
         this.dx = dx;
         this.dy = dy;
@@ -30,19 +30,19 @@ public abstract class MovableObject extends GameObject {
     }
 
 
-    public int getDx() {
+    public double getDx() {
         return dx;
     }
 
-    public void setDx(int dx) {
+    public void setDx(double dx) {
         this.dx = dx;
     }
 
-    public int getDy() {
+    public double getDy() {
         return dy;
     }
 
-    public void setDy(int dy) {
+    public void setDy(double dy) {
         this.dy = dy;
     }
 

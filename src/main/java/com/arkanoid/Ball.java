@@ -7,20 +7,19 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Ball extends MovableObject {
-    private int radius;
-    private double angle;
+    private double radius;
 
     public Ball() {
         super();
         this.radius = 0;
     }
 
-    public Ball(int x, int y, int dx, int dy, int radius, double speed) {
+    public Ball(double x, double y, double dx, double dy, double radius, double speed) {
         super(x, y, 0, 0, dx, dy, speed);
         this.radius = radius;
     }
 
-    public int getRadius() {
+    public double getRadius() {
         return radius;
     }
 
@@ -59,7 +58,7 @@ public class Ball extends MovableObject {
 
     public void bouncePaddle(Paddle paddle) {
         double hitPos = (getX() - paddle.getX()) / paddle.getWidth();
-        setDx((int) ((hitPos-0.5) * 8));
+        setDx((hitPos-0.5) * 8);
         reverseDy();
     }
 
