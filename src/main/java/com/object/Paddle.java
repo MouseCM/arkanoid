@@ -1,4 +1,4 @@
-package com.arkanoid;
+package com.object;
 
 import com.abstracts.MovableObject;
 
