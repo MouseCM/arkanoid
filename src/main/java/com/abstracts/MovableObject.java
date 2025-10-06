@@ -24,9 +24,9 @@ public abstract class MovableObject extends GameObject {
         this.speed = speed;
     }
 
-    public void move() {
-        setX((int) (getX() + speed * dx));
-        setY((int) (getY() + speed * dy));
+    public void update() {
+        setX(getX() + speed * dx);
+        setY(getY() + speed * dy);
     }
 
 
