@@ -31,7 +31,7 @@ public class GameController {
         gameCanvas.setOnKeyPressed(e -> handleKeyPressed(e.getCode()));
         gameCanvas.setOnKeyReleased(e -> handleKeyReleased(e.getCode()));
 
-        ball = new Ball(WIDTH / 2, HEIGHT - 30, 3, -3, 10, 1.5);
+        ball = new Ball(WIDTH / 2, HEIGHT - 30, 3, -3, 10, 5.0, 45);
         paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 20, 1, 0, 100, 10, 10);
 
         startGameLoop();
@@ -101,12 +101,12 @@ public class GameController {
                 ball.setX(WIDTH - ball.getRadius());
             }
             else {
-                ball.setX(0 + ball.getRadius());
+                ball.setX(ball.getRadius());
             }
             ball.reverseDx();
         }
         if (ball.getY() - ball.getRadius() <= 0) {
-            ball.setY(0 + ball.getRadius());
+            ball.setY(ball.getRadius());
             ball.reverseDy();
         }
 
@@ -127,7 +127,7 @@ public class GameController {
             ball.bouncePaddle(paddle);
         }
 
-        ball.move();
+        ball.update();
     }
 
     private void render() {

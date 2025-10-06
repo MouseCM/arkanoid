@@ -18,12 +18,12 @@ public class Paddle extends MovableObject {
 
     public void moveLeft() {
         setDx(-1);
-        move();
+        update();
     }
 
     public void moveRight() {
         setDx(1);
-        move();
+        update();
     }
 
     public void render(GraphicsContext gc) {

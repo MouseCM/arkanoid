@@ -8,15 +8,18 @@ import javafx.scene.paint.Color;
 
 public class Ball extends MovableObject {
     private double radius;
+    private double angle;
 
     public Ball() {
         super();
         this.radius = 0;
     }
 
-    public Ball(double x, double y, double dx, double dy, double radius, double speed) {
+    public Ball(double x, double y, double dx, double dy, double radius, double speed, double angle) {
         super(x, y, 0, 0, dx, dy, speed);
         this.radius = radius;
+        setDx(getSpeed() * Math.cos(Math.toRadians(-45)));
+        setDy(getSpeed() * Math.sin(Math.toRadians(-45)));
     }
 
     public double getRadius() {
@@ -25,6 +28,16 @@ public class Ball extends MovableObject {
 
     public void setRadius(int radius) {
         this.radius = radius;
+    }
+
+    public double getAngle() {
+        return angle;
+    }
+
+    public void setAngle(double angle) {
+        this.angle = angle;
+        setDx(getSpeed() * Math.sin(Math.toRadians(angle)));
+        setDy(getSpeed() * Math.cos(Math.toRadians(angle)));
     }
 
     public void reverseDx() {
@@ -49,6 +62,19 @@ public class Ball extends MovableObject {
         gc.fillOval(getX() - getRadius(), getY() - getRadius(), getRadius()*2, getRadius()*2);
     }
 
+    @Override
+    public void update() {
+        double currentSpeed = Math.sqrt(getDx() * getDx() + getDy() * getDy());
+        
+        if (currentSpeed > 0) {  
+            setDx(getDx() / currentSpeed);
+            setDy(getDy() / currentSpeed);
+        }
+
+        setX(getX() + getDx() * getSpeed());
+        setY(getY() + getDy() * getSpeed());
+    }
+
     public boolean isCollision(GameObject other) {
         return getY() + getRadius() >= other.getY() && 
             getY() - getRadius() <= other.getY() + other.getHeight() &&
@@ -57,8 +83,11 @@ public class Ball extends MovableObject {
     }
 
     public void bouncePaddle(Paddle paddle) {
+        setY(paddle.getY() - getRadius());
+
         double hitPos = (getX() - paddle.getX()) / paddle.getWidth();
-        setDx((hitPos-0.5) * 8);
+        double angle = (hitPos - 0.5) * 120; 
+        setAngle(angle);
         reverseDy();
     }
 
