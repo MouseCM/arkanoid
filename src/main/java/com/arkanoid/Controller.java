@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.abstracts.Brick;
+import com.abstracts.GameObject;
 import com.object.Ball;
 import com.object.NormalBrick;
 import com.object.Paddle;
+import com.arkanoid.LevelIndex;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
@@ -18,7 +20,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 
 import java.util.Random;
-
 public class Controller {
     @FXML
     private Canvas gameCanvas;
@@ -33,10 +34,12 @@ public class Controller {
     private AnimationTimer gameLoop;
     private int score = 0;
     private int lives = 3;
+    private LevelIndex levelIndex = new LevelIndex();
 
     private Ball ball;
     private Paddle paddle;
     private List<Brick> bricks;
+    private int levelUpdate = 0;
 
     @FXML
     public void initialize() {
@@ -134,6 +137,9 @@ public class Controller {
             lives--;
             if (lives <= 0) {
                 gameOver = true;
+                levelUpdate = 0;
+                bricks.clear();
+                initBricks();   
             } else {
                 ball.resetBall(paddle);
                 gameStarted = false;
@@ -143,11 +149,19 @@ public class Controller {
         if (ball.isCollision(paddle)) {
             ball.bouncePaddle(paddle);
         }
+        if (levelUpdate == 0) {
+            Random rand = new Random(); 
+            levelUpdate = rand.nextInt(20); 
         for (int i = 0; i < bricks.size(); i++) {
-            if (bricks.get(i).brickint == 0)
-            bricks.get(i).setBrickType(i % 2 + 1);
+            if (levelIndex.levels[levelUpdate][i]>0)
+            bricks.get(i).setBrickType(levelIndex.levels[levelUpdate][i]);
+            else bricks.get(i).setDestroyed(true);  
+            } 
         }
         for(int i = 0; i < bricks.size(); i++) {
+            if (bricks.get(i).isDestroyed()){
+                continue;
+            }
             Brick brick = bricks.get(i);
             ball.setReversed(false);
             if (!brick.isDestroyed() && ball.isCollision(brick)) {
