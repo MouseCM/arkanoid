@@ -5,7 +5,17 @@ public abstract class Brick extends GameObject {
     private boolean destroyed;
     private String type;
     private int scoreValue;
-
+    private String BrickType="file:D:\\java\\New folder\\arkanoid\\assets\\brick1.png";
+    public int brickint=0;
+    public void setBrickType(int type){
+        if (type==1) this.BrickType="file:D:\\java\\New folder\\arkanoid\\assets\\brick1.png";
+        else if (type==2) this.BrickType="file:D:\\java\\New folder\\arkanoid\\assets\\brick2.png";
+        else this.BrickType="file:D:\\java\\New folder\\arkanoid\\assets\\brick1.png";
+        brickint=type;
+    }
+    public String getBrickType(){
+        return BrickType;
+    }  
     public Brick() {
         super();
         this.hitPoints = 0;
@@ -13,7 +23,7 @@ public abstract class Brick extends GameObject {
         this.type = "normal";
         this.scoreValue = 0;
     }
-
+  
     public Brick(double x, double y, double width, double height, int hitPoints, String type, int scoreValue) {
         super(x, y, width, height);
         this.hitPoints = hitPoints;
@@ -59,7 +69,14 @@ public abstract class Brick extends GameObject {
         if (hitPoints > 0) {
             hitPoints--;
             if (hitPoints == 0) {
-                destroyed = true;
+                if (brickint==1){
+                    brickint=0;
+                    destroyed = true;
+                }
+                else if (brickint >= 2){
+                    this.setBrickType(brickint-1);
+                    hitPoints=1;
+                }
             }
             return true;
         }

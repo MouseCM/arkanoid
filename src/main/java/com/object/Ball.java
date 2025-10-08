@@ -9,12 +9,14 @@ import javafx.scene.paint.Color;
 public class Ball extends MovableObject {
     private double radius;
     private double angle;
-
+    private boolean Reversed=false;
     public Ball() {
         super();
         this.radius = 0;
     }
-
+    public void setReversed(boolean r){
+        this.Reversed=r;
+    }
     public Ball(double x, double y, double dx, double dy, double radius, double speed, double angle) {
         super(x, y, 0, 0, dx, dy, speed);
         this.radius = radius;
@@ -52,8 +54,8 @@ public class Ball extends MovableObject {
         setX(paddle.getX() + paddle.getWidth() / 2);
         setY(paddle.getY() - getRadius() - 5);
 
-        setDx(3);
-        setDy(-3);
+        setDx(1);
+        setDy(-1);
     }
 
     @Override
@@ -80,6 +82,7 @@ public class Ball extends MovableObject {
             getY() - getRadius() <= other.getY() + other.getHeight() &&
             getX() >= other.getX() && 
             getX() <= other.getX() + other.getWidth();
+            
     }
 
     public void bouncePaddle(Paddle paddle) {
@@ -88,7 +91,10 @@ public class Ball extends MovableObject {
         double hitPos = (getX() - paddle.getX()) / paddle.getWidth();
         double angle = (hitPos - 0.5) * 120; 
         setAngle(angle);
-        reverseDy();
+        if (!Reversed) {
+            reverseDy();
+            setReversed(true);
+        }
     }
 
     public boolean isDeath(int HEIGHT) {

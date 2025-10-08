@@ -17,6 +17,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 
+import java.util.Random;
+
 public class Controller {
     @FXML
     private Canvas gameCanvas;
@@ -57,25 +59,29 @@ public class Controller {
     }
 
     private void handleKeyPressed(KeyCode key) {
-        if (key == KeyCode.LEFT) {
+        if (key == KeyCode.A) {
             leftPressed = true;
         }
-        if (key == KeyCode.RIGHT) {
+        if (key == KeyCode.D) {
             rightPressed = true;
         }
         if (key == KeyCode.SPACE && !gameStarted) {
+            ball.setReversed(false);
+            Random rand = new Random(); 
+            int n = rand.nextInt(30); 
+            ball.setAngle(HEIGHT - (45+n) );
             gameStarted = true;
         }
-        if (key == KeyCode.R && gameOver) {
+        if (key == KeyCode.SPACE && gameOver) {
             resetGame();
         }
     }
 
     private void handleKeyReleased(KeyCode key) {
-        if (key == KeyCode.LEFT) {
+        if (key == KeyCode.A) {
             leftPressed = false;
         }
-        if (key == KeyCode.RIGHT) {
+        if (key == KeyCode.D) {
             rightPressed = false;
         }
     }
@@ -137,15 +143,19 @@ public class Controller {
         if (ball.isCollision(paddle)) {
             ball.bouncePaddle(paddle);
         }
-
+        for (int i = 0; i < bricks.size(); i++) {
+            if (bricks.get(i).brickint == 0)
+            bricks.get(i).setBrickType(i % 2 + 1);
+        }
         for(int i = 0; i < bricks.size(); i++) {
             Brick brick = bricks.get(i);
+            ball.setReversed(false);
             if (!brick.isDestroyed() && ball.isCollision(brick)) {
                 
                 if (brick.takeHit()) {
                     score += brick.getScoreValue();
                 }
-
+                
                 double overlapLeft = (ball.getX() + ball.getRadius()) - brick.getX();
                 double overlapRight = (brick.getX() + brick.getWidth()) - (ball.getX() - ball.getRadius());
                 double overlapTop = (ball.getY() + ball.getRadius()) - brick.getY();
@@ -164,6 +174,7 @@ public class Controller {
                     ball.setY(brick.getY() - ball.getRadius());
                     ball.reverseDy();
                 } else {
+
                     ball.setY(brick.getY() + brick.getHeight() + ball.getRadius());
                     ball.reverseDy();
                 }

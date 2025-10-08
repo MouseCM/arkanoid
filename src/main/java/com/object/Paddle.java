@@ -3,7 +3,8 @@ package com.object;
 import com.abstracts.MovableObject;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import javafx.scene.image.Image;
+//import javafx.scene.paint.Color;
 
 public class Paddle extends MovableObject {
 
@@ -17,18 +18,18 @@ public class Paddle extends MovableObject {
 
 
     public void moveLeft() {
-        setDx(-1);
+        setDx(-0.75);
         update();
     }
 
     public void moveRight() {
-        setDx(1);
+        setDx(0.75);
         update();
     }
 
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.CYAN);
-        gc.fillRect(getX(), getY(), getWidth(), getHeight());
+        Image image = new Image("file:D:\\java\\New folder\\arkanoid\\assets\\paddle.png");
+        gc.drawImage(image, getX(), getY(), getWidth(), getHeight());   
     }
-
+    
 }

@@ -64,7 +64,7 @@ public class Renderer {
         gc.fillText("Press SPACE to start", WIDTH / 2 - 100, HEIGHT / 2);
         
         gc.setFont(Font.font("Arial", 14));
-        gc.fillText("Use LEFT/RIGHT arrows to move", WIDTH / 2 - 110, HEIGHT / 2 + 30);
+        gc.fillText("Use A/D to move", WIDTH / 2 - 110, HEIGHT / 2 + 30);
         gc.fillText("Click canvas to enable controls", WIDTH / 2 - 110, HEIGHT / 2 + 50);
     }
 
@@ -80,7 +80,7 @@ public class Renderer {
         
         gc.setFont(Font.font("Arial", 16));
         gc.setFill(Color.WHITE);
-        gc.fillText("Press R to restart", WIDTH / 2 - 70, HEIGHT / 2 + 40);
+        gc.fillText("Press SPACE to restart", WIDTH / 2 - 70, HEIGHT / 2 + 40);
     }
 
 
