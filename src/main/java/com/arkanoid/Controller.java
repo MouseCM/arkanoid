@@ -19,6 +19,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 
 import java.util.Random;
+import javafx.animation.AnimationTimer;
 
 public class Controller {
     @FXML
@@ -27,6 +28,11 @@ public class Controller {
     Renderer renderer;
     private static final int WIDTH = 720;
     private static final int HEIGHT = 600;
+    //
+    final long FPS = 120;
+    final long timePerFrame = 1000000000 / FPS;
+    private long lasttime = 0;
+
     private boolean leftPressed = false;
     private boolean rightPressed = false;
     private boolean gameStarted = false;
@@ -34,7 +40,7 @@ public class Controller {
     private AnimationTimer gameLoop;
     private int score = 0;
     private int lives = 3;
-   // private LevelIndex levelIndex = new LevelIndex();
+    // private LevelIndex levelIndex = new LevelIndex();
 
     private Ball ball;
     private Paddle paddle;
@@ -60,6 +66,10 @@ public class Controller {
 
         gameCanvas.requestFocus();
 
+    }
+
+    private void setNanotime() {
+        lasttime = System.nanoTime();
     }
 
     private void handleKeyPressed(KeyCode key) {
@@ -151,16 +161,6 @@ public class Controller {
         if (ball.isCollision(paddle)) {
             ball.bouncePaddle(paddle);
         }
-        // if (levelUpdate == 0) {
-        //     Random rand = new Random();
-        //     levelUpdate = rand.nextInt(20);
-        //     for (int i = 0; i < bricks.size(); i++) {
-        //         if (levelIndex.levels[levelUpdate][i] > 0)
-        //             bricks.get(i).setBrickType(levelIndex.levels[levelUpdate][i]);
-        //         else
-        //             bricks.get(i).setDestroyed(true);
-        //     }
-        // }
         for (int i = 0; i < bricks.size(); i++) {
             if (bricks.get(i).isDestroyed()) {
                 continue;
@@ -206,10 +206,22 @@ public class Controller {
     }
 
     private void render() {
-        renderer.clear();
         
-        // Image background = new Image("file:assets/iceburg/background.png");
-        // gc.drawImage(background, 0, 0, WIDTH, HEIGHT);
+        //fps stabilize
+        long frameDuration = System.nanoTime() - lasttime;
+        if (frameDuration < timePerFrame) {
+            long sleepTime = (timePerFrame - frameDuration) / 1_000_000; // ns -> ms
+            if (sleepTime > 0) {
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        lasttime = System.nanoTime();
+        renderer.clear();
         renderer.render(ball);
         renderer.render(paddle);
 
@@ -281,5 +293,5 @@ public class Controller {
         } catch (FileNotFoundException e) {
             System.err.println("Error loading brick layout: " + e.getMessage());
         }
-    }   
+    }
 }
