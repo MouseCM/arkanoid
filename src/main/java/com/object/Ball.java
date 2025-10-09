@@ -81,11 +81,10 @@ public class Ball extends MovableObject {
     }
 
     public boolean isCollision(GameObject other) {
-        return getY() + getRadius() >= other.getY() &&
-                getY() - getRadius() <= other.getY() + other.getHeight() &&
-                getX() + getRadius() >= other.getX() &&
-                getX() - getRadius() <= other.getX() + other.getWidth();
-
+        return getY() + getRadius() >= other.getY() && 
+            getY() - getRadius() <= other.getY() + other.getHeight() &&
+            getX() + getRadius() >= other.getX() && 
+            getX() - getRadius() <= other.getX() + other.getWidth();
     }
 
     public void bouncePaddle(Paddle paddle) {

@@ -51,7 +51,7 @@ public class Controller {
         gameCanvas.setOnKeyPressed(e -> handleKeyPressed(e.getCode()));
         gameCanvas.setOnKeyReleased(e -> handleKeyReleased(e.getCode()));
 
-        ball = new Ball(WIDTH / 2, HEIGHT - 30, 3, -3, 10, 5.0, 45);
+        ball = new Ball(WIDTH / 2, HEIGHT - 30, 3, -3, 10, 4, 45);
         paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 20, 1, 0, 100, 10, 10);
 
         initBricks();
@@ -151,22 +151,10 @@ public class Controller {
         if (ball.isCollision(paddle)) {
             ball.bouncePaddle(paddle);
         }
-        // if (levelUpdate == 0) {
-        //     Random rand = new Random();
-        //     levelUpdate = rand.nextInt(20);
-        //     for (int i = 0; i < bricks.size(); i++) {
-        //         if (levelIndex.levels[levelUpdate][i] > 0)
-        //             bricks.get(i).setBrickType(levelIndex.levels[levelUpdate][i]);
-        //         else
-        //             bricks.get(i).setDestroyed(true);
-        //     }
-        // }
-        for (int i = 0; i < bricks.size(); i++) {
-            if (bricks.get(i).isDestroyed()) {
-                continue;
-            }
+
+        // bounce brick
+        for(int i = 0; i < bricks.size(); i++) {
             Brick brick = bricks.get(i);
-            ball.setReversed(false);
             if (!brick.isDestroyed() && ball.isCollision(brick)) {
 
                 if (brick.takeHit()) {
