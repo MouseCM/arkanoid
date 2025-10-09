@@ -1,4 +1,4 @@
-package com.arkanoid;
+package com.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.abstracts.Brick;
+import com.arkanoid.Renderer;
 import com.object.Ball;
 import com.object.NormalBrick;
 import com.object.Paddle;
@@ -17,7 +18,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 
-public class Controller {
+public class GameController {
     @FXML
     private Canvas gameCanvas;
     private GraphicsContext gc;
@@ -46,11 +47,11 @@ public class Controller {
         gameCanvas.setOnKeyPressed(e -> handleKeyPressed(e.getCode()));
         gameCanvas.setOnKeyReleased(e -> handleKeyReleased(e.getCode()));
 
-        ball = new Ball(WIDTH / 2, HEIGHT - 30, 3, -3, 10, 4, 45);
+        ball = new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 10, 7, 45);
         paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 20, 1, 0, 100, 10, 10);
 
         initBricks();
-
+ 
         startGameLoop();
 
         gameCanvas.requestFocus();
