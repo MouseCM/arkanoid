@@ -1,10 +1,11 @@
 package com.object;
 
 import com.abstracts.Brick;
-
+import javafx.scene.image.Image;
 import javafx.scene.canvas.GraphicsContext;
 
 public class NormalBrick extends Brick {
+
     public NormalBrick() {
         super();
         setHitPoints(1);
@@ -19,11 +20,13 @@ public class NormalBrick extends Brick {
     public NormalBrick(double x, double y) {
         super(x, y, 30, 10, 1, "normal", 10);
     }
-    
+
     public void render(GraphicsContext gc) {
         if (!isDestroyed()) {
-            gc.setFill(javafx.scene.paint.Color.BLUE);
-            gc.fillRect(getX(), getY(), getWidth(), getHeight());
+            if (brickint != 0) {
+                Image img = new Image(getBrickType());
+                gc.drawImage(img, getX(), getY(), getWidth(), getHeight());
+            }
         }
     }
 }

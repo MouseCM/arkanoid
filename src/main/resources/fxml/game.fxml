@@ -5,8 +5,8 @@
 
 <StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.arkanoid.Controller"
 
-           prefWidth="600" 
-           prefHeight="500"
+           prefWidth="720" 
+           prefHeight="600"
            style="-fx-background-color: black;">
     
     <Canvas fx:id="gameCanvas" width="720" height="600"/>

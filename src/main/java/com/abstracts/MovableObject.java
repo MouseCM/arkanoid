@@ -29,7 +29,6 @@ public abstract class MovableObject extends GameObject {
         setY(getY() + speed * dy);
     }
 
-
     public double getDx() {
         return dx;
     }
