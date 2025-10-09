@@ -8,12 +8,15 @@ public abstract class GameObject {
     private double width;
     private double height;
     private String imageLocation;
+
     public void setImageLocation(String il) {
-         this.imageLocation = il;
-    }  
+        this.imageLocation = il;
+    }
+
     public String getImageLocation() {
-         return imageLocation;
-    }   
+        return imageLocation;
+    }
+
     public GameObject() {
         this.x = 0;
         this.y = 0;

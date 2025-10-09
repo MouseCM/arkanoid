@@ -16,20 +16,19 @@ public class Paddle extends MovableObject {
         super(x, y, width, height, dx, dy, speed);
     }
 
-
     public void moveLeft() {
-        setDx(-0.75);
+        setDx(-1);
         update();
     }
 
     public void moveRight() {
-        setDx(0.75);
+        setDx(1);
         update();
     }
 
     public void render(GraphicsContext gc) {
-        Image image = new Image("file:D:\\java\\New folder\\arkanoid\\assets\\paddle.png");
-        gc.drawImage(image, getX(), getY(), getWidth(), getHeight());   
+        Image image = new Image("file:assets/iceburg/paddle2.png");
+        gc.drawImage(image, getX(), getY(), getWidth(), getHeight());
     }
-    
+
 }

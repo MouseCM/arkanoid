@@ -9,14 +9,17 @@ import javafx.scene.paint.Color;
 public class Ball extends MovableObject {
     private double radius;
     private double angle;
-    private boolean Reversed=false;
+    private boolean Reversed = false;
+
     public Ball() {
         super();
         this.radius = 0;
     }
-    public void setReversed(boolean r){
-        this.Reversed=r;
+
+    public void setReversed(boolean r) {
+        this.Reversed = r;
     }
+
     public Ball(double x, double y, double dx, double dy, double radius, double speed, double angle) {
         super(x, y, 0, 0, dx, dy, speed);
         this.radius = radius;
@@ -54,21 +57,21 @@ public class Ball extends MovableObject {
         setX(paddle.getX() + paddle.getWidth() / 2);
         setY(paddle.getY() - getRadius() - 5);
 
-        setDx(1);
-        setDy(-1);
+        setDx(-3);
+        setDy(-3);
     }
 
     @Override
     public void render(GraphicsContext gc) {
         gc.setFill(Color.WHITE);
-        gc.fillOval(getX() - getRadius(), getY() - getRadius(), getRadius()*2, getRadius()*2);
+        gc.fillOval(getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
     }
 
     @Override
     public void update() {
         double currentSpeed = Math.sqrt(getDx() * getDx() + getDy() * getDy());
-        
-        if (currentSpeed > 0) {  
+
+        if (currentSpeed > 0) {
             setDx(getDx() / currentSpeed);
             setDy(getDy() / currentSpeed);
         }
@@ -78,18 +81,18 @@ public class Ball extends MovableObject {
     }
 
     public boolean isCollision(GameObject other) {
-        return getY() + getRadius() >= other.getY() && 
-            getY() - getRadius() <= other.getY() + other.getHeight() &&
-            getX() >= other.getX() && 
-            getX() <= other.getX() + other.getWidth();
-            
+        return getY() + getRadius() >= other.getY() &&
+                getY() - getRadius() <= other.getY() + other.getHeight() &&
+                getX() + getRadius() >= other.getX() &&
+                getX() - getRadius() <= other.getX() + other.getWidth();
+
     }
 
     public void bouncePaddle(Paddle paddle) {
         setY(paddle.getY() - getRadius());
 
         double hitPos = (getX() - paddle.getX()) / paddle.getWidth();
-        double angle = (hitPos - 0.5) * 120; 
+        double angle = (hitPos - 0.5) * 120;
         setAngle(angle);
         if (!Reversed) {
             reverseDy();

@@ -7,11 +7,10 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.abstracts.Brick;
-import com.abstracts.GameObject;
 import com.object.Ball;
 import com.object.NormalBrick;
 import com.object.Paddle;
-import com.arkanoid.LevelIndex;
+import javafx.scene.image.Image;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
@@ -20,6 +19,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 
 import java.util.Random;
+
 public class Controller {
     @FXML
     private Canvas gameCanvas;
@@ -34,7 +34,7 @@ public class Controller {
     private AnimationTimer gameLoop;
     private int score = 0;
     private int lives = 3;
-    private LevelIndex levelIndex = new LevelIndex();
+   // private LevelIndex levelIndex = new LevelIndex();
 
     private Ball ball;
     private Paddle paddle;
@@ -59,6 +59,7 @@ public class Controller {
         startGameLoop();
 
         gameCanvas.requestFocus();
+
     }
 
     private void handleKeyPressed(KeyCode key) {
@@ -70,9 +71,9 @@ public class Controller {
         }
         if (key == KeyCode.SPACE && !gameStarted) {
             ball.setReversed(false);
-            Random rand = new Random(); 
-            int n = rand.nextInt(30); 
-            ball.setAngle(HEIGHT - (45+n) );
+            Random rand = new Random();
+            int n = rand.nextInt(30);
+            ball.setAngle(HEIGHT - 75);
             gameStarted = true;
         }
         if (key == KeyCode.SPACE && gameOver) {
@@ -98,6 +99,7 @@ public class Controller {
             }
         };
         gameLoop.start();
+
     }
 
     private void update() {
@@ -139,7 +141,7 @@ public class Controller {
                 gameOver = true;
                 levelUpdate = 0;
                 bricks.clear();
-                initBricks();   
+                initBricks();
             } else {
                 ball.resetBall(paddle);
                 gameStarted = false;
@@ -149,35 +151,36 @@ public class Controller {
         if (ball.isCollision(paddle)) {
             ball.bouncePaddle(paddle);
         }
-        if (levelUpdate == 0) {
-            Random rand = new Random(); 
-            levelUpdate = rand.nextInt(20); 
+        // if (levelUpdate == 0) {
+        //     Random rand = new Random();
+        //     levelUpdate = rand.nextInt(20);
+        //     for (int i = 0; i < bricks.size(); i++) {
+        //         if (levelIndex.levels[levelUpdate][i] > 0)
+        //             bricks.get(i).setBrickType(levelIndex.levels[levelUpdate][i]);
+        //         else
+        //             bricks.get(i).setDestroyed(true);
+        //     }
+        // }
         for (int i = 0; i < bricks.size(); i++) {
-            if (levelIndex.levels[levelUpdate][i]>0)
-            bricks.get(i).setBrickType(levelIndex.levels[levelUpdate][i]);
-            else bricks.get(i).setDestroyed(true);  
-            } 
-        }
-        for(int i = 0; i < bricks.size(); i++) {
-            if (bricks.get(i).isDestroyed()){
+            if (bricks.get(i).isDestroyed()) {
                 continue;
             }
             Brick brick = bricks.get(i);
             ball.setReversed(false);
             if (!brick.isDestroyed() && ball.isCollision(brick)) {
-                
+
                 if (brick.takeHit()) {
                     score += brick.getScoreValue();
                 }
-                
+
                 double overlapLeft = (ball.getX() + ball.getRadius()) - brick.getX();
                 double overlapRight = (brick.getX() + brick.getWidth()) - (ball.getX() - ball.getRadius());
                 double overlapTop = (ball.getY() + ball.getRadius()) - brick.getY();
                 double overlapBottom = (brick.getY() + brick.getHeight()) - (ball.getY() - ball.getRadius());
-                
-                double minOverlap = Math.min(Math.min(overlapLeft, overlapRight), 
-                                            Math.min(overlapTop, overlapBottom));
-                
+
+                double minOverlap = Math.min(Math.min(overlapLeft, overlapRight),
+                        Math.min(overlapTop, overlapBottom));
+
                 if (minOverlap == overlapLeft) {
                     ball.setX(brick.getX() - ball.getRadius());
                     ball.reverseDx();
@@ -188,11 +191,10 @@ public class Controller {
                     ball.setY(brick.getY() - ball.getRadius());
                     ball.reverseDy();
                 } else {
-
                     ball.setY(brick.getY() + brick.getHeight() + ball.getRadius());
                     ball.reverseDy();
                 }
-                
+
                 if (bricks.stream().allMatch(b -> b == null || b.isDestroyed())) {
                     gameOver = true;
                 }
@@ -205,7 +207,9 @@ public class Controller {
 
     private void render() {
         renderer.clear();
-
+        
+        // Image background = new Image("file:assets/iceburg/background.png");
+        // gc.drawImage(background, 0, 0, WIDTH, HEIGHT);
         renderer.render(ball);
         renderer.render(paddle);
 
@@ -236,7 +240,13 @@ public class Controller {
     }
 
     private void initBricks() {
-        File file = new File("src/main/resources/layout/1.txt");
+        String path = "src/main/resources/layout/normal/";
+        Random rand = new Random();
+        levelUpdate = rand.nextInt(19) + 1;
+        path += Integer.toString(levelUpdate) + ".txt";
+        File file = new File("src/main/resources/layout/normal/layout.txt");
+        File index = new File(path);
+
         try (Scanner sc = new Scanner(file)) {
             bricks = new ArrayList<>();
             int n;
@@ -245,7 +255,6 @@ public class Controller {
             String type;
             n = sc.nextInt();
 
-            
             for (int i = 0; i < n; i++) {
                 double x = sc.nextDouble();
                 double y = sc.nextDouble();
@@ -260,5 +269,17 @@ public class Controller {
         } catch (FileNotFoundException e) {
             System.err.println("Error loading brick layout: " + e.getMessage());
         }
-    }
+        try (Scanner sc = new Scanner(index)) {
+            for (int i = 0; i < bricks.size(); i++) {
+                int btype = sc.nextInt();
+                if (btype > 0)
+                    bricks.get(i).setBrickType(btype);
+                else
+                    bricks.get(i).setDestroyed(true);
+            }
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Error loading brick layout: " + e.getMessage());
+        }
+    }   
 }
