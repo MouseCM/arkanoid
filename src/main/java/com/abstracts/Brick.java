@@ -5,24 +5,6 @@ public abstract class Brick extends GameObject {
     private boolean destroyed;
     private String type;
     private int scoreValue;
-    private String BrickType = "file:assets/iceburg/brick1.png";
-    public int brickint = 0;
-
-    public void setBrickType(int type) {
-        if (type == 1)
-            this.BrickType = "file:assets/iceburg/brick1.png";
-        else if (type == 2)
-            this.BrickType = "file:assets/iceburg/brick2.png";
-        else if (type == 3)
-            this.BrickType = "file:assets/iceburg/brick3.png";
-        else
-            this.BrickType = "file:assets/brick1.png";
-        brickint = type;
-    }
-
-    public String getBrickType() {
-        return BrickType;
-    }
 
     public Brick() {
         super();
@@ -76,16 +58,11 @@ public abstract class Brick extends GameObject {
         if (hitPoints > 0) {
             hitPoints--;
             if (hitPoints == 0) {
-                if (brickint == 1 || brickint == 0) {
-                    brickint = 0;
-                    destroyed = true;
-                } else if (brickint >= 2) {
-                    this.setBrickType(brickint - 1);
-                    hitPoints = 1;
-                }
+                destroyed = true;
             }
             return true;
         }
         return false;
     }
+
 }

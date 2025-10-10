@@ -11,6 +11,7 @@ import com.abstracts.Brick;
 import com.arkanoid.Renderer;
 import com.object.Ball;
 import com.object.NormalBrick;
+import com.object.StrongBrick;
 import com.object.Paddle;
 
 import javafx.animation.AnimationTimer;
@@ -19,6 +20,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 
+import java.util.Random;
+import javafx.animation.AnimationTimer;
+
+
 public class GameController {
     @FXML
     private Canvas gameCanvas;
@@ -26,6 +31,11 @@ public class GameController {
     Renderer renderer;
     private static final int WIDTH = 720;
     private static final int HEIGHT = 600;
+    //
+    final long FPS = 60;
+    final long timePerFrame = 1000000000 / FPS;
+    private long lasttime = 0;
+
     private boolean leftPressed = false;
     private boolean rightPressed = false;
     private boolean gameStarted = false;
@@ -33,7 +43,7 @@ public class GameController {
     private AnimationTimer gameLoop;
     private int score = 0;
     private int lives = 3;
-   // private LevelIndex levelIndex = new LevelIndex();
+    // private LevelIndex levelIndex = new LevelIndex();
 
     private Ball ball;
     private Paddle paddle;
@@ -191,9 +201,23 @@ public class GameController {
     }
 
     private void render() {
+        
+        //fps stabilize
+        long frameDuration = System.nanoTime() - lasttime;
+        if (frameDuration < timePerFrame) {
+            long sleepTime = (timePerFrame - frameDuration) / 1_000_000; // ns -> ms
+            if (sleepTime > 0) {
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        lasttime = System.nanoTime();
         renderer.clear();
-
-
+        
         for (Brick brick : bricks) {
             if (!brick.isDestroyed()) {
                 renderer.render(brick);
@@ -233,40 +257,45 @@ public class GameController {
         path += Integer.toString(levelUpdate) + ".txt";
         File file = new File("src/main/resources/layout/normal/layout.txt");
         File index = new File(path);
-
+        float[] x= new float[45];
+        float[] y= new float[45];
+        float width;
+        float height;
+        int size=0;
         try (Scanner sc = new Scanner(file)) {
             bricks = new ArrayList<>();
-            int n;
-            float width;
-            float height;
             String type;
+            int n;
             n = sc.nextInt();
-
+            if(size==0) size=n;
             for (int i = 0; i < n; i++) {
-                float x = (float) sc.nextFloat();
-                float y = sc.nextFloat();
+                 x[i] = sc.nextFloat();
+                 y[i] = sc.nextFloat();
                 width = sc.nextFloat();
                 height = sc.nextFloat();
                 type = sc.next();
-
-                if (type.equals("normal")) {
-                    bricks.add(new NormalBrick(x, y, width, height));
-                }
             }
         } catch (FileNotFoundException e) {
             System.err.println("Error loading brick layout: " + e.getMessage());
         }
         try (Scanner sc = new Scanner(index)) {
-            for (int i = 0; i < bricks.size(); i++) {
+            for (int i = 0; i < size; i++) {
                 int btype = sc.nextInt();
-                if (btype > 0)
-                    bricks.get(i).setBrickType(btype);
-                else
-                    bricks.get(i).setDestroyed(true);
+                if (btype > 1) {
+                    bricks.add( new StrongBrick(x[i],y[i],btype));
+                }
+               else if (btype == 1) {
+                bricks.add(new NormalBrick(x[i],y[i]));
+            }
+                else {
+                bricks.add(new NormalBrick(x[i],y[i]));
+                bricks.get(i).setHitPoints(0);
+                bricks.get(i).setDestroyed(true);
+                }
             }
 
         } catch (FileNotFoundException e) {
             System.err.println("Error loading brick layout: " + e.getMessage());
         }
-    }   
+    }
 }

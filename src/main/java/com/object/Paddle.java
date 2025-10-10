@@ -27,7 +27,7 @@ public class Paddle extends MovableObject {
     }
 
     public void render(GraphicsContext gc) {
-        Image image = new Image("file:assets/iceburg/paddle2.png");
+        Image image = new Image("file:assets/iceburg/paddle.png");
         gc.drawImage(image, getX(), getY(), getWidth(), getHeight());
     }
 
