@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 import com.abstracts.Brick;
@@ -11,7 +12,6 @@ import com.arkanoid.Renderer;
 import com.object.Ball;
 import com.object.NormalBrick;
 import com.object.Paddle;
-import javafx.scene.image.Image;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
@@ -69,10 +69,7 @@ public class GameController {
             rightPressed = true;
         }
         if (key == KeyCode.SPACE && !gameStarted) {
-            ball.setReversed(false);
-            Random rand = new Random();
-            int n = rand.nextInt(30);
-            ball.setAngle(HEIGHT - 75);
+            ball.setAngle(75);
             gameStarted = true;
         }
         if (key == KeyCode.SPACE && gameOver) {

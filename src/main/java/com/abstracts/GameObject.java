@@ -7,10 +7,6 @@ public abstract class GameObject {
     private float y;
     private float width;
     private float height;
-    private double x;
-    private double y;
-    private double width;
-    private double height;
     private String imageLocation;
 
     public void setImageLocation(String il) {
