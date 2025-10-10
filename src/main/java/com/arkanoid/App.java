@@ -2,10 +2,9 @@ package com.arkanoid;
 
 import java.io.IOException;
 
+import com.controller.ScreenController;
+
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
@@ -13,20 +12,28 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 
-    private static Scene scene;
+    private static Stage primaryStage;
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/game.fxml"));
+        // Parent root = FXMLLoader.load(getClass().getResource("/fxml/game.fxml"));
+        primaryStage = stage;
 
-        Scene scene = new Scene(root);
+
 
         stage.setTitle("Arkanoid");
-        stage.setScene(scene);
+        ScreenController.loadScreen("/fxml/menu.fxml");
         stage.setResizable(false);
 
         stage.show();
     }
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    
+
 
     public static void main(String[] args) {
         launch(args);

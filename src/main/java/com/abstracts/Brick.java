@@ -14,7 +14,7 @@ public abstract class Brick extends GameObject {
         this.scoreValue = 0;
     }
 
-    public Brick(double x, double y, double width, double height, int hitPoints, String type, int scoreValue) {
+    public Brick(float x, float y, float width, float height, int hitPoints, String type, int scoreValue) {
         super(x, y, width, height);
         this.hitPoints = hitPoints;
         this.destroyed = false;

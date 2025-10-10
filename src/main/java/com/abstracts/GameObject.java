@@ -3,10 +3,10 @@ package com.abstracts;
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class GameObject {
-    private double x;
-    private double y;
-    private double width;
-    private double height;
+    private float x;
+    private float y;
+    private float width;
+    private float height;
     private String imageLocation;
 
     public void setImageLocation(String il) {
@@ -24,7 +24,7 @@ public abstract class GameObject {
         this.height = 0;
     }
 
-    public GameObject(double x, double y, double width, double height) {
+    public GameObject(float x, float y, float width, float height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -37,35 +37,35 @@ public abstract class GameObject {
     public void render(GraphicsContext gc) {
     }
 
-    public double getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(double x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public double getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(double y) {
+    public void setY(float y) {
         this.y = y;
     }
 
-    public double getWidth() {
+    public float getWidth() {
         return width;
     }
 
-    public void setWidth(double width) {
+    public void setWidth(float width) {
         this.width = width;
     }
 
-    public double getHeight() {
+    public float getHeight() {
         return height;
     }
 
-    public void setHeight(double height) {
+    public void setHeight(float height) {
         this.height = height;
     }
 }
