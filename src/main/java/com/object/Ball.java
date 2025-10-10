@@ -65,7 +65,7 @@ public class Ball extends MovableObject {
     @Override
     public void render(GraphicsContext gc) {
         gc.setFill(Color.WHITE);
-        gc.fillOval(getX() - getRadius(), getY() - getRadius(), getRadius()*2, getRadius()*2);
+        gc.fillOval(getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
     }
 
     @Override
