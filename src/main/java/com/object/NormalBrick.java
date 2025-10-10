@@ -12,11 +12,11 @@ public class NormalBrick extends Brick {
         setScoreValue(10);
     }
 
-    public NormalBrick(double x, double y, double width, double height) {
+    public NormalBrick(float x, float y, float width, float height) {
         super(x, y, width, height, 1, "normal", 10);
     }
 
-    public NormalBrick(double x, double y) {
+    public NormalBrick(float x, float y) {
         super(x, y, 30, 10, 1, "normal", 10);
     }
     

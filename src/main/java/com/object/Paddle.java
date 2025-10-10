@@ -11,7 +11,7 @@ public class Paddle extends MovableObject {
         super();
     }
 
-    public Paddle(double x, double y, double dx, double dy, double width, double height, double speed) {
+    public Paddle(float x, float y, float dx, float dy, float width, float height, float speed) {
         super(x, y, width, height, dx, dy, speed);
     }
 

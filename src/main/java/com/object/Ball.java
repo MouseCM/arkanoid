@@ -1,28 +1,34 @@
 package com.object;
 
+
 import com.abstracts.GameObject;
 import com.abstracts.MovableObject;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+
 public class Ball extends MovableObject {
-    private double radius;
-    private double angle;
+    private float radius;
+    private float angle;
 
     public Ball() {
         super();
         this.radius = 0;
     }
 
-    public Ball(double x, double y, double dx, double dy, double radius, double speed, double angle) {
+    public Ball(float x, float y, float dx, float dy, float radius, float speed, float angle) {
         super(x, y, 0, 0, dx, dy, speed);
         this.radius = radius;
-        setDx(getSpeed() * Math.cos(Math.toRadians(-45)));
-        setDy(getSpeed() * Math.sin(Math.toRadians(-45)));
+
+        // setDx(getSpeed() * (float) Math.cos(Math.toRadians(angle)));
+        // setDy(getSpeed() * (float) Math.sin(Math.toRadians(angle)));
+        setAngle(angle);
+        setDx(getSpeed() * (float) Math.sin(Math.toRadians(angle)));
+        setDy(getSpeed() * (float) Math.cos(Math.toRadians(angle)));
     }
 
-    public double getRadius() {
+    public float getRadius() {
         return radius;
     }
 
@@ -30,14 +36,12 @@ public class Ball extends MovableObject {
         this.radius = radius;
     }
 
-    public double getAngle() {
+    public float getAngle() {
         return angle;
     }
 
-    public void setAngle(double angle) {
+    public void setAngle(float angle) {
         this.angle = angle;
-        setDx(getSpeed() * Math.sin(Math.toRadians(angle)));
-        setDy(getSpeed() * Math.cos(Math.toRadians(angle)));
     }
 
     public void reverseDx() {
@@ -50,10 +54,12 @@ public class Ball extends MovableObject {
 
     public void resetBall(Paddle paddle) {
         setX(paddle.getX() + paddle.getWidth() / 2);
-        setY(paddle.getY() - getRadius() - 5);
+        setY(paddle.getY() - getRadius() - 1);
 
-        setDx(3);
-        setDy(-3);
+        setAngle(75);
+        setDx(getSpeed() * (float) Math.sin(Math.toRadians(angle)));
+        setDy(getSpeed() * (float) Math.cos(Math.toRadians(angle)));
+        
     }
 
     @Override
@@ -64,15 +70,8 @@ public class Ball extends MovableObject {
 
     @Override
     public void update() {
-        double currentSpeed = Math.sqrt(getDx() * getDx() + getDy() * getDy());
-        
-        if (currentSpeed > 0) {  
-            setDx(getDx() / currentSpeed);
-            setDy(getDy() / currentSpeed);
-        }
-
-        setX(getX() + getDx() * getSpeed());
-        setY(getY() + getDy() * getSpeed());
+        setX(getX() + getDx());
+        setY(getY() + getDy());
     }
 
     public boolean isCollision(GameObject other) {
@@ -82,16 +81,22 @@ public class Ball extends MovableObject {
             getX() - getRadius() <= other.getX() + other.getWidth();
     }
 
+
+
     public void bouncePaddle(Paddle paddle) {
         setY(paddle.getY() - getRadius());
 
-        double hitPos = (getX() - paddle.getX()) / paddle.getWidth();
-        double angle = (hitPos - 0.5) * 120; 
+        float hitPos = (getX() - paddle.getX()) / paddle.getWidth();
+        float angle = (float) ((hitPos - 0.5) * 120); 
+        
         setAngle(angle);
+        setDx(getSpeed() * (float) Math.sin(Math.toRadians(angle)));
+        setDy(getSpeed() * (float) Math.cos(Math.toRadians(angle)));
+        
         reverseDy();
     }
 
     public boolean isDeath(int HEIGHT) {
-        return getY() - getRadius() > HEIGHT;
+        return getY() + getRadius() >= HEIGHT;
     }
 }
