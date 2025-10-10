@@ -1,16 +1,17 @@
-package com.arkanoid;
+package com.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 import com.abstracts.Brick;
+import com.arkanoid.Renderer;
 import com.object.Ball;
 import com.object.NormalBrick;
 import com.object.Paddle;
-import javafx.scene.image.Image;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
@@ -18,9 +19,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 
-import java.util.Random;
-
-public class Controller {
+public class GameController {
     @FXML
     private Canvas gameCanvas;
     private GraphicsContext gc;
@@ -51,11 +50,11 @@ public class Controller {
         gameCanvas.setOnKeyPressed(e -> handleKeyPressed(e.getCode()));
         gameCanvas.setOnKeyReleased(e -> handleKeyReleased(e.getCode()));
 
-        ball = new Ball(WIDTH / 2, HEIGHT - 30, 3, -3, 10, 4, 45);
+        ball = new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 10, 8, 75);
         paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 20, 1, 0, 100, 10, 10);
 
         initBricks();
-
+ 
         startGameLoop();
 
         gameCanvas.requestFocus();
@@ -70,10 +69,7 @@ public class Controller {
             rightPressed = true;
         }
         if (key == KeyCode.SPACE && !gameStarted) {
-            ball.setReversed(false);
-            Random rand = new Random();
-            int n = rand.nextInt(30);
-            ball.setAngle(HEIGHT - 75);
+            ball.setAngle(75);
             gameStarted = true;
         }
         if (key == KeyCode.SPACE && gameOver) {
@@ -116,21 +112,20 @@ public class Controller {
 
         if (!gameStarted) {
             ball.setX(paddle.getX() + paddle.getWidth() / 2);
-            ball.setY(paddle.getY() - ball.getRadius() - 5);
+            ball.setY(paddle.getY() - ball.getRadius() - 1);
             return;
         }
 
         // bounce wall
-        if (ball.getX() - ball.getRadius() <= 0 ||
-                ball.getX() + ball.getRadius() >= WIDTH) {
-            if (ball.getX() > WIDTH / 2) {
-                ball.setX(WIDTH - ball.getRadius());
-            } else {
-                ball.setX(ball.getRadius());
-            }
+        if (ball.getX() - ball.getRadius() <= 0) {
+            ball.setX(ball.getRadius());
             ball.reverseDx();
         }
-        if (ball.getY() - ball.getRadius() <= 0) {
+        else if (ball.getX() + ball.getRadius() >= WIDTH) {
+            ball.setX(WIDTH - ball.getRadius());
+            ball.reverseDx();
+        }
+        else if (ball.getY() - ball.getRadius() <= 0) {
             ball.setY(ball.getRadius());
             ball.reverseDy();
         }
@@ -155,19 +150,17 @@ public class Controller {
         // bounce brick
         for(int i = 0; i < bricks.size(); i++) {
             Brick brick = bricks.get(i);
+
             if (!brick.isDestroyed() && ball.isCollision(brick)) {
 
-                if (brick.takeHit()) {
-                    score += brick.getScoreValue();
-                }
+                float overlapLeft = Math.abs(ball.getX() + ball.getRadius() - brick.getX());
+                float overlapRight = Math.abs((brick.getX() + brick.getWidth()) - (ball.getX() - ball.getRadius()));
+                float overlapTop = Math.abs((ball.getY() + ball.getRadius()) - brick.getY());
+                float overlapBottom = Math.abs((brick.getY() + brick.getHeight()) - (ball.getY() - ball.getRadius()));
+                
+                float minOverlap = Math.min(Math.min(overlapLeft, overlapRight), 
+                                            Math.min(overlapTop, overlapBottom));
 
-                double overlapLeft = (ball.getX() + ball.getRadius()) - brick.getX();
-                double overlapRight = (brick.getX() + brick.getWidth()) - (ball.getX() - ball.getRadius());
-                double overlapTop = (ball.getY() + ball.getRadius()) - brick.getY();
-                double overlapBottom = (brick.getY() + brick.getHeight()) - (ball.getY() - ball.getRadius());
-
-                double minOverlap = Math.min(Math.min(overlapLeft, overlapRight),
-                        Math.min(overlapTop, overlapBottom));
 
                 if (minOverlap == overlapLeft) {
                     ball.setX(brick.getX() - ball.getRadius());
@@ -178,11 +171,15 @@ public class Controller {
                 } else if (minOverlap == overlapTop) {
                     ball.setY(brick.getY() - ball.getRadius());
                     ball.reverseDy();
-                } else {
+                } else if(minOverlap == overlapBottom){
                     ball.setY(brick.getY() + brick.getHeight() + ball.getRadius());
                     ball.reverseDy();
                 }
 
+                if (brick.takeHit()) {
+                    score += brick.getScoreValue();
+                }
+                
                 if (bricks.stream().allMatch(b -> b == null || b.isDestroyed())) {
                     gameOver = true;
                 }
@@ -195,17 +192,18 @@ public class Controller {
 
     private void render() {
         renderer.clear();
-        
-        // Image background = new Image("file:assets/iceburg/background.png");
-        // gc.drawImage(background, 0, 0, WIDTH, HEIGHT);
-        renderer.render(ball);
-        renderer.render(paddle);
+
 
         for (Brick brick : bricks) {
             if (!brick.isDestroyed()) {
                 renderer.render(brick);
             }
         }
+
+        renderer.render(ball);
+        renderer.render(paddle);
+
+        
 
         renderer.renderHUD(score, lives);
 
@@ -225,6 +223,7 @@ public class Controller {
         gameOver = false;
         gameStarted = false;
         paddle.setX(WIDTH / 2 - (paddle.getWidth() / 2));
+        ball.resetBall(paddle);
     }
 
     private void initBricks() {
@@ -238,16 +237,16 @@ public class Controller {
         try (Scanner sc = new Scanner(file)) {
             bricks = new ArrayList<>();
             int n;
-            double width;
-            double height;
+            float width;
+            float height;
             String type;
             n = sc.nextInt();
 
             for (int i = 0; i < n; i++) {
-                double x = sc.nextDouble();
-                double y = sc.nextDouble();
-                width = sc.nextDouble();
-                height = sc.nextDouble();
+                float x = (float) sc.nextFloat();
+                float y = sc.nextFloat();
+                width = sc.nextFloat();
+                height = sc.nextFloat();
                 type = sc.next();
 
                 if (type.equals("normal")) {
