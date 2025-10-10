@@ -15,16 +15,18 @@ public class NormalBrick extends Brick {
 
     public NormalBrick(double x, double y, double width, double height) {
         super(x, y, width, height, 1, "normal", 10);
+        setImageLocation("file:assets/brick1.png");
     }
 
     public NormalBrick(double x, double y) {
-        super(x, y, 30, 10, 1, "normal", 10);
+        super(x, y, 70, 20, 1, "normal", 10);
+        setImageLocation("file:assets/brick1.png");
     }
 
     public void render(GraphicsContext gc) {
         if (!isDestroyed()) {
-            if (brickint != 0) {
-                Image img = new Image(getBrickType());
+            if (getHitPoints() != 0) {
+                Image img = new Image(getImageLocation());
                 gc.drawImage(img, getX(), getY(), getWidth(), getHeight());
             }
         }

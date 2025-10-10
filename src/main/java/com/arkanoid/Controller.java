@@ -9,6 +9,7 @@ import java.util.Scanner;
 import com.abstracts.Brick;
 import com.object.Ball;
 import com.object.NormalBrick;
+import com.object.StrongBrick;
 import com.object.Paddle;
 import javafx.scene.image.Image;
 
@@ -29,7 +30,7 @@ public class Controller {
     private static final int WIDTH = 720;
     private static final int HEIGHT = 600;
     //
-    final long FPS = 120;
+    final long FPS = 150;
     final long timePerFrame = 1000000000 / FPS;
     private long lasttime = 0;
 
@@ -66,10 +67,6 @@ public class Controller {
 
         gameCanvas.requestFocus();
 
-    }
-
-    private void setNanotime() {
-        lasttime = System.nanoTime();
     }
 
     private void handleKeyPressed(KeyCode key) {
@@ -162,9 +159,9 @@ public class Controller {
             ball.bouncePaddle(paddle);
         }
         for (int i = 0; i < bricks.size(); i++) {
-            if (bricks.get(i).isDestroyed()) {
-                continue;
-            }
+             if (bricks.get(i).isDestroyed()) {
+                 continue;
+             }
             Brick brick = bricks.get(i);
             ball.setReversed(false);
             if (!brick.isDestroyed() && ball.isCollision(brick)) {
@@ -258,36 +255,41 @@ public class Controller {
         path += Integer.toString(levelUpdate) + ".txt";
         File file = new File("src/main/resources/layout/normal/layout.txt");
         File index = new File(path);
-
+        double[] x= new double[45];
+        double[] y= new double[45];
+        double width;
+        double height;
+        int size=0;
         try (Scanner sc = new Scanner(file)) {
             bricks = new ArrayList<>();
-            int n;
-            double width;
-            double height;
             String type;
+            int n;
             n = sc.nextInt();
-
+            if(size==0) size=n;
             for (int i = 0; i < n; i++) {
-                double x = sc.nextDouble();
-                double y = sc.nextDouble();
+                 x[i] = sc.nextDouble();
+                 y[i] = sc.nextDouble();
                 width = sc.nextDouble();
                 height = sc.nextDouble();
                 type = sc.next();
-
-                if (type.equals("normal")) {
-                    bricks.add(new NormalBrick(x, y, width, height));
-                }
             }
         } catch (FileNotFoundException e) {
             System.err.println("Error loading brick layout: " + e.getMessage());
         }
         try (Scanner sc = new Scanner(index)) {
-            for (int i = 0; i < bricks.size(); i++) {
+            for (int i = 0; i < size; i++) {
                 int btype = sc.nextInt();
-                if (btype > 0)
-                    bricks.get(i).setBrickType(btype);
-                else
-                    bricks.get(i).setDestroyed(true);
+                if (btype > 1) {
+                    bricks.add( new StrongBrick(x[i],y[i],btype));
+                }
+               else if (btype == 1) {
+                bricks.add(new NormalBrick(x[i],y[i]));
+            }
+                else {
+                bricks.add(new NormalBrick(x[i],y[i]));
+                bricks.get(i).setHitPoints(0);
+                bricks.get(i).setDestroyed(true);
+                }
             }
 
         } catch (FileNotFoundException e) {
