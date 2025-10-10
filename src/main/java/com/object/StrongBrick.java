@@ -11,12 +11,12 @@ public class StrongBrick extends Brick {
         super ();
         setHitPoints(1); 
     }
-    public StrongBrick(double x, double y, double width, double height, int hitPoints) {
+    public StrongBrick(float x, float y, float width, float height, int hitPoints) {
         super(x, y, width, height, hitPoints , "strong", 10);
         setBrickImageLink(getHitPoints());
         setImageLocation(getBrickImageLink());
     }
-    public StrongBrick (double x, double y,int hitPoints){
+    public StrongBrick (float x, float y,int hitPoints){
          super(x, y, 70, 20, hitPoints, "strong", 10);
          setBrickImageLink(getHitPoints());
          setImageLocation(getBrickImageLink());
