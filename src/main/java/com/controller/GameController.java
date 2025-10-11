@@ -13,6 +13,7 @@ import com.object.Ball;
 import com.object.NormalBrick;
 import com.object.StrongBrick;
 import com.object.Paddle;
+import com.object.PowerUp;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
@@ -32,7 +33,7 @@ public class GameController {
     private static final int WIDTH = 720;
     private static final int HEIGHT = 600;
     //
-    final long FPS = 60;
+    final long FPS = 90;
     final long timePerFrame = 1000000000 / FPS;
     private long lasttime = 0;
 
@@ -49,6 +50,7 @@ public class GameController {
     private Paddle paddle;
     private List<Brick> bricks;
     private int levelUpdate = 0;
+    private List<PowerUp> powerUps;
 
     @FXML
     public void initialize() {
@@ -146,6 +148,7 @@ public class GameController {
                 gameOver = true;
                 levelUpdate = 0;
                 bricks.clear();
+                powerUps.clear();
                 initBricks();
             } else {
                 ball.resetBall(paddle);
@@ -156,10 +159,20 @@ public class GameController {
         if (ball.isCollision(paddle)) {
             ball.bouncePaddle(paddle);
         }
-
         // bounce brick
         for(int i = 0; i < bricks.size(); i++) {
             Brick brick = bricks.get(i);
+
+            // add PowerUp
+            if ( brick.getIsSPU() == 1){
+                 Random rand = new Random();
+                 
+                int x = rand.nextInt(100);
+                if (x <= 20){
+                    powerUps.add(new PowerUp(brick.getX(), brick.getY(), "HP"));     
+                }
+                 brick.setIsSPU(2);
+            }
 
             if (!brick.isDestroyed() && ball.isCollision(brick)) {
 
@@ -170,7 +183,6 @@ public class GameController {
                 
                 float minOverlap = Math.min(Math.min(overlapLeft, overlapRight), 
                                             Math.min(overlapTop, overlapBottom));
-
 
                 if (minOverlap == overlapLeft) {
                     ball.setX(brick.getX() - ball.getRadius());
@@ -196,8 +208,27 @@ public class GameController {
                 break;
             }
         }
-
         ball.update();
+        for (PowerUp powerUp : powerUps){
+            powerUp.update();
+            if (powerUp.isCollision(paddle)) {
+                System.out.println(powerUp.getPUType());
+                String pu = powerUp.getPUType();
+                switch (pu) {
+                    case "HP" : 
+                        lives ++ ;
+                    default:
+                        System.out.println("No action");
+                    break;
+                }
+                System.out.println(powerUps.size());
+                powerUp.setisCollected(true);
+            }
+
+        }
+        powerUps.removeIf(PowerUp::isDead);
+        powerUps.removeIf(PowerUp::getisCollected);
+        
     }
 
     private void render() {
@@ -223,11 +254,14 @@ public class GameController {
                 renderer.render(brick);
             }
         }
-
+         for (PowerUp powerUp  : powerUps) {
+            if (!powerUp.getisCollected()) {
+              renderer.render(powerUp);
+            }
+        }
         renderer.render(ball);
         renderer.render(paddle);
 
-        
 
         renderer.renderHUD(score, lives);
 
@@ -264,6 +298,7 @@ public class GameController {
         int size=0;
         try (Scanner sc = new Scanner(file)) {
             bricks = new ArrayList<>();
+            powerUps = new ArrayList<>();
             String type;
             int n;
             n = sc.nextInt();
