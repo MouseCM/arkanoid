@@ -1,29 +1,30 @@
 package com.object;
 
 import com.abstracts.Brick;
-import javafx.scene.image.Image;
+
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 public class StrongBrick extends Brick {
    // public int brickint = 0;
-    public boolean isSPU;
+    public boolean HasPowerUp;
     private String BrickImageLink = "file:assets/iceburg/brick1.png";
 
     public StrongBrick (){
         super ();
         setHitPoints(1); 
-        setIsSPU(0);
+        setHasPowerUp(0);
     }
     public StrongBrick(float x, float y, float width, float height, int hitPoints) {
         super(x, y, width, height, hitPoints , "strong", 10);
         setBrickImageLink(getHitPoints());
         setImageLocation(getBrickImageLink());
-        setIsSPU(0);
+        setHasPowerUp(0);
     }
     public StrongBrick (float x, float y,int hitPoints){
          super(x, y, 70, 20, hitPoints, "strong", 10);
          setBrickImageLink(getHitPoints());
          setImageLocation(getBrickImageLink());
-        setIsSPU(0);
+        setHasPowerUp(0);
     }
     public void setBrickImageLink(int hitp) {
         if (hitp == 1)
@@ -53,7 +54,7 @@ public class StrongBrick extends Brick {
             setHitPoints(hp);
             if (hp == 0) {
                 setDestroyed(true);
-                setIsSPU(getIsSPU()+1);
+                setHasPowerUp(getHasPowerUp()+1);
             }
             else {
          setBrickImageLink(getHitPoints());

@@ -5,7 +5,6 @@ import com.abstracts.GameObject;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 
 public class Renderer {
     private GraphicsContext gc;
@@ -29,7 +28,6 @@ public class Renderer {
 
 
     public void renderHUD(int score, int lives) {
-
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font("Arial", 16));
         gc.fillText("Score: " + score, 10, 25);
@@ -38,7 +36,6 @@ public class Renderer {
 
 
     public void renderGameOver(boolean won) {
-        gc.setTextAlign(TextAlignment.CENTER);
         gc.setFont(Font.font("Arial", 30));
         gc.setFill(Color.YELLOW);
 
@@ -47,10 +44,6 @@ public class Renderer {
         } else {
             gc.fillText("GAME OVER!", WIDTH / 2 - 90, HEIGHT / 2);
         }
-
-        gc.setFont(Font.font("Arial", 16));
-        gc.setFill(Color.WHITE);
-        gc.fillText("Press SPACE to restart", WIDTH / 2 - 70, HEIGHT / 2 + 40);
     }
 
 }

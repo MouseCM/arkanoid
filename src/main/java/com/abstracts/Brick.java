@@ -5,14 +5,14 @@ public abstract class Brick extends GameObject {
     private boolean destroyed;
     private String type;
     private int scoreValue;
-    private int isSPU;
+    private int hasPowerUp;
 
-    public int getIsSPU(){
-        return isSPU;
+    public int getHasPowerUp(){
+        return hasPowerUp;
     }
-    
-    public void setIsSPU(int isSPU){
-        this.isSPU = isSPU;
+
+    public void setHasPowerUp(int hasPowerUp){
+        this.hasPowerUp = hasPowerUp;
     }
 
     public Brick() {
@@ -68,7 +68,7 @@ public abstract class Brick extends GameObject {
             hitPoints--;
             if (hitPoints == 0) {
                 destroyed = true;
-                setIsSPU(getIsSPU()+1);
+                setHasPowerUp(getHasPowerUp()+1);
             }
             return true;
         }

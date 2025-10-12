@@ -14,11 +14,11 @@ public class PowerUp extends MovableObject {
         return getY() > 720;
     }
 
-    public boolean getisCollected() {
+    public boolean getIsCollected() {
         return isCollected;
     }
 
-    public void setisCollected(boolean isCollected) {
+    public void setIsCollected(boolean isCollected) {
         this.isCollected = isCollected;
     }
 
