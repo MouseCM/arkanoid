@@ -12,6 +12,7 @@ import com.arkanoid.Renderer;
 import com.object.Ball;
 import com.object.NormalBrick;
 import com.object.Paddle;
+import com.object.PowerUp;
 import com.object.StrongBrick;
 
 import javafx.animation.AnimationTimer;
@@ -19,7 +20,6 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-
 
 public class GameController {
     @FXML
@@ -29,7 +29,7 @@ public class GameController {
     private static final int WIDTH = 720;
     private static final int HEIGHT = 600;
     //
-    final long FPS = 60;
+    final long FPS = 90;
     final long timePerFrame = 1000000000 / FPS;
     private long lasttime = 0;
 
@@ -46,6 +46,7 @@ public class GameController {
     private Paddle paddle;
     private List<Brick> bricks;
     private int levelUpdate = 0;
+    private List<PowerUp> powerUps;
 
     @FXML
     public void initialize() {
@@ -61,7 +62,7 @@ public class GameController {
         paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 20, 1, 0, 100, 10, 10);
 
         initBricks();
- 
+
         startGameLoop();
 
         gameCanvas.requestFocus();
@@ -126,11 +127,9 @@ public class GameController {
         // bounce wall
         if (ball.getX() + ball.getDx() - ball.getRadius() <= 0) {
             ball.reverseDx();
-        }
-        else if (ball.getX() + ball.getDx() + ball.getRadius() >= WIDTH) {
+        } else if (ball.getX() + ball.getDx() + ball.getRadius() >= WIDTH) {
             ball.reverseDx();
-        }
-        else if (ball.getY() + ball.getDy() - ball.getRadius() <= 0) {
+        } else if (ball.getY() + ball.getDy() - ball.getRadius() <= 0) {
             ball.reverseDy();
         }
 
@@ -140,6 +139,7 @@ public class GameController {
                 gameOver = true;
                 levelUpdate = 0;
                 bricks.clear();
+                powerUps.clear();
                 initBricks();
             } else {
                 ball.resetBall(paddle);
@@ -150,39 +150,67 @@ public class GameController {
         if (ball.willCollision(paddle)) {
             ball.bouncePaddle(paddle);
         }
-
         // bounce brick
-        for(int i = 0; i < bricks.size(); i++) {
+        for (int i = 0; i < bricks.size(); i++) {
             Brick brick = bricks.get(i);
+            // add PowerUp
+            if (brick.getIsSPU() == 1) {
+                Random rand = new Random();
+
+                int x = rand.nextInt(100);
+                if (x <= 20) {
+                    powerUps.add(new PowerUp(brick.getX(), brick.getY(), "HP"));
+                }
+                brick.setIsSPU(2);
+            }
 
             if (!brick.isDestroyed() && ball.willCollision(brick)) {
 
-                // Determine the side of collision
-                if(ball.getX() > brick.getX() - ball.getRadius() &&
-                   ball.getX() < brick.getX() + brick.getWidth() + ball.getRadius()) {
+                
+
+                // determine bounce direction
+                if (ball.getX() > brick.getX() - ball.getRadius() &&
+                        ball.getX() < brick.getX() + brick.getWidth() + ball.getRadius()) {
                     ball.reverseDy();
                 } else {
                     ball.reverseDx();
                 }
 
-                
-
                 if (brick.takeHit()) {
                     score += brick.getScoreValue();
                 }
-                
+
                 if (bricks.stream().allMatch(b -> b == null || b.isDestroyed())) {
                     gameOver = true;
                 }
             }
         }
-
         ball.update();
+        for (PowerUp powerUp : powerUps) {
+            powerUp.update();
+            if (powerUp.isCollision(paddle)) {
+                System.out.println(powerUp.getPUType());
+                String pu = powerUp.getPUType();
+                switch (pu) {
+                    case "HP":
+                        lives++;
+                    default:
+                        System.out.println("No action");
+                        break;
+                }
+                System.out.println(powerUps.size());
+                powerUp.setisCollected(true);
+            }
+
+        }
+        powerUps.removeIf(PowerUp::isDead);
+        powerUps.removeIf(PowerUp::getisCollected);
+
     }
 
     private void render() {
-        
-        //fps stabilize
+
+        // fps stabilize
         long frameDuration = System.nanoTime() - lasttime;
         if (frameDuration < timePerFrame) {
             long sleepTime = (timePerFrame - frameDuration) / 1_000_000; // ns -> ms
@@ -197,17 +225,19 @@ public class GameController {
 
         lasttime = System.nanoTime();
         renderer.clear();
-        
+
         for (Brick brick : bricks) {
             if (!brick.isDestroyed()) {
                 renderer.render(brick);
             }
         }
-
+        for (PowerUp powerUp : powerUps) {
+            if (!powerUp.getisCollected()) {
+                renderer.render(powerUp);
+            }
+        }
         renderer.render(ball);
         renderer.render(paddle);
-
-        
 
         renderer.renderHUD(score, lives);
 
@@ -237,20 +267,22 @@ public class GameController {
         path += Integer.toString(levelUpdate) + ".txt";
         File file = new File("src/main/resources/layout/normal/layout.txt");
         File index = new File(path);
-        float[] x= new float[45];
-        float[] y= new float[45];
+        float[] x = new float[45];
+        float[] y = new float[45];
         float width;
         float height;
-        int size=0;
+        int size = 0;
         try (Scanner sc = new Scanner(file)) {
             bricks = new ArrayList<>();
+            powerUps = new ArrayList<>();
             String type;
             int n;
             n = sc.nextInt();
-            if(size==0) size=n;
+            if (size == 0)
+                size = n;
             for (int i = 0; i < n; i++) {
-                 x[i] = sc.nextFloat();
-                 y[i] = sc.nextFloat();
+                x[i] = sc.nextFloat();
+                y[i] = sc.nextFloat();
                 width = sc.nextFloat();
                 height = sc.nextFloat();
                 type = sc.next();
@@ -262,15 +294,13 @@ public class GameController {
             for (int i = 0; i < size; i++) {
                 int btype = sc.nextInt();
                 if (btype > 1) {
-                    bricks.add( new StrongBrick(x[i],y[i],btype));
-                }
-               else if (btype == 1) {
-                bricks.add(new NormalBrick(x[i],y[i]));
-            }
-                else {
-                bricks.add(new NormalBrick(x[i],y[i]));
-                bricks.get(i).setHitPoints(0);
-                bricks.get(i).setDestroyed(true);
+                    bricks.add(new StrongBrick(x[i], y[i], btype));
+                } else if (btype == 1) {
+                    bricks.add(new NormalBrick(x[i], y[i]));
+                } else {
+                    bricks.add(new NormalBrick(x[i], y[i]));
+                    bricks.get(i).setHitPoints(0);
+                    bricks.get(i).setDestroyed(true);
                 }
             }
 
