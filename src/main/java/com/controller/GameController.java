@@ -17,6 +17,7 @@ import com.object.StrongBrick;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -35,6 +36,7 @@ public class GameController {
 
     private boolean leftPressed = false;
     private boolean rightPressed = false;
+    boolean isMousePressed = false;
     private boolean gameStarted = false;
     private boolean gameOver = false;
     private AnimationTimer gameLoop;
@@ -77,12 +79,13 @@ public class GameController {
             rightPressed = true;
         }
         if (key == KeyCode.SPACE && !gameStarted) {
-            ball.setAngle(75);
             gameStarted = true;
         }
         if (key == KeyCode.SPACE && gameOver) {
             resetGame();
         }
+
+        
     }
 
     private void handleKeyReleased(KeyCode key) {
@@ -92,13 +95,33 @@ public class GameController {
         if (key == KeyCode.D) {
             rightPressed = false;
         }
+
+        
+    }
+
+    private void handleMouse(Scene scene) {
+        scene.setOnMousePressed(event -> {
+            isMousePressed = true;
+            
+            if(gameStarted == false) {
+                gameStarted = true;
+            }
+
+            if(gameOver == true) {
+                resetGame();
+            }
+        });
+
+        scene.setOnMouseReleased(event -> {
+            isMousePressed = false;
+        });
     }
 
     private void startGameLoop() {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                update();
+                update(ScreenController.getCurrentScene());
                 render();
             }
         };
@@ -106,10 +129,12 @@ public class GameController {
 
     }
 
-    private void update() {
+    private void update(Scene scene) {
         if (gameOver) {
             return;
         }
+
+        handleMouse(ScreenController.getCurrentScene());
 
         if (leftPressed && paddle.getX() > 0) {
             paddle.moveLeft();
@@ -117,6 +142,21 @@ public class GameController {
         if (rightPressed && paddle.getX() < WIDTH - paddle.getWidth()) {
             paddle.moveRight();
         }
+
+
+        scene.setOnMouseMoved(event -> {
+            float mouseX = (float) event.getSceneX() - paddle.getWidth() / 2;
+            if (mouseX < 0) {
+                paddle.setX(0);
+                return;
+            }
+            if (mouseX > WIDTH - paddle.getWidth()) {
+                paddle.setX(WIDTH - paddle.getWidth());
+                return;
+            }
+
+            paddle.setX(mouseX);
+        });
 
         if (!gameStarted) {
             ball.setX(paddle.getX() + paddle.getWidth() / 2);
@@ -165,8 +205,6 @@ public class GameController {
             }
 
             if (!brick.isDestroyed() && ball.willCollision(brick)) {
-
-                
 
                 // determine bounce direction
                 if (ball.getX() > brick.getX() - ball.getRadius() &&

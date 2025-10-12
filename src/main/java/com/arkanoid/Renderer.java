@@ -5,9 +5,9 @@ import com.object.Ball;
 import com.object.Paddle;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 
 public class Renderer {
     private GraphicsContext gc;
@@ -31,20 +31,11 @@ public class Renderer {
 
     public void render(Ball obj) {
         obj.render(gc);
-        gc.setStroke(Color.BLUE);
-        gc.setLineWidth(1);
-        gc.strokeOval(obj.getX() - obj.getRadius(),
-                obj.getY() - obj.getRadius(),
-                obj.getRadius() * 2,
-                obj.getRadius() * 2);
         return;
     }
 
     public void render(Paddle obj) {
         obj.render(gc);
-        // gc.setStroke(Color.WHITE);
-        // gc.setLineWidth(1);
-        // gc.strokeRect(obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight());
         return;
     }
 
@@ -59,14 +50,14 @@ public class Renderer {
     public void renderStartScreen() {
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font("Arial", 20));
-        gc.fillText("Press SPACE to start", WIDTH / 2 - 100, HEIGHT / 2);
+        gc.fillText("Press SPACE or CLICK MOUSE to start", WIDTH / 2 - 100, HEIGHT / 2);
 
         gc.setFont(Font.font("Arial", 14));
-        gc.fillText("Use A/D to move", WIDTH / 2 - 110, HEIGHT / 2 + 30);
-        gc.fillText("Click canvas to enable controls", WIDTH / 2 - 110, HEIGHT / 2 + 50);
+        gc.fillText("Use A, D or mouse to move", WIDTH / 2 - 110, HEIGHT / 2 + 30);
     }
 
     public void renderGameOver(boolean won) {
+        gc.setTextAlign(TextAlignment.CENTER);
         gc.setFont(Font.font("Arial", 30));
         gc.setFill(Color.YELLOW);
 
