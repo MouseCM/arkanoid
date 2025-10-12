@@ -1,8 +1,6 @@
 package com.arkanoid;
 
 import com.abstracts.GameObject;
-import com.object.Ball;
-import com.object.Paddle;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -29,15 +27,6 @@ public class Renderer {
         return;
     }
 
-    public void render(Ball obj) {
-        obj.render(gc);
-        return;
-    }
-
-    public void render(Paddle obj) {
-        obj.render(gc);
-        return;
-    }
 
     public void renderHUD(int score, int lives) {
 
@@ -47,14 +36,6 @@ public class Renderer {
         gc.fillText("Lives: " + lives, WIDTH - 80, 25);
     }
 
-    public void renderStartScreen() {
-        gc.setFill(Color.WHITE);
-        gc.setFont(Font.font("Arial", 20));
-        gc.fillText("Press SPACE or CLICK MOUSE to start", WIDTH / 2 - 100, HEIGHT / 2);
-
-        gc.setFont(Font.font("Arial", 14));
-        gc.fillText("Use A, D or mouse to move", WIDTH / 2 - 110, HEIGHT / 2 + 30);
-    }
 
     public void renderGameOver(boolean won) {
         gc.setTextAlign(TextAlignment.CENTER);

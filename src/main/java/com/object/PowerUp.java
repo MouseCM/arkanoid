@@ -74,6 +74,7 @@ public class PowerUp extends MovableObject {
         gc.drawImage(image, getX(), getY(), getWidth(), getHeight());
     }
 
+
     @Override
     public void update() {
         setX(getX() + getDx());

@@ -10,9 +10,11 @@ public abstract class Brick extends GameObject {
     public int getIsSPU(){
         return isSPU;
     }
+    
     public void setIsSPU(int isSPU){
         this.isSPU = isSPU;
     }
+
     public Brick() {
         super();
         this.hitPoints = 0;

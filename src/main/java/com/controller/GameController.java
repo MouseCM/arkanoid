@@ -26,7 +26,7 @@ public class GameController {
     @FXML
     private Canvas gameCanvas;
     private GraphicsContext gc;
-    Renderer renderer;
+    private Renderer renderer;
     private static final int WIDTH = 720;
     private static final int HEIGHT = 600;
     //
@@ -36,7 +36,7 @@ public class GameController {
 
     private boolean leftPressed = false;
     private boolean rightPressed = false;
-    boolean isMousePressed = false;
+    private boolean isMousePressed = false;
     private boolean gameStarted = false;
     private boolean gameOver = false;
     private AnimationTimer gameLoop;
@@ -44,7 +44,7 @@ public class GameController {
     private int lives = 3;
     // private LevelIndex levelIndex = new LevelIndex();
 
-    private Ball ball;
+    private List<Ball> balls;
     private Paddle paddle;
     private List<Brick> bricks;
     private int levelUpdate = 0;
@@ -60,7 +60,8 @@ public class GameController {
         gameCanvas.setOnKeyPressed(e -> handleKeyPressed(e.getCode()));
         gameCanvas.setOnKeyReleased(e -> handleKeyReleased(e.getCode()));
 
-        ball = new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 10, 8, 165);
+        balls = new ArrayList<>();
+        balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 10, 8, 165));
         paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 20, 1, 0, 100, 10, 10);
 
         initBricks();
@@ -92,6 +93,7 @@ public class GameController {
         if (key == KeyCode.A) {
             leftPressed = false;
         }
+
         if (key == KeyCode.D) {
             rightPressed = false;
         }
@@ -159,71 +161,104 @@ public class GameController {
         });
 
         if (!gameStarted) {
-            ball.setX(paddle.getX() + paddle.getWidth() / 2);
-            ball.setY(paddle.getY() - ball.getRadius() - 5);
+            for (Ball ball : balls) {
+                ball.setX(paddle.getX() + paddle.getWidth() / 2);
+                ball.setY(paddle.getY() - ball.getRadius() - 5);
+            }
             return;
         }
 
         // bounce wall
-        if (ball.getX() + ball.getDx() - ball.getRadius() <= 0) {
-            ball.reverseDx();
-        } else if (ball.getX() + ball.getDx() + ball.getRadius() >= WIDTH) {
-            ball.reverseDx();
-        } else if (ball.getY() + ball.getDy() - ball.getRadius() <= 0) {
-            ball.reverseDy();
-        }
-
-        if (ball.isDeath(HEIGHT)) {
-            lives--;
-            if (lives <= 0) {
-                gameOver = true;
-                levelUpdate = 0;
-                bricks.clear();
-                powerUps.clear();
-                initBricks();
-            } else {
-                ball.resetBall(paddle);
-                gameStarted = false;
+        for (Ball ball : balls) {
+            if (ball.getX() + ball.getDx() - ball.getRadius() <= 0) {
+                ball.reverseDx();
+            } else if (ball.getX() + ball.getDx() + ball.getRadius() >= WIDTH) {
+                ball.reverseDx();
+            } else if (ball.getY() + ball.getDy() - ball.getRadius() <= 0) {
+                ball.reverseDy();
             }
         }
+        
 
-        if (ball.willCollision(paddle)) {
-            ball.bouncePaddle(paddle);
-        }
-        // bounce brick
-        for (int i = 0; i < bricks.size(); i++) {
-            Brick brick = bricks.get(i);
-            // add PowerUp
-            if (brick.getIsSPU() == 1) {
-                Random rand = new Random();
 
-                int x = rand.nextInt(100);
-                if (x <= 20) {
-                    powerUps.add(new PowerUp(brick.getX(), brick.getY(), "HP"));
-                }
-                brick.setIsSPU(2);
+        for (Ball ball : balls) {
+            if (ball.isDeath(HEIGHT)) {
+                balls.remove(ball);
             }
 
-            if (!brick.isDestroyed() && ball.willCollision(brick)) {
-
-                // determine bounce direction
-                if (ball.getX() > brick.getX() - ball.getRadius() &&
-                        ball.getX() < brick.getX() + brick.getWidth() + ball.getRadius()) {
-                    ball.reverseDy();
-                } else {
-                    ball.reverseDx();
-                }
-
-                if (brick.takeHit()) {
-                    score += brick.getScoreValue();
-                }
-
-                if (bricks.stream().allMatch(b -> b == null || b.isDestroyed())) {
+            if (balls.size() == 0) {
+                lives--;
+                if (lives <= 0) {
                     gameOver = true;
+                    levelUpdate = 0;
+                    bricks.clear();
+                    powerUps.clear();
+                    initBricks();
+                } 
+                else {
+                    balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 10, 8, 165));
+                    gameStarted = false;
                 }
             }
         }
-        ball.update();
+        
+
+
+        for (Ball ball : balls) {
+            if (ball.willCollision(paddle)) {
+                ball.bouncePaddle(paddle);
+            }
+        }
+        
+
+
+        // bounce brick
+        for (Ball ball : balls) {
+            for (Brick brick : bricks) {
+
+                // add PowerUp
+                if (brick.getIsSPU() == 1) {
+                    Random rand = new Random();
+
+                    int x = rand.nextInt(100);
+                    brick.setIsSPU(0);
+                    if (x <= 20) {
+                        powerUps.add(new PowerUp(brick.getX(), brick.getY(), "HP"));
+                    }
+                    else if (x <= 100) {
+                        powerUps.add(new PowerUp(brick.getX(), brick.getY(), "x3Ball"));
+                    }
+                }
+                
+
+                if (!brick.isDestroyed() && ball.willCollision(brick)) {
+                    
+
+                    // determine bounce direction
+                    if (ball.getX() > brick.getX() - ball.getRadius() &&
+                            ball.getX() < brick.getX() + brick.getWidth() + ball.getRadius()) {
+                        ball.reverseDy();
+                    } else {
+                        ball.reverseDx();
+                    }
+
+                    if (brick.takeHit()) {
+                        score += brick.getScoreValue();
+                    }
+
+                    if (bricks.stream().allMatch(b -> b == null || b.isDestroyed())) {
+                        gameOver = true;
+                    }
+                }
+            }
+        }
+
+
+        for (Ball ball : balls) {
+            ball.update();
+        }
+
+
         for (PowerUp powerUp : powerUps) {
             powerUp.update();
             if (powerUp.isCollision(paddle)) {
@@ -232,6 +267,17 @@ public class GameController {
                 switch (pu) {
                     case "HP":
                         lives++;
+                        break;
+                    case "x3Ball":
+                        int size = balls.size();
+                        for (int i = 0; i < size; i++) {
+                            Ball temp = Ball.copy(balls.get(i));
+                            temp.setAngle(temp.getAngle() + 30);
+                            balls.add(temp.copy());
+                            temp.setAngle(temp.getAngle() - 60);
+                            balls.add(temp.copy());
+                        }
+                        break;
                     default:
                         System.out.println("No action");
                         break;
@@ -239,10 +285,12 @@ public class GameController {
                 System.out.println(powerUps.size());
                 powerUp.setisCollected(true);
             }
-
         }
         powerUps.removeIf(PowerUp::isDead);
         powerUps.removeIf(PowerUp::getisCollected);
+
+
+        
 
     }
 
@@ -269,19 +317,20 @@ public class GameController {
                 renderer.render(brick);
             }
         }
+
         for (PowerUp powerUp : powerUps) {
             if (!powerUp.getisCollected()) {
                 renderer.render(powerUp);
             }
         }
-        renderer.render(ball);
+
+        for (Ball ball : balls) {
+            renderer.render(ball);
+        }
+        
         renderer.render(paddle);
 
         renderer.renderHUD(score, lives);
-
-        if (!gameStarted && !gameOver) {
-            renderer.renderStartScreen();
-        }
 
         if (gameOver) {
             boolean won = lives > 0;
@@ -295,7 +344,7 @@ public class GameController {
         gameOver = false;
         gameStarted = false;
         paddle.setX(WIDTH / 2 - (paddle.getWidth() / 2));
-        ball.resetBall(paddle);
+        balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 10, 8, 165));
     }
 
     private void initBricks() {
@@ -310,6 +359,8 @@ public class GameController {
         float width;
         float height;
         int size = 0;
+
+
         try (Scanner sc = new Scanner(file)) {
             bricks = new ArrayList<>();
             powerUps = new ArrayList<>();
@@ -328,6 +379,7 @@ public class GameController {
         } catch (FileNotFoundException e) {
             System.err.println("Error loading brick layout: " + e.getMessage());
         }
+
         try (Scanner sc = new Scanner(index)) {
             for (int i = 0; i < size; i++) {
                 int btype = sc.nextInt();
