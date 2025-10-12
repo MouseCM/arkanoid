@@ -21,8 +21,6 @@ public class Ball extends MovableObject {
         super(x, y, 0, 0, dx, dy, speed);
         this.radius = radius;
 
-        // setDx(getSpeed() * (float) Math.cos(Math.toRadians(angle)));
-        // setDy(getSpeed() * (float) Math.sin(Math.toRadians(angle)));
         setAngle(angle);
         setDx(getSpeed() * (float) Math.sin(Math.toRadians(angle)));
         setDy(getSpeed() * (float) Math.cos(Math.toRadians(angle)));
@@ -52,14 +50,6 @@ public class Ball extends MovableObject {
         this.setDy(-getDy());
     }
 
-    public void resetBall(Paddle paddle) {
-        setX(paddle.getX() + paddle.getWidth() / 2);
-        setY(paddle.getY() - getRadius() - 5);
-
-        setAngle(165);
-        setDx(getSpeed() * (float) Math.sin(Math.toRadians(angle)));
-        setDy(getSpeed() * (float) Math.cos(Math.toRadians(angle)));
-    }
 
     @Override
     public void render(GraphicsContext gc) {
@@ -107,5 +97,13 @@ public class Ball extends MovableObject {
 
     public boolean isDeath(int HEIGHT) {
         return getY() + getRadius() >= HEIGHT;
+    }
+
+    public static Ball copy(Ball ball) {
+        return new Ball(ball.getX(), ball.getY(), ball.getDx(), ball.getDy(), ball.getRadius(), ball.getSpeed(), ball.getAngle());
+    }
+
+    public Ball copy() {
+        return new Ball(getX(), getY(), getDx(), getDy(), getRadius(), getSpeed(), getAngle());
     }
 }
