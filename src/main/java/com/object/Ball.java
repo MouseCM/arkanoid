@@ -54,12 +54,11 @@ public class Ball extends MovableObject {
 
     public void resetBall(Paddle paddle) {
         setX(paddle.getX() + paddle.getWidth() / 2);
-        setY(paddle.getY() - getRadius() - 1);
+        setY(paddle.getY() - getRadius() - 5);
 
-        setAngle(75);
+        setAngle(165);
         setDx(getSpeed() * (float) Math.sin(Math.toRadians(angle)));
         setDy(getSpeed() * (float) Math.cos(Math.toRadians(angle)));
-        
     }
 
     @Override
@@ -74,6 +73,13 @@ public class Ball extends MovableObject {
         setY(getY() + getDy());
     }
 
+    public boolean willCollision(GameObject other) {
+        return getY() + getRadius() + getDy() >= other.getY() && 
+            getY() - getRadius() + getDy() <= other.getY() + other.getHeight() &&
+            getX() + getRadius() + getDx() >= other.getX() && 
+            getX() - getRadius() + getDx() <= other.getX() + other.getWidth();
+    }
+
     public boolean isCollision(GameObject other) {
         return getY() + getRadius() >= other.getY() && 
             getY() - getRadius() <= other.getY() + other.getHeight() &&
@@ -84,16 +90,19 @@ public class Ball extends MovableObject {
 
 
     public void bouncePaddle(Paddle paddle) {
-        setY(paddle.getY() - getRadius());
-
-        float hitPos = (getX() - paddle.getX()) / paddle.getWidth();
-        float angle = (float) ((hitPos - 0.5) * 120); 
-        
-        setAngle(angle);
-        setDx(getSpeed() * (float) Math.sin(Math.toRadians(angle)));
-        setDy(getSpeed() * (float) Math.cos(Math.toRadians(angle)));
-        
-        reverseDy();
+        if (getX() > paddle.getX() - getRadius() && getX() < paddle.getX() + paddle.getWidth() + getRadius()) {
+            float hitPos = (getX() - paddle.getX()) / paddle.getWidth();
+            float angle = (float) ((hitPos - 0.5) * 120); 
+            
+            setAngle(angle);
+            setDx(getSpeed() * (float) Math.sin(Math.toRadians(angle)));
+            setDy(getSpeed() * (float) Math.cos(Math.toRadians(angle)));
+            
+            reverseDy();
+        }
+        else {
+            reverseDx();
+        }
     }
 
     public boolean isDeath(int HEIGHT) {

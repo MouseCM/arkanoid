@@ -11,17 +11,14 @@ import com.abstracts.Brick;
 import com.arkanoid.Renderer;
 import com.object.Ball;
 import com.object.NormalBrick;
-import com.object.StrongBrick;
 import com.object.Paddle;
+import com.object.StrongBrick;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-
-import java.util.Random;
-import javafx.animation.AnimationTimer;
 
 
 public class GameController {
@@ -60,7 +57,7 @@ public class GameController {
         gameCanvas.setOnKeyPressed(e -> handleKeyPressed(e.getCode()));
         gameCanvas.setOnKeyReleased(e -> handleKeyReleased(e.getCode()));
 
-        ball = new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 10, 8, 75);
+        ball = new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 10, 8, 165);
         paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 20, 1, 0, 100, 10, 10);
 
         initBricks();
@@ -122,21 +119,18 @@ public class GameController {
 
         if (!gameStarted) {
             ball.setX(paddle.getX() + paddle.getWidth() / 2);
-            ball.setY(paddle.getY() - ball.getRadius() - 1);
+            ball.setY(paddle.getY() - ball.getRadius() - 5);
             return;
         }
 
         // bounce wall
-        if (ball.getX() - ball.getRadius() <= 0) {
-            ball.setX(ball.getRadius());
+        if (ball.getX() + ball.getDx() - ball.getRadius() <= 0) {
             ball.reverseDx();
         }
-        else if (ball.getX() + ball.getRadius() >= WIDTH) {
-            ball.setX(WIDTH - ball.getRadius());
+        else if (ball.getX() + ball.getDx() + ball.getRadius() >= WIDTH) {
             ball.reverseDx();
         }
-        else if (ball.getY() - ball.getRadius() <= 0) {
-            ball.setY(ball.getRadius());
+        else if (ball.getY() + ball.getDy() - ball.getRadius() <= 0) {
             ball.reverseDy();
         }
 
@@ -153,7 +147,7 @@ public class GameController {
             }
         }
 
-        if (ball.isCollision(paddle)) {
+        if (ball.willCollision(paddle)) {
             ball.bouncePaddle(paddle);
         }
 
@@ -161,30 +155,17 @@ public class GameController {
         for(int i = 0; i < bricks.size(); i++) {
             Brick brick = bricks.get(i);
 
-            if (!brick.isDestroyed() && ball.isCollision(brick)) {
+            if (!brick.isDestroyed() && ball.willCollision(brick)) {
 
-                float overlapLeft = Math.abs(ball.getX() + ball.getRadius() - brick.getX());
-                float overlapRight = Math.abs((brick.getX() + brick.getWidth()) - (ball.getX() - ball.getRadius()));
-                float overlapTop = Math.abs((ball.getY() + ball.getRadius()) - brick.getY());
-                float overlapBottom = Math.abs((brick.getY() + brick.getHeight()) - (ball.getY() - ball.getRadius()));
-                
-                float minOverlap = Math.min(Math.min(overlapLeft, overlapRight), 
-                                            Math.min(overlapTop, overlapBottom));
-
-
-                if (minOverlap == overlapLeft) {
-                    ball.setX(brick.getX() - ball.getRadius());
-                    ball.reverseDx();
-                } else if (minOverlap == overlapRight) {
-                    ball.setX(brick.getX() + brick.getWidth() + ball.getRadius());
-                    ball.reverseDx();
-                } else if (minOverlap == overlapTop) {
-                    ball.setY(brick.getY() - ball.getRadius());
+                // Determine the side of collision
+                if(ball.getX() > brick.getX() - ball.getRadius() &&
+                   ball.getX() < brick.getX() + brick.getWidth() + ball.getRadius()) {
                     ball.reverseDy();
-                } else if(minOverlap == overlapBottom){
-                    ball.setY(brick.getY() + brick.getHeight() + ball.getRadius());
-                    ball.reverseDy();
+                } else {
+                    ball.reverseDx();
                 }
+
+                
 
                 if (brick.takeHit()) {
                     score += brick.getScoreValue();
@@ -193,7 +174,6 @@ public class GameController {
                 if (bricks.stream().allMatch(b -> b == null || b.isDestroyed())) {
                     gameOver = true;
                 }
-                break;
             }
         }
 

@@ -19,8 +19,6 @@ public class App extends Application {
         // Parent root = FXMLLoader.load(getClass().getResource("/fxml/game.fxml"));
         primaryStage = stage;
 
-
-
         stage.setTitle("Arkanoid");
         ScreenController.loadScreen("/fxml/menu.fxml");
         stage.setResizable(false);
