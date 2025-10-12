@@ -147,9 +147,9 @@ public class GameController {
     }
 
     private void update(Scene scene) {
-        // if (gameOver) {
-        //     return;
-        // }
+        if (gameOver) {
+            return;
+        }
 
         handleMouse(ScreenController.getCurrentScene());
 
@@ -275,24 +275,15 @@ public class GameController {
 
 
         for (PowerUp powerUp : powerUps) {
-            powerUp.update();
             if (powerUp.isCollision(paddle)) {
                 System.out.println(powerUp.getPUType());
-                String pu = powerUp.getPUType();
 
-                switch (pu) {
+                switch (powerUp.getPUType()) {
                     case "HP":
                         lives++;
                         break;
                     case "x3Ball":
-                        int size = balls.size();
-                        for (int i = 0; i < size; i++) {
-                            Ball temp = Ball.copy(balls.get(i));
-                            temp.setAngle(temp.getAngle() + 30);
-                            balls.add(temp.copy());
-                            temp.setAngle(temp.getAngle() - 60);
-                            balls.add(temp.copy());
-                        }
+                        powerUp.x3Balls(balls);
                         break;
                     default:
                         System.out.println("No action");
@@ -301,6 +292,8 @@ public class GameController {
                 System.out.println(powerUps.size());
                 powerUp.setIsCollected(true);
             }
+
+            powerUp.update();
         }
         powerUps.removeIf(PowerUp::isDead);
         powerUps.removeIf(PowerUp::getIsCollected);

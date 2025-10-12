@@ -22,8 +22,6 @@ public class Ball extends MovableObject {
         this.radius = radius;
 
         setAngle(angle);
-        setDx(getSpeed() * (float) Math.sin(Math.toRadians(angle)));
-        setDy(getSpeed() * (float) Math.cos(Math.toRadians(angle)));
     }
 
     public float getRadius() {
@@ -40,6 +38,8 @@ public class Ball extends MovableObject {
 
     public void setAngle(float angle) {
         this.angle = angle;
+        setDx((float) Math.sin(Math.toRadians(angle)));
+        setDy((float) Math.cos(Math.toRadians(angle)));
     }
 
     public void reverseDx() {
@@ -55,12 +55,6 @@ public class Ball extends MovableObject {
     public void render(GraphicsContext gc) {
         gc.setFill(Color.WHITE);
         gc.fillOval(getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
-    }
-
-    @Override
-    public void update() {
-        setX(getX() + getDx());
-        setY(getY() + getDy());
     }
 
     public boolean willCollision(GameObject other) {
@@ -85,8 +79,6 @@ public class Ball extends MovableObject {
             float angle = (float) ((hitPos - 0.5) * 120); 
             
             setAngle(angle);
-            setDx(getSpeed() * (float) Math.sin(Math.toRadians(angle)));
-            setDy(getSpeed() * (float) Math.cos(Math.toRadians(angle)));
             
             reverseDy();
         }
