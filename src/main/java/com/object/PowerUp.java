@@ -5,6 +5,7 @@ import com.abstracts.MovableObject;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import java.util.List;
 
 public class PowerUp extends MovableObject {
     private String PUType;
@@ -14,11 +15,11 @@ public class PowerUp extends MovableObject {
         return getY() > 720;
     }
 
-    public boolean getisCollected() {
+    public boolean getIsCollected() {
         return isCollected;
     }
 
-    public void setisCollected(boolean isCollected) {
+    public void setIsCollected(boolean isCollected) {
         this.isCollected = isCollected;
     }
 
@@ -80,6 +81,17 @@ public class PowerUp extends MovableObject {
         setX(getX() + getDx());
         setY(getY() + getDy());
 
+    }
+
+    public void x3Balls(List<Ball> balls) {
+        int n = balls.size();
+        for (int i = 0; i < n; i++) {
+            Ball nextBall = balls.get(i).copy();
+            nextBall.setAngle(nextBall.getAngle() + 30);
+            balls.add(nextBall.copy());
+            nextBall.setAngle(nextBall.getAngle() - 60);
+            balls.add(nextBall.copy());
+        }
     }
 
 }

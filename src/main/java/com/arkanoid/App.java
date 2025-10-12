@@ -23,6 +23,7 @@ public class App extends Application {
         ScreenController.loadScreen("/fxml/menu.fxml");
         stage.setResizable(false);
 
+
         stage.show();
     }
 
