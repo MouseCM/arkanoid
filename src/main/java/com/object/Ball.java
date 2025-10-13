@@ -58,10 +58,10 @@ public class Ball extends MovableObject {
     }
 
     public boolean willCollision(GameObject other) {
-        return getY() + getRadius() + getDy() >= other.getY() && 
-            getY() - getRadius() + getDy() <= other.getY() + other.getHeight() &&
-            getX() + getRadius() + getDx() >= other.getX() && 
-            getX() - getRadius() + getDx() <= other.getX() + other.getWidth();
+        return getY() + getRadius() + getDy() * getSpeed() >= other.getY() && 
+            getY() - getRadius() + getDy() * getSpeed() <= other.getY() + other.getHeight() &&
+            getX() + getRadius() + getDx() * getSpeed() >= other.getX() && 
+            getX() - getRadius() + getDx() * getSpeed() <= other.getX() + other.getWidth();
     }
 
     public boolean isCollision(GameObject other) {
@@ -76,11 +76,9 @@ public class Ball extends MovableObject {
     public void bouncePaddle(Paddle paddle) {
         if (getX() > paddle.getX() - getRadius() && getX() < paddle.getX() + paddle.getWidth() + getRadius()) {
             float hitPos = (getX() - paddle.getX()) / paddle.getWidth();
-            float angle = (float) ((hitPos - 0.5) * 120); 
+            float angle = (float) ((1 - hitPos) * 120) + 120; 
             
             setAngle(angle);
-            
-            reverseDy();
         }
         else {
             reverseDx();
