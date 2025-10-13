@@ -1,10 +1,13 @@
 package com.object;
 
+import java.security.NoSuchAlgorithmException;
+
 import com.abstracts.GameObject;
 import com.abstracts.MovableObject;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+
 import java.util.List;
 
 public class PowerUp extends MovableObject {
@@ -56,7 +59,7 @@ public class PowerUp extends MovableObject {
     }
 
     public PowerUp(float x, float y, String PUType) {
-        super(x, y, 20, 20, 0, 1, 50);
+        super(x, y, 20, 20, 0, 1, 5);
         this.PUType = PUType;
         isCollected = false;
     }
@@ -76,20 +79,16 @@ public class PowerUp extends MovableObject {
     }
 
 
-    @Override
-    public void update() {
-        setX(getX() + getDx());
-        setY(getY() + getDy());
-
-    }
-
     public void x3Balls(List<Ball> balls) {
         int n = balls.size();
         for (int i = 0; i < n; i++) {
             Ball nextBall = balls.get(i).copy();
-            nextBall.setAngle(nextBall.getAngle() + 30);
+            System.out.println(nextBall.getAngle());
+            nextBall.setAngle(nextBall.getAngle() + 20);
+            System.out.println(nextBall.getAngle());
             balls.add(nextBall.copy());
-            nextBall.setAngle(nextBall.getAngle() - 60);
+            nextBall.setAngle(nextBall.getAngle() - 40);
+            System.out.println(nextBall.getAngle());
             balls.add(nextBall.copy());
         }
     }

@@ -186,12 +186,12 @@ public class GameController {
 
         // bounce wall
         for (Ball ball : balls) {
-            if (ball.getX() + ball.getDx() - ball.getRadius() <= 0) {
-                ball.reverseDx();
-            } else if (ball.getX() + ball.getDx() + ball.getRadius() >= WIDTH) {
-                ball.reverseDx();
-            } else if (ball.getY() + ball.getDy() - ball.getRadius() <= 0) {
-                ball.reverseDy();
+            if (ball.getX() + ball.getDx() * ball.getSpeed() - ball.getRadius() <= 0) {
+                ball.setAngle(-ball.getAngle());
+            } else if (ball.getX() + ball.getDx() * ball.getSpeed() + ball.getRadius() >= WIDTH) {
+                ball.setAngle(-ball.getAngle());
+            } else if (ball.getY() + ball.getDy() * ball.getSpeed() - ball.getRadius() <= 0) {
+                ball.setAngle(180 - ball.getAngle());
             }
         }
         
@@ -237,10 +237,10 @@ public class GameController {
 
                     int x = rand.nextInt(100);
                     brick.setHasPowerUp(0);
-                    if (x <= 20) {
+                    if (x <= 0) {
                         powerUps.add(new PowerUp(brick.getX(), brick.getY(), "HP"));
                     }
-                    else if (x <= 60) {
+                    else if (x <= 100) {
                         powerUps.add(new PowerUp(brick.getX(), brick.getY(), "x3Ball"));
                     }
                 }
@@ -252,9 +252,9 @@ public class GameController {
                     // determine bounce direction
                     if (ball.getX() > brick.getX() - ball.getRadius() &&
                             ball.getX() < brick.getX() + brick.getWidth() + ball.getRadius()) {
-                        ball.reverseDy();
+                        ball.setAngle(180 - ball.getAngle());
                     } else {
-                        ball.reverseDx();
+                        ball.setAngle(-ball.getAngle());
                     }
 
                     if (brick.takeHit()) {
@@ -269,10 +269,7 @@ public class GameController {
         }
 
 
-        for (Ball ball : balls) {
-            ball.update();
-        }
-
+        
 
         for (PowerUp powerUp : powerUps) {
             if (powerUp.isCollision(paddle)) {
@@ -295,13 +292,18 @@ public class GameController {
 
             powerUp.update();
         }
+
         powerUps.removeIf(PowerUp::isDead);
         powerUps.removeIf(PowerUp::getIsCollected);
 
 
-        
+
+        for (Ball ball : balls) {
+            ball.update();
+        }
 
     }
+
 
     private void render() {
 
@@ -358,6 +360,8 @@ public class GameController {
         balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 10, 8, 165));
         initBricks();
     }
+
+
 
     private void initBricks() {
         String path = "src/main/resources/layout/normal/";
