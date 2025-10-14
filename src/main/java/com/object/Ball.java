@@ -47,8 +47,9 @@ public class Ball extends MovableObject {
 
     @Override
     public void render(GraphicsContext gc) {
-        Image image = new Image(getImageLocation());
-        gc.drawImage(image,getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
+        // Image image = new Image(getImageLocation());
+        // gc.drawImage(image,getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
+        gc.fillOval(getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
     }
 
     public boolean willCollision(GameObject other) {
@@ -75,6 +76,11 @@ public class Ball extends MovableObject {
         }
     }
 
+    public void followPaddle(Paddle paddle) {
+        setX(paddle.getX() + paddle.getWidth() / 2);
+        setY(paddle.getY() - getRadius() - 5);
+    }
+
     public void bouncePaddle(Paddle paddle) {
         if (getX() > paddle.getX() - getRadius() && getX() < paddle.getX() + paddle.getWidth() + getRadius()) {
             float hitPos = (getX() - paddle.getX()) / paddle.getWidth();
@@ -90,9 +96,11 @@ public class Ball extends MovableObject {
     public void bounceBrick(Brick brick) {
         // determine bounce direction
         if (getX() > brick.getX() - getRadius() &&
-                getX() < getX() + getWidth() + getRadius()) {
+                getX() < brick.getX() + brick.getWidth() + getRadius()) {
+            // reverse vertical direction
             setAngle(180 - getAngle());
         } else {
+            // reverse horizontal direction
             setAngle(-getAngle());
         }
     }
