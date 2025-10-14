@@ -1,5 +1,47 @@
-1 0 2 0 3 0 2 0 1
-0 1 0 2 0 3 0 2 0
-1 0 2 0 3 0 2 0 1
-0 1 0 2 0 3 0 2 0
-1 0 2 0 3 0 2 0 1
+49
+215 60 1 normal
+285 60 2 strong
+355 60 1 normal
+425 60 1 normal
+495 60 1 normal
+565 60 1 normal
+150 85 1 normal
+220 85 1 normal
+290 85 1 normal
+360 85 1 normal
+430 85 1 normal
+500 85 1 normal
+570 85 1 normal
+85 110 1 normal
+155 110 1 normal
+225 110 1 normal
+295 110 1 normal
+365 110 1 normal
+435 110 1 normal
+505 110 1 normal
+575 110 1 normal
+20 135 1 normal
+90 135 1 normal
+160 135 1 normal
+230 135 1 normal
+300 135 1 normal
+370 135 1 normal
+440 135 1 normal
+510 135 1 normal
+580 135 1 normal
+20 160 1 normal
+90 160 1 normal
+160 160 1 normal
+230 160 1 normal
+300 160 1 normal
+370 160 1 normal
+440 160 1 normal
+510 160 1 normal
+580 160 1 normal
+150 185 1 normal
+220 185 1 normal
+290 185 1 normal
+360 185 1 normal
+430 185 1 normal
+500 185 1 normal
+570 185 1 normal

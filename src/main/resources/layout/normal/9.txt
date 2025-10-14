@@ -1,5 +1,56 @@
-0 0 0 3 0 3 0 0 0
-0 0 3 2 3 2 3 0 0
-0 3 2 1 1 1 2 3 0
-3 2 1 0 0 0 1 2 3
-0 3 0 0 0 0 0 3 0
+55
+5 60 2 strong
+75 60 1 normal
+145 60 2 strong
+215 60 1 normal
+285 60 2 strong
+355 60 1 normal
+425 60 2 strong
+495 60 1 normal
+565 60 2 strong
+635 60 1 normal
+35 85 2 strong
+105 85 1 normal
+175 85 2 strong
+245 85 1 normal
+315 85 2 strong
+385 85 1 normal
+455 85 2 strong
+525 85 1 normal
+595 85 2 strong
+35 110 3 strong
+105 110 2 strong
+175 110 3 strong
+245 110 2 strong
+315 110 3 strong
+385 110 2 strong
+455 110 3 strong
+525 110 2 strong
+595 110 3 strong
+95 135 2 strong
+165 135 1 normal
+235 135 2 strong
+305 135 1 normal
+375 135 2 strong
+445 135 1 normal
+515 135 2 strong
+585 135 1 normal
+5 160 2 strong
+75 160 1 normal
+145 160 2 strong
+215 160 1 normal
+285 160 2 strong
+355 160 1 normal
+425 160 2 strong
+495 160 1 normal
+565 160 2 strong
+635 160 1 normal
+35 185 2 strong
+105 185 1 normal
+175 185 2 strong
+245 185 1 normal
+315 185 2 strong
+385 185 1 normal
+455 185 2 strong
+525 185 1 normal
+595 185 2 strong

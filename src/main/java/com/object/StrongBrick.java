@@ -12,33 +12,37 @@ public class StrongBrick extends Brick {
     public StrongBrick (){
         super ();
         setHitPoints(1); 
-        setHasPowerUp(0);
+        setHasPowerUp(false);
     }
     public StrongBrick(float x, float y, float width, float height, int hitPoints) {
         super(x, y, width, height, hitPoints , "strong", 10);
         setBrickImageLink(getHitPoints());
         setImageLocation(getBrickImageLink());
-        setHasPowerUp(0);
+        setHasPowerUp(false);
     }
-    public StrongBrick (float x, float y,int hitPoints){
+    
+    public StrongBrick (float x, float y, int hitPoints){
          super(x, y, 70, 20, hitPoints, "strong", 10);
          setBrickImageLink(getHitPoints());
          setImageLocation(getBrickImageLink());
-        setHasPowerUp(0);
+        setHasPowerUp(false);
     }
-    public void setBrickImageLink(int hitp) {
-        if (hitp == 1)
+
+    public void setBrickImageLink(int hitPoints) {
+        if (hitPoints == 1)
             this.BrickImageLink = "file:assets/iceburg/brick1.png";
-        else if (hitp == 2)
+        else if (hitPoints == 2)
             this.BrickImageLink = "file:assets/iceburg/brick2.png";
-        else if (hitp == 3)
+        else if (hitPoints == 3)
             this.BrickImageLink = "file:assets/iceburg/brick3.png";
         else
             this.BrickImageLink = "file:assets/brick1.png";
     }
+
     public String getBrickImageLink(){
         return this.BrickImageLink;
     }
+
     public void render(GraphicsContext gc) {
         if (!isDestroyed()) {
             if (getHitPoints() != 0) {
@@ -49,16 +53,17 @@ public class StrongBrick extends Brick {
     }
     public boolean takeHit() {
         int hp = getHitPoints();
+
         if (hp > 0) {
             hp--;
             setHitPoints(hp);
             if (hp == 0) {
                 setDestroyed(true);
-                setHasPowerUp(getHasPowerUp()+1);
+                setHasPowerUp(true);
             }
             else {
-         setBrickImageLink(getHitPoints());
-         setImageLocation(getBrickImageLink());
+                setBrickImageLink(getHitPoints());
+                setImageLocation(getBrickImageLink());
             }
             return true;
         }

@@ -1,5 +1,41 @@
-3 3 3 3 3 3 3 3 3
-3 0 0 0 0 0 0 0 3
-3 0 2 2 2 2 2 0 3
-3 0 0 0 0 0 0 0 3
-3 3 3 3 3 3 3 3 3
+40
+0 60 2 strong
+70 60 1 normal
+140 60 2 strong
+210 60 1 normal
+280 60 2 strong
+350 60 1 normal
+420 60 2 strong
+490 60 1 normal
+560 60 2 strong
+630 60 1 normal
+0 85 1 normal
+70 85 2 strong
+140 85 1 normal
+210 85 2 strong
+280 85 1 normal
+350 85 2 strong
+420 85 1 normal
+490 85 2 strong
+560 85 1 normal
+630 85 2 strong
+0 110 2 strong
+70 110 1 normal
+140 110 2 strong
+210 110 1 normal
+280 110 2 strong
+350 110 1 normal
+420 110 2 strong
+490 110 1 normal
+560 110 2 strong
+630 110 1 normal
+0 135 1 normal
+70 135 2 strong
+140 135 1 normal
+210 135 2 strong
+280 135 1 normal
+350 135 2 strong
+420 135 1 normal
+490 135 2 strong
+560 135 1 normal
+630 135 2 strong

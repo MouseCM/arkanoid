@@ -1,6 +1,7 @@
 package com.object;
 
 
+import com.abstracts.Brick;
 import com.abstracts.GameObject;
 import com.abstracts.MovableObject;
 
@@ -43,14 +44,6 @@ public class Ball extends MovableObject {
         setDy((float) Math.cos(Math.toRadians(angle)));
     }
 
-    public void reverseDx() {
-        this.setDx(-getDx());
-    }
-
-    public void reverseDy() {
-        this.setDy(-getDy());
-    }
-
 
     @Override
     public void render(GraphicsContext gc) {
@@ -73,6 +66,14 @@ public class Ball extends MovableObject {
     }
 
 
+    public void bounceWall(int WIDTH) {
+        if (getX() + getDx() * getSpeed() - getRadius() <= 0 || 
+            getX() + getDx() * getSpeed() + getRadius() >= WIDTH) {
+            setAngle(-getAngle());
+        } else if (getY() + getDy() * getSpeed() - getRadius() <= 0) {
+            setAngle(180 - getAngle());
+        }
+    }
 
     public void bouncePaddle(Paddle paddle) {
         if (getX() > paddle.getX() - getRadius() && getX() < paddle.getX() + paddle.getWidth() + getRadius()) {
@@ -82,9 +83,21 @@ public class Ball extends MovableObject {
             setAngle(angle);
         }
         else {
-            reverseDx();
+            setDx(-getDx());
         }
     }
+
+    public void bounceBrick(Brick brick) {
+        // determine bounce direction
+        if (getX() > brick.getX() - getRadius() &&
+                getX() < getX() + getWidth() + getRadius()) {
+            setAngle(180 - getAngle());
+        } else {
+            setAngle(-getAngle());
+        }
+    }
+
+    
 
     public boolean isDeath(int HEIGHT) {
         return getY() + getRadius() >= HEIGHT;
