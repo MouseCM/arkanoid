@@ -48,7 +48,6 @@ public class GameController {
     private int score = 0;
     private int lives = 3;
 
-
     private List<Ball> balls;
     private Paddle paddle;
     private List<Brick> bricks;
@@ -121,12 +120,12 @@ public class GameController {
     private void handleMouse(Scene scene) {
         scene.setOnMousePressed(event -> {
             isMousePressed = true;
-            
-            if(gameStarted == false) {
+
+            if (gameStarted == false) {
                 gameStarted = true;
             }
 
-            if(gameOver == true) {
+            if (gameOver == true) {
                 resetGame();
             }
 
@@ -142,7 +141,7 @@ public class GameController {
         scene.setOnMouseEntered(e -> {
             scene.setCursor(Cursor.NONE);
         });
-        
+
         scene.setOnMouseExited(e -> {
             scene.setCursor(Cursor.DEFAULT);
         });
@@ -174,7 +173,6 @@ public class GameController {
             paddle.moveRight();
         }
 
-
         scene.setOnMouseMoved(event -> {
             float mouseX = (float) event.getSceneX() - paddle.getWidth() / 2;
             if (mouseX < 0) {
@@ -201,7 +199,6 @@ public class GameController {
         for (Ball ball : balls) {
             ball.bounceWall(WIDTH);
         }
-        
 
         for (int i = balls.size() - 1; i >= 0; i--) {
             Ball ball = balls.get(i);
@@ -214,8 +211,7 @@ public class GameController {
                 lives--;
                 if (lives <= 0) {
                     gameOver = true;
-                } 
-                else {
+                } else {
                     powerUps.clear();
                     balls.clear();
                     balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
@@ -223,16 +219,12 @@ public class GameController {
                 }
             }
         }
-        
-
 
         for (Ball ball : balls) {
             if (ball.willCollision(paddle)) {
                 ball.bouncePaddle(paddle);
             }
         }
-        
-
 
         // bounce brick
         for (Ball ball : balls) {
@@ -251,7 +243,6 @@ public class GameController {
                         powerUps.add(new PowerUp(brick.getX(), brick.getY(), "x3Ball"));
                     }
                 }
-                
 
                 if (!brick.isDestroyed() && ball.willCollision(brick)) {
                     ball.bounceBrick(brick);
@@ -267,9 +258,6 @@ public class GameController {
             }
         }
 
-
-        
-
         for (PowerUp powerUp : powerUps) {
             if (powerUp.isCollision(paddle)) {
                 powerUp.active(lives, balls);
@@ -280,9 +268,7 @@ public class GameController {
 
         powerUps.removeIf(PowerUp::isDead);
         powerUps.removeIf(PowerUp::getIsCollected);
-
-
-
+        
         for (Ball ball : balls) {
             ball.update();
         }
@@ -327,7 +313,7 @@ public class GameController {
         for (Ball ball : balls) {
             renderer.render(ball);
         }
-        
+
         renderer.render(paddle);
 
         renderer.renderHUD(score, lives);

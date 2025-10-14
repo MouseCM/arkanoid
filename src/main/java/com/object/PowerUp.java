@@ -11,7 +11,19 @@ import java.util.List;
 public class PowerUp extends MovableObject {
     private String PUType;
     private boolean isCollected;
-
+    private long TimeLimit = 0;
+    private long EndTime = 0;
+    public void setTimeLimit (long TimeLimit ) {
+        this.TimeLimit = TimeLimit;
+    }
+    public long getTimeLimit () {
+        return TimeLimit;
+    }
+    public boolean isExpired (long time){
+        if (getTimeLimit() > 0 )
+        return time >= EndTime;
+        return false;
+    }
     public boolean isDead() {
         return getY() > 720;
     }
@@ -44,16 +56,29 @@ public class PowerUp extends MovableObject {
         isCollected = false;
     }
 
-    public PowerUp(float x, float y, float dx, float dy, String PUType) {
+    public PowerUp(float x, float y, float dx, float dy, String PUType, long TimeLimit) {
         super(x, y, 20, 20, dx, dy, 50);
         this.PUType = PUType;
         isCollected = false;
+        this.TimeLimit = TimeLimit;
+        this.EndTime = TimeLimit + System.currentTimeMillis();
+        
     }
 
-    public PowerUp(float x, float y, float dx, float dy, float speed, String PUType) {
+    public PowerUp(float x, float y, float dx, float dy, float speed, String PUType, long TimeLimit) {
         super(x, y, 20, 20, dx, dy, speed);
         this.PUType = PUType;
         isCollected = false;
+        this.TimeLimit = TimeLimit;
+        this.EndTime = TimeLimit + System.currentTimeMillis();
+    }
+
+    public PowerUp(float x, float y, String PUType, long TimeLimit) {
+        super(x, y, 20, 20, 0, 1, 5);
+        this.PUType = PUType;
+        isCollected = false;
+        this.TimeLimit = TimeLimit;
+        this.EndTime = TimeLimit + System.currentTimeMillis();
     }
 
     public PowerUp(float x, float y, String PUType) {
@@ -84,7 +109,7 @@ public class PowerUp extends MovableObject {
 
             nextBall.setAngle(nextBall.getAngle() + 20);
             balls.add(nextBall.copy());
-            
+
             nextBall.setAngle(nextBall.getAngle() - 40);
             balls.add(nextBall.copy());
         }
