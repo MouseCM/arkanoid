@@ -1,5 +1,21 @@
-0 0 0 3 0 0 0 0 0
-0 0 3 2 3 0 0 0 0
-0 3 2 1 2 3 0 0 0
-3 2 1 1 1 2 3 0 0
-3 3 3 3 3 3 3 0 0
+20
+10 60 1 normal
+80 60 2 strong
+150 60 1 normal
+220 60 1 normal
+290 60 1 normal
+360 60 1 normal
+430 60 1 normal
+500 60 2 strong
+570 60 1 normal
+10 85 1 normal
+80 85 1 normal
+150 85 1 normal
+220 85 1 normal
+290 85 1 normal
+360 85 1 normal
+430 85 1 normal
+500 85 1 normal
+570 85 1 normal
+10 110 1 normal
+80 110 1 normal

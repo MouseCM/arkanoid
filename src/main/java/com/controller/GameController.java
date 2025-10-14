@@ -30,16 +30,19 @@ public class GameController {
     private Renderer renderer;
     private static final int WIDTH = 720;
     private static final int HEIGHT = 600;
-    //
-    final long FPS = 90;
-    final long timePerFrame = 1000000000 / FPS;
+
+
+    private int curLevels = 9;
+    private final long FPS = 90;
+    private long timePerFrame = 1000000000 / FPS;
     private long lasttime = 0;
 
-    private boolean leftPressed = false;
-    private boolean rightPressed = false;
+    private boolean aPressed = false;
+    private boolean dPressed = false;
     private boolean isMousePressed = false;
     private boolean gameStarted = false;
     private boolean gameOver = false;
+    private boolean won = false;
     private boolean gamePaused = false;
     private AnimationTimer gameLoop;
     private int score = 0;
@@ -49,7 +52,6 @@ public class GameController {
     private List<Ball> balls;
     private Paddle paddle;
     private List<Brick> bricks;
-    private int levelUpdate = 0;
     private List<PowerUp> powerUps;
 
     @FXML
@@ -75,10 +77,10 @@ public class GameController {
 
     private void handleKeyPressed(KeyCode key) {
         if (key == KeyCode.A) {
-            leftPressed = true;
+            aPressed = true;
         }
         if (key == KeyCode.D) {
-            rightPressed = true;
+            dPressed = true;
         }
         if (key == KeyCode.SPACE && !gameStarted) {
             gameStarted = true;
@@ -86,6 +88,13 @@ public class GameController {
         if (key == KeyCode.SPACE && gameOver) {
             resetGame();
         }
+        if (key == KeyCode.SPACE && won) {
+            nextLevel();
+        }
+        if (key == KeyCode.R) {
+            resetGame();
+        }
+
         if (key == KeyCode.ESCAPE) {
             gamePaused = !gamePaused;
             if (gamePaused) {
@@ -101,11 +110,11 @@ public class GameController {
 
     private void handleKeyReleased(KeyCode key) {
         if (key == KeyCode.A) {
-            leftPressed = false;
+            aPressed = false;
         }
 
         if (key == KeyCode.D) {
-            rightPressed = false;
+            dPressed = false;
         }
     }
 
@@ -119,6 +128,10 @@ public class GameController {
 
             if(gameOver == true) {
                 resetGame();
+            }
+
+            if (won) {
+                nextLevel();
             }
         });
 
@@ -147,17 +160,17 @@ public class GameController {
     }
 
     private void update(Scene scene) {
-        if (gameOver) {
+        if (gameOver || won) {
             return;
         }
 
         handleMouse(ScreenController.getCurrentScene());
 
 
-        if (leftPressed && paddle.getX() > 0) {
+        if (aPressed && paddle.getX() > 0) {
             paddle.moveLeft();
         }
-        if (rightPressed && paddle.getX() < WIDTH - paddle.getWidth()) {
+        if (dPressed && paddle.getX() < WIDTH - paddle.getWidth()) {
             paddle.moveRight();
         }
 
@@ -182,17 +195,11 @@ public class GameController {
                 ball.setY(paddle.getY() - ball.getRadius() - 5);
             }
             return;
-        }
+        }  
 
         // bounce wall
         for (Ball ball : balls) {
-            if (ball.getX() + ball.getDx() * ball.getSpeed() - ball.getRadius() <= 0) {
-                ball.setAngle(-ball.getAngle());
-            } else if (ball.getX() + ball.getDx() * ball.getSpeed() + ball.getRadius() >= WIDTH) {
-                ball.setAngle(-ball.getAngle());
-            } else if (ball.getY() + ball.getDy() * ball.getSpeed() - ball.getRadius() <= 0) {
-                ball.setAngle(180 - ball.getAngle());
-            }
+            ball.bounceWall(WIDTH);
         }
         
 
@@ -232,11 +239,11 @@ public class GameController {
             for (Brick brick : bricks) {
 
                 // add PowerUp
-                if (brick.getHasPowerUp() == 1) {
+                if (brick.hasPowerUp() == true) {
                     Random rand = new Random();
 
                     int x = rand.nextInt(100);
-                    brick.setHasPowerUp(0);
+                    brick.setHasPowerUp(false);
                     if (x <= 0) {
                         powerUps.add(new PowerUp(brick.getX(), brick.getY(), "HP"));
                     }
@@ -247,22 +254,14 @@ public class GameController {
                 
 
                 if (!brick.isDestroyed() && ball.willCollision(brick)) {
+                    ball.bounceBrick(brick);
                     
-
-                    // determine bounce direction
-                    if (ball.getX() > brick.getX() - ball.getRadius() &&
-                            ball.getX() < brick.getX() + brick.getWidth() + ball.getRadius()) {
-                        ball.setAngle(180 - ball.getAngle());
-                    } else {
-                        ball.setAngle(-ball.getAngle());
-                    }
-
                     if (brick.takeHit()) {
                         score += brick.getScoreValue();
                     }
 
                     if (bricks.stream().allMatch(b -> b == null || b.isDestroyed())) {
-                        gameOver = true;
+                        won = true;
                     }
                 }
             }
@@ -273,21 +272,7 @@ public class GameController {
 
         for (PowerUp powerUp : powerUps) {
             if (powerUp.isCollision(paddle)) {
-                System.out.println(powerUp.getPUType());
-
-                switch (powerUp.getPUType()) {
-                    case "HP":
-                        lives++;
-                        break;
-                    case "x3Ball":
-                        powerUp.x3Balls(balls);
-                        break;
-                    default:
-                        System.out.println("No action");
-                        break;
-                }
-                System.out.println(powerUps.size());
-                powerUp.setIsCollected(true);
+                powerUp.active(lives, balls);
             }
 
             powerUp.update();
@@ -304,9 +289,7 @@ public class GameController {
 
     }
 
-
-    private void render() {
-
+    private void FPS() {
         // fps stabilize
         long frameDuration = System.nanoTime() - lasttime;
         if (frameDuration < timePerFrame) {
@@ -321,6 +304,11 @@ public class GameController {
         }
 
         lasttime = System.nanoTime();
+    }
+
+
+    private void render() {
+        FPS();
 
         renderer.clear();
 
@@ -344,8 +332,7 @@ public class GameController {
 
         renderer.renderHUD(score, lives);
 
-        if (gameOver) {
-            boolean won = lives > 0;
+        if (gameOver || won) {
             renderer.renderGameOver(won);
         }
     }
@@ -361,57 +348,45 @@ public class GameController {
         initBricks();
     }
 
+    private void nextLevel() {
+        curLevels++;
+        won = false;
+        resetGame();
+    }
+
 
 
     private void initBricks() {
         String path = "src/main/resources/layout/normal/";
-        Random rand = new Random();
-        levelUpdate = rand.nextInt(19) + 1;
-        path += Integer.toString(levelUpdate) + ".txt";
-        File file = new File("src/main/resources/layout/normal/layout.txt");
-        File index = new File(path);
-        float[] x = new float[45];
-        float[] y = new float[45];
-        float width;
-        float height;
-        int size = 0;
+        path += Integer.toString(curLevels) + ".txt";
+        File levels = new File(path);
 
 
-        try (Scanner sc = new Scanner(file)) {
+        try (Scanner sc = new Scanner(levels)) {
             bricks = new ArrayList<>();
             powerUps = new ArrayList<>();
             String type;
             int n;
+            int x;
+            int y;
+            int hitPoints;
+
             n = sc.nextInt();
-            if (size == 0) {
-                size = n;
-            }
             
             for (int i = 0; i < n; i++) {
-                x[i] = sc.nextFloat();
-                y[i] = sc.nextFloat();
-                width = sc.nextFloat();
-                height = sc.nextFloat();
+                x = sc.nextInt();
+                y = sc.nextInt();
+                hitPoints = sc.nextInt();
                 type = sc.next();
-            }
-        } catch (FileNotFoundException e) {
-            System.err.println("Error loading brick layout: " + e.getMessage());
-        }
+                type.strip();
 
-        try (Scanner sc = new Scanner(index)) {
-            for (int i = 0; i < size; i++) {
-                int btype = sc.nextInt();
-                if (btype > 1) {
-                    bricks.add(new StrongBrick(x[i], y[i], btype));
-                } else if (btype == 1) {
-                    bricks.add(new NormalBrick(x[i], y[i]));
-                } else {
-                    bricks.add(new NormalBrick(x[i], y[i]));
-                    bricks.get(i).setHitPoints(0);
-                    bricks.get(i).setDestroyed(true);
+                if (type.equals("normal")) {
+                    bricks.add(new NormalBrick(x, y));
+                }
+                else if (type.equals("strong")) {
+                    bricks.add(new StrongBrick(x, y, hitPoints));
                 }
             }
-
         } catch (FileNotFoundException e) {
             System.err.println("Error loading brick layout: " + e.getMessage());
         }

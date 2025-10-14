@@ -5,15 +5,7 @@ public abstract class Brick extends GameObject {
     private boolean destroyed;
     private String type;
     private int scoreValue;
-    private int hasPowerUp;
-
-    public int getHasPowerUp(){
-        return hasPowerUp;
-    }
-
-    public void setHasPowerUp(int hasPowerUp){
-        this.hasPowerUp = hasPowerUp;
-    }
+    private boolean hasPowerUp;
 
     public Brick() {
         super();
@@ -63,12 +55,20 @@ public abstract class Brick extends GameObject {
         this.scoreValue = scoreValue;
     }
 
+    public boolean  hasPowerUp(){
+        return hasPowerUp;
+    }
+
+    public void setHasPowerUp(boolean hasPowerUp){
+        this.hasPowerUp = hasPowerUp;
+    }
+
     public boolean takeHit() {
         if (hitPoints > 0) {
             hitPoints--;
             if (hitPoints == 0) {
                 destroyed = true;
-                setHasPowerUp(getHasPowerUp()+1);
+                setHasPowerUp(true);
             }
             return true;
         }

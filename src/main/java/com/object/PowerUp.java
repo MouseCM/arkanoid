@@ -1,7 +1,5 @@
 package com.object;
 
-import java.security.NoSuchAlgorithmException;
-
 import com.abstracts.GameObject;
 import com.abstracts.MovableObject;
 
@@ -83,14 +81,30 @@ public class PowerUp extends MovableObject {
         int n = balls.size();
         for (int i = 0; i < n; i++) {
             Ball nextBall = balls.get(i).copy();
-            System.out.println(nextBall.getAngle());
+
             nextBall.setAngle(nextBall.getAngle() + 20);
-            System.out.println(nextBall.getAngle());
             balls.add(nextBall.copy());
+            
             nextBall.setAngle(nextBall.getAngle() - 40);
-            System.out.println(nextBall.getAngle());
             balls.add(nextBall.copy());
         }
     }
+
+    public void active(int lives, List<Ball> balls) {
+        switch (getPUType()) {
+            case "HP":
+                lives++;
+                break;
+            case "x3Ball":
+                x3Balls(balls);
+                break;
+            default:
+                System.out.println("No action");
+                break;
+        }
+
+        setIsCollected(true);
+    }
+
 
 }
