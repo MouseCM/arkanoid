@@ -3,6 +3,7 @@ package com.arkanoid;
 import com.abstracts.GameObject;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -44,6 +45,10 @@ public class Renderer {
         } else {
             gc.fillText("GAME OVER!", WIDTH / 2 - 90, HEIGHT / 2);
         }
+    }
+
+    public void renderBackground(Image image) {
+        gc.drawImage(image, 0, 0, 720, 600);
     }
 
 }

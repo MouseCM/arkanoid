@@ -9,63 +9,63 @@ import javafx.scene.image.Image;
 import java.util.List;
 
 public class PowerUp extends MovableObject {
-    private String PUType;
+    private String type;
     private boolean isCollected;
-    private long TimeLimit = 0;
-    private long EndTime = 0;
+    private long timeLimit = 0;
+    private long endTime = 0;
     Image image;
 
     public PowerUp() {
         super();
         isCollected = false;
-        PUType = "";
+        type = "";
     }
 
-    public PowerUp(float x, float y, float dx, float dy, String PUType, long TimeLimit) {
+    public PowerUp(float x, float y, float dx, float dy, String type, long timeLimit) {
         super(x, y, 20, 20, dx, dy, 50);
-        this.PUType = PUType;
+        this.type = type;
         isCollected = false;
-        this.TimeLimit = TimeLimit;
-        this.EndTime = TimeLimit + System.currentTimeMillis();
-        image = new Image("file:assets/powerup/" + getPUType() + ".png");
+        this.timeLimit = timeLimit;
+        this.endTime = timeLimit + System.currentTimeMillis();
+        image = new Image("file:assets/powerup/" + getType() + ".png");
     }
 
-    public PowerUp(float x, float y, float dx, float dy, float speed, String PUType, long TimeLimit) {
+    public PowerUp(float x, float y, float dx, float dy, float speed, String type, long timeLimit) {
         super(x, y, 20, 20, dx, dy, speed);
-        this.PUType = PUType;
+        this.type = type;
         isCollected = false;
-        this.TimeLimit = TimeLimit;
-        this.EndTime = TimeLimit + System.currentTimeMillis();
-        image = new Image("file:assets/powerup/" + getPUType() + ".png");
+        this.timeLimit = timeLimit;
+        this.endTime = timeLimit + System.currentTimeMillis();
+        image = new Image("file:assets/powerup/" + getType() + ".png");
     }
 
-    public PowerUp(float x, float y, String PUType, long TimeLimit) {
+    public PowerUp(float x, float y, String type, long timeLimit) {
         super(x, y, 20, 20, 0, 1, 5);
-        this.PUType = PUType;
+        this.type = type;
         isCollected = false;
-        this.TimeLimit = TimeLimit;
-        this.EndTime = TimeLimit + System.currentTimeMillis();
-        image = new Image("file:assets/powerup/" + getPUType() + ".png");
+        this.timeLimit = timeLimit;
+        this.endTime = timeLimit + System.currentTimeMillis();
+        image = new Image("file:assets/powerup/" + getType() + ".png");
     }
 
-    public PowerUp(float x, float y, String PUType) {
+    public PowerUp(float x, float y, String type) {
         super(x, y, 20, 20, 0, 1, 5);
-        this.PUType = PUType;
+        this.type = type;
         isCollected = false;
-        image = new Image("file:assets/powerup/" + getPUType() + ".png");
+        image = new Image("file:assets/powerup/" + getType() + ".png");
     }
 
-    public void setTimeLimit (long TimeLimit ) {
-        this.TimeLimit = TimeLimit;
+    public void setTimeLimit (long timeLimit ) {
+        this.timeLimit = timeLimit;
     }
 
     public long getTimeLimit () {
-        return TimeLimit;
+        return timeLimit;
     }
 
     public boolean isExpired (long time){
         if (getTimeLimit() > 0 )
-        return time >= EndTime;
+        return time >= endTime;
         return false;
     }
 
@@ -81,12 +81,12 @@ public class PowerUp extends MovableObject {
         this.isCollected = isCollected;
     }
 
-    public String getPUType() {
-        return PUType;
+    public String getType() {
+        return type;
     }
 
-    public void setPUType(String PUType) {
-        this.PUType = PUType;
+    public void setType(String type) {
+        this.type = type;
     }
 
 
@@ -118,7 +118,7 @@ public class PowerUp extends MovableObject {
     }
 
     public void active(int lives, List<Ball> balls) {
-        switch (getPUType()) {
+        switch (getType()) {
             case "HP":
                 lives++;
                 break;
