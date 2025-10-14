@@ -6,7 +6,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 public class StrongBrick extends Brick {
     Image img;
-    public boolean HasPowerUp;
 
     public StrongBrick (){
         super ();
@@ -53,6 +52,7 @@ public class StrongBrick extends Brick {
             }
         }
     }
+    
     public boolean takeHit() {
         int hp = getHitPoints();
 

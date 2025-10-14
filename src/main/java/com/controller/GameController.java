@@ -21,6 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
+import javafx.scene.image.Image;
 
 public class GameController {
     @FXML
@@ -50,6 +51,7 @@ public class GameController {
     private Paddle paddle;
     private List<Brick> bricks;
     private List<PowerUp> powerUps;
+    // Image bg = new Image("file:assets/iceburg/background.png");
 
     @FXML
     public void initialize() {
@@ -267,6 +269,8 @@ public class GameController {
         FPS();
 
         renderer.clear();
+
+        // renderer.renderBackground(bg);
 
         for (Brick brick : bricks) {
             if (!brick.isDestroyed()) {
