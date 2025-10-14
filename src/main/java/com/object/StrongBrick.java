@@ -5,48 +5,50 @@ import com.abstracts.Brick;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 public class StrongBrick extends Brick {
-   // public int brickint = 0;
+    Image img;
     public boolean HasPowerUp;
-    private String BrickImageLink = "file:assets/iceburg/brick1.png";
 
     public StrongBrick (){
         super ();
         setHitPoints(1); 
         setHasPowerUp(false);
+        setImage(getHitPoints());
     }
     public StrongBrick(float x, float y, float width, float height, int hitPoints) {
         super(x, y, width, height, hitPoints , "strong", 10);
-        setBrickImageLink(getHitPoints());
-        setImageLocation(getBrickImageLink());
         setHasPowerUp(false);
+        setImage(hitPoints);
     }
     
     public StrongBrick (float x, float y, int hitPoints){
-         super(x, y, 70, 20, hitPoints, "strong", 10);
-         setBrickImageLink(getHitPoints());
-         setImageLocation(getBrickImageLink());
+        super(x, y, 70, 20, hitPoints, "strong", 10);
         setHasPowerUp(false);
+        setImage(hitPoints);
     }
 
-    public void setBrickImageLink(int hitPoints) {
-        if (hitPoints == 1)
-            this.BrickImageLink = "file:assets/iceburg/brick1.png";
-        else if (hitPoints == 2)
-            this.BrickImageLink = "file:assets/iceburg/brick2.png";
-        else if (hitPoints == 3)
-            this.BrickImageLink = "file:assets/iceburg/brick3.png";
-        else
-            this.BrickImageLink = "file:assets/brick1.png";
+    public void setImage(int hitPoints) {
+        if (hitPoints == 1) {
+            setImageLocation("file:assets/iceburg/brick1.png");
+            img = new Image(getImageLocation());
+        }
+        else if (hitPoints == 2) {
+            setImageLocation("file:assets/iceburg/brick2.png");
+            img = new Image(getImageLocation());
+        }
+        else if (hitPoints == 3) {
+            setImageLocation("file:assets/iceburg/brick3.png");
+            img = new Image(getImageLocation());
+        }
+        else {
+            setImageLocation("file:assets/iceburg/brick1.png");
+            img = new Image(getImageLocation());
+        }
     }
 
-    public String getBrickImageLink(){
-        return this.BrickImageLink;
-    }
 
     public void render(GraphicsContext gc) {
         if (!isDestroyed()) {
             if (getHitPoints() != 0) {
-                Image img = new Image(getImageLocation());
                 gc.drawImage(img, getX(), getY(), getWidth(), getHeight());
             }
         }
@@ -62,8 +64,7 @@ public class StrongBrick extends Brick {
                 setHasPowerUp(true);
             }
             else {
-                setBrickImageLink(getHitPoints());
-                setImageLocation(getBrickImageLink());
+                setImage(hp);
             }
             return true;
         }

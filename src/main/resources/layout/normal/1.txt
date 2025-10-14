@@ -1,7 +1,25 @@
-6
+24
 150 60 1 normal
 220 60 1 normal
 290 60 1 normal
 360 60 1 normal
 430 60 1 normal
 500 60 1 normal
+150 85 1 normal
+220 85 1 normal
+290 85 1 normal
+360 85 1 normal
+430 85 1 normal
+500 85 1 normal
+150 110 2 strong
+220 110 2 strong
+290 110 2 strong
+360 110 2 strong
+430 110 2 strong
+500 110 2 strong
+150 135 3 strong
+220 135 3 strong
+290 135 3 strong
+360 135 3 strong
+430 135 3 strong
+500 135 3 strong

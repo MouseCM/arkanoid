@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
 import com.abstracts.Brick;
@@ -32,14 +31,13 @@ public class GameController {
     private static final int HEIGHT = 600;
 
 
-    private int curLevels = 9;
+    private int curLevels = 1;
     private final long FPS = 90;
     private long timePerFrame = 1000000000 / FPS;
     private long lasttime = 0;
 
     private boolean aPressed = false;
     private boolean dPressed = false;
-    private boolean isMousePressed = false;
     private boolean gameStarted = false;
     private boolean gameOver = false;
     private boolean won = false;
@@ -85,13 +83,13 @@ public class GameController {
             gameStarted = true;
         }
         if (key == KeyCode.SPACE && gameOver) {
-            resetGame();
+            hardResetGame();
         }
         if (key == KeyCode.SPACE && won) {
             nextLevel();
         }
         if (key == KeyCode.R) {
-            resetGame();
+            hardResetGame();
         }
 
         if (key == KeyCode.ESCAPE) {
@@ -119,23 +117,18 @@ public class GameController {
 
     private void handleMouse(Scene scene) {
         scene.setOnMousePressed(event -> {
-            isMousePressed = true;
 
             if (gameStarted == false) {
                 gameStarted = true;
             }
 
             if (gameOver == true) {
-                resetGame();
+                hardResetGame();
             }
 
             if (won) {
                 nextLevel();
             }
-        });
-
-        scene.setOnMouseReleased(event -> {
-            isMousePressed = false;
         });
 
         scene.setOnMouseEntered(e -> {
@@ -163,42 +156,29 @@ public class GameController {
             return;
         }
 
+        // handle mouse events
         handleMouse(ScreenController.getCurrentScene());
 
 
-        if (aPressed && paddle.getX() > 0) {
-            paddle.moveLeft();
-        }
-        if (dPressed && paddle.getX() < WIDTH - paddle.getWidth()) {
-            paddle.moveRight();
-        }
+        // handle paddle movement with mouse and keyboard
+        paddle.update(scene, WIDTH, aPressed, dPressed);
 
-        scene.setOnMouseMoved(event -> {
-            float mouseX = (float) event.getSceneX() - paddle.getWidth() / 2;
-            if (mouseX < 0) {
-                paddle.setX(0);
-                return;
-            }
-            if (mouseX > WIDTH - paddle.getWidth()) {
-                paddle.setX(WIDTH - paddle.getWidth());
-                return;
-            }
 
-            paddle.setX(mouseX);
-        });
-
+        // ball follow paddle
         if (!gameStarted) {
             for (Ball ball : balls) {
-                ball.setX(paddle.getX() + paddle.getWidth() / 2);
-                ball.setY(paddle.getY() - ball.getRadius() - 5);
+                ball.followPaddle(paddle);
             }
             return;
         }  
+
 
         // bounce wall
         for (Ball ball : balls) {
             ball.bounceWall(WIDTH);
         }
+
+
 
         for (int i = balls.size() - 1; i >= 0; i--) {
             Ball ball = balls.get(i);
@@ -211,11 +191,11 @@ public class GameController {
                 lives--;
                 if (lives <= 0) {
                     gameOver = true;
-                } else {
-                    powerUps.clear();
-                    balls.clear();
-                    balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
-                    gameStarted = false;
+                    return;
+                } 
+                else {
+                    resetGame();
+                    return;
                 }
             }
         }
@@ -232,16 +212,7 @@ public class GameController {
 
                 // add PowerUp
                 if (brick.hasPowerUp() == true) {
-                    Random rand = new Random();
-
-                    int x = rand.nextInt(100);
-                    brick.setHasPowerUp(false);
-                    if (x <= 0) {
-                        powerUps.add(new PowerUp(brick.getX(), brick.getY(), "HP"));
-                    }
-                    else if (x <= 100) {
-                        powerUps.add(new PowerUp(brick.getX(), brick.getY(), "x3Ball"));
-                    }
+                    brick.addPowerUp(powerUps);
                 }
 
                 if (!brick.isDestroyed() && ball.willCollision(brick)) {
@@ -272,11 +243,10 @@ public class GameController {
         for (Ball ball : balls) {
             ball.update();
         }
-
     }
 
+    // fps stabilize
     private void FPS() {
-        // fps stabilize
         long frameDuration = System.nanoTime() - lasttime;
         if (frameDuration < timePerFrame) {
             long sleepTime = (timePerFrame - frameDuration) / 1_000_000; // ns -> ms
@@ -324,6 +294,13 @@ public class GameController {
     }
 
     private void resetGame() {
+        powerUps.clear();
+        balls.clear();
+        balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
+        gameStarted = false;
+    }
+
+    private void hardResetGame() {
         score = 0;
         lives = 3;
         gameOver = false;
@@ -337,7 +314,7 @@ public class GameController {
     private void nextLevel() {
         curLevels++;
         won = false;
-        resetGame();
+        hardResetGame();
     }
 
 

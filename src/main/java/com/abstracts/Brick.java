@@ -1,5 +1,10 @@
 package com.abstracts;
 
+import java.util.Random;
+import java.util.List;
+
+import com.object.PowerUp;
+
 public abstract class Brick extends GameObject {
     private int hitPoints;
     private boolean destroyed;
@@ -74,5 +79,21 @@ public abstract class Brick extends GameObject {
         }
         return false;
     }
+
+    public void addPowerUp(List<PowerUp> powerUps) {
+        setHasPowerUp(false);
+
+        // add PowerUp
+        Random rand = new Random();
+        int num = rand.nextInt(100);
+
+        if (num <= 0) {
+            powerUps.add(new PowerUp(getX(), getY(), "HP"));
+        }
+        else if (num <= 100) {
+            powerUps.add(new PowerUp(getX(), getY(), "x3Ball"));
+        }
+    }
+
 
 }
