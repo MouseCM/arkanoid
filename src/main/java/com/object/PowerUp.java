@@ -2,6 +2,7 @@ package com.object;
 
 import com.abstracts.GameObject;
 import com.abstracts.MovableObject;
+import com.object.FireBall;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -125,8 +126,15 @@ public class PowerUp extends MovableObject {
             case "x3Ball":
                 x3Balls(balls);
                 break;
+            case "FireBall":
+                long curTime =System.currentTimeMillis();
+                for (Ball ball : balls){
+                    if (!(ball instanceof FireBall )){
+                        ball = new FireBall (ball.getX(), ball.getY(), ball.getDx(), ball.getDy(),ball.getRadius(),ball.getSpeed(),ball.getAngle(),curTime);
+                    }
+                }
+
             default:
-                System.out.println("No action");
                 break;
         }
 

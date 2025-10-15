@@ -286,6 +286,7 @@ public class GameController {
 
         for (Ball ball : balls) {
             renderer.render(ball);
+            // System.out.println(ball.getImageLocation());
         }
 
         renderer.render(paddle);
