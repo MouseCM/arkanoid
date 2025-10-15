@@ -1,13 +1,12 @@
 package com.object;
 
+import java.util.List;
+
 import com.abstracts.GameObject;
 import com.abstracts.MovableObject;
-import com.object.FireBall;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-
-import java.util.List;
 
 public class PowerUp extends MovableObject {
     private String type;
@@ -100,8 +99,8 @@ public class PowerUp extends MovableObject {
     }
 
     @Override
-    public void render(GraphicsContext gc) {
-        gc.drawImage(image, getX(), getY(), getWidth(), getHeight());
+    public void render(GraphicsContext gc, int LEFT) {
+        gc.drawImage(image, getX() + LEFT, getY(), getWidth(), getHeight());
     }
 
 
@@ -128,9 +127,11 @@ public class PowerUp extends MovableObject {
                 break;
             case "FireBall":
                 long curTime =System.currentTimeMillis();
-                for (Ball ball : balls){
-                    if (!(ball instanceof FireBall )){
-                        ball = new FireBall (ball.getX(), ball.getY(), ball.getDx(), ball.getDy(),ball.getRadius(),ball.getSpeed(),ball.getAngle(),curTime);
+                for (int i = 0; i < balls.size(); i++){
+                    if (!(balls.get(i) instanceof FireBall )){
+                        balls.set(i, new FireBall(balls.get(i).getX(), balls.get(i).getY(), 
+                            balls.get(i).getDx(), balls.get(i).getDy(),balls.get(i).getRadius(),
+                            balls.get(i).getSpeed(),balls.get(i).getAngle(), curTime));
                     }
                 }
 

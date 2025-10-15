@@ -20,8 +20,9 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 
 public class GameController {
     @FXML
@@ -29,7 +30,7 @@ public class GameController {
     private GraphicsContext gc;
     private Renderer renderer;
     private static final int WIDTH = 720;
-    private static final int HEIGHT = 600;
+    private static final int HEIGHT = 720;
 
 
     private int curLevels = 1;
@@ -51,7 +52,7 @@ public class GameController {
     private Paddle paddle;
     private List<Brick> bricks;
     private List<PowerUp> powerUps;
-    // Image bg = new Image("file:assets/iceburg/background.png");
+    Image bg = new Image("file:assets/iceburg/background.png");
 
     @FXML
     public void initialize() {
@@ -99,13 +100,14 @@ public class GameController {
             if (gamePaused) {
                 gameLoop.stop();
                 ScreenController.getCurrentScene().setCursor(Cursor.DEFAULT);
-
+                renderer.renderPaused();
             } else {
                 gameLoop.start();
                 ScreenController.getCurrentScene().setCursor(Cursor.NONE);
             }
         }
     }
+
 
     private void handleKeyReleased(KeyCode key) {
         if (key == KeyCode.A) {
@@ -116,6 +118,7 @@ public class GameController {
             dPressed = false;
         }
     }
+    
 
     private void handleMouse(Scene scene) {
         scene.setOnMousePressed(event -> {
@@ -270,6 +273,9 @@ public class GameController {
 
         renderer.clear();
 
+        gc.setFill(Color.BLACK);
+        gc.fillRect(180, 0, 720, 720);
+
         // renderer.renderBackground(bg);
 
         for (Brick brick : bricks) {
@@ -312,7 +318,7 @@ public class GameController {
         gameStarted = false;
         paddle.setX(WIDTH / 2 - (paddle.getWidth() / 2));
         balls.clear();
-        balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 10, 8, 165));
+        balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
         initBricks();
     }
 

@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 //import javafx.scene.paint.Color;
 
 public class Paddle extends MovableObject {
-    Image image;
+    private Image image;
 
     public Paddle() {
         super();
@@ -54,8 +54,8 @@ public class Paddle extends MovableObject {
         }
     }
 
-    public void render(GraphicsContext gc) {
-        gc.drawImage(image, getX(), getY(), getWidth(), getHeight());
+    public void render(GraphicsContext gc, int LEFT) {
+        gc.drawImage(image, getX() + LEFT, getY(), getWidth(), getHeight());
     }
 
 }

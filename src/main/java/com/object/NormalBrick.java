@@ -28,11 +28,11 @@ public class NormalBrick extends Brick {
         setHasPowerUp(false);
     }
 
-    public void render(GraphicsContext gc) {
+    public void render(GraphicsContext gc, int LEFT) {
         if (!isDestroyed()) {
             if (getHitPoints() != 0) {
                 
-                gc.drawImage(img, getX(), getY(), getWidth(), getHeight());
+                gc.drawImage(img, getX() + LEFT, getY(), getWidth(), getHeight());
             }
         }
     }

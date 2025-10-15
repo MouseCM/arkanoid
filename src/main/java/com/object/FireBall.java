@@ -16,14 +16,15 @@ public class FireBall extends Ball {
 
     public FireBall(float x, float y, float dx, float dy, float radius, float speed, float angle, long curTime) {
         super(x, y, dx, dy, radius, speed, angle);
-        setImg("file:assets/ball/fireball.png");
+        System.out.println(x);
+        setImg("file:assets/ball/fireball2.png");
         setActiveTime(curTime+5000);
     }
     
 
     @Override
-    public void render(GraphicsContext gc) {
-        gc.drawImage(getImg(), getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
+    public void render(GraphicsContext gc, int LEFT) {
+        gc.drawImage(getImg(), getX() - getRadius() + LEFT, getY() - getRadius(), getRadius() * 2, getRadius() * 2);
     }
 
 

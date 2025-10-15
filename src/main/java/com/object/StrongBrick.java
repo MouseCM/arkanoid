@@ -41,10 +41,10 @@ public class StrongBrick extends Brick {
     }
 
 
-    public void render(GraphicsContext gc) {
+    public void render(GraphicsContext gc, int left) {
         if (!isDestroyed()) {
             if (getHitPoints() != 0) {
-                gc.drawImage(img, getX(), getY(), getWidth(), getHeight());
+                gc.drawImage(img, getX() + left, getY(), getWidth(), getHeight());
             }
         }
     }

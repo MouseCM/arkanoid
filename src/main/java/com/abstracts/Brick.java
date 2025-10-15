@@ -1,7 +1,7 @@
 package com.abstracts;
 
-import java.util.Random;
 import java.util.List;
+import java.util.Random;
 
 import com.object.PowerUp;
 
@@ -87,13 +87,13 @@ public abstract class Brick extends GameObject {
         Random rand = new Random();
         int num = rand.nextInt(100);
 
-        if (num <= 10) {
+        if (num <= 0) {
             powerUps.add(new PowerUp(getX(), getY(), "HP"));
         }
-        else if(num <= 100) {
+        else if(num <= 50) {
             powerUps.add(new PowerUp(getX(), getY(), "FireBall"));
         }
-        else if (num <= 20) {
+        else if (num <= 100) {
             powerUps.add(new PowerUp(getX(), getY(), "x3Ball"));
         }
     }

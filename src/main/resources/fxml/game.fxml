@@ -6,8 +6,8 @@
 <StackPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.controller.GameController"
 
 
-           style="-fx-background-color: black;">
+           style="-fx-background-color: whitesmoke;">
     
-    <Canvas fx:id="gameCanvas" width="720" height="600"/>
+    <Canvas fx:id="gameCanvas" width="1080" height="720"/>
     
 </StackPane>
