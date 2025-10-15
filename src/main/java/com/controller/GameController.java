@@ -9,10 +9,12 @@ import java.util.Scanner;
 import com.abstracts.Brick;
 import com.arkanoid.Renderer;
 import com.object.Ball;
+import com.object.FireBall;
 import com.object.NormalBrick;
 import com.object.Paddle;
 import com.object.PowerUp;
 import com.object.StrongBrick;
+import com.object.Effect;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
@@ -20,8 +22,9 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 
 public class GameController {
     @FXML
@@ -29,13 +32,13 @@ public class GameController {
     private GraphicsContext gc;
     private Renderer renderer;
     private static final int WIDTH = 720;
-    private static final int HEIGHT = 600;
-
+    private static final int HEIGHT = 720;
 
     private int curLevels = 1;
-    private final long FPS = 90;
+    private final long FPS = 60;
     private long timePerFrame = 1000000000 / FPS;
     private long lasttime = 0;
+    private Effect effect = new Effect();
 
     private boolean aPressed = false;
     private boolean dPressed = false;
@@ -51,7 +54,8 @@ public class GameController {
     private Paddle paddle;
     private List<Brick> bricks;
     private List<PowerUp> powerUps;
-    // Image bg = new Image("file:assets/iceburg/background.png");
+
+    Image bg = new Image("file:assets/iceburg/background.png");
 
     @FXML
     public void initialize() {
@@ -99,7 +103,7 @@ public class GameController {
             if (gamePaused) {
                 gameLoop.stop();
                 ScreenController.getCurrentScene().setCursor(Cursor.DEFAULT);
-
+                renderer.renderPaused();
             } else {
                 gameLoop.start();
                 ScreenController.getCurrentScene().setCursor(Cursor.NONE);
@@ -161,10 +165,8 @@ public class GameController {
         // handle mouse events
         handleMouse(ScreenController.getCurrentScene());
 
-
         // handle paddle movement with mouse and keyboard
         paddle.update(scene, WIDTH, aPressed, dPressed);
-
 
         // ball follow paddle
         if (!gameStarted) {
@@ -172,15 +174,12 @@ public class GameController {
                 ball.followPaddle(paddle);
             }
             return;
-        }  
-
+        }
 
         // bounce wall
         for (Ball ball : balls) {
             ball.bounceWall(WIDTH);
         }
-
-
 
         for (int i = balls.size() - 1; i >= 0; i--) {
             Ball ball = balls.get(i);
@@ -194,8 +193,7 @@ public class GameController {
                 if (lives <= 0) {
                     gameOver = true;
                     return;
-                } 
-                else {
+                } else {
                     resetGame();
                     return;
                 }
@@ -219,7 +217,7 @@ public class GameController {
 
                 if (!brick.isDestroyed() && ball.willCollision(brick)) {
                     ball.bounceBrick(brick);
-                    
+
                     if (brick.takeHit()) {
                         score += brick.getScoreValue();
                     }
@@ -233,7 +231,7 @@ public class GameController {
 
         for (PowerUp powerUp : powerUps) {
             if (powerUp.isCollision(paddle)) {
-                powerUp.active(lives, balls);
+                powerUp.active(lives, balls, effect);
             }
 
             powerUp.update();
@@ -241,9 +239,16 @@ public class GameController {
 
         powerUps.removeIf(PowerUp::isDead);
         powerUps.removeIf(PowerUp::getIsCollected);
-        
-        for (Ball ball : balls) {
-            ball.update();
+
+        for (int i = 0; i < balls.size(); i++) {
+            if ((balls.get(i) instanceof FireBall) && effect.getFireballEffect() <= 0) {
+                balls.set(i, new Ball(balls.get(i).getX(), balls.get(i).getY(),
+                        balls.get(i).getDx(), balls.get(i).getDy(), balls.get(i).getRadius(),
+                        balls.get(i).getSpeed(), balls.get(i).getAngle()));
+            }
+            
+            balls.get(i).update();
+
         }
     }
 
@@ -264,13 +269,15 @@ public class GameController {
         lasttime = System.nanoTime();
     }
 
-
     private void render() {
         FPS();
 
         renderer.clear();
 
-     // renderer.renderBackground(bg);
+        gc.setFill(Color.BLACK);
+        gc.fillRect(180, 0, 720, 720);
+
+        // renderer.renderBackground(bg);
 
         for (Brick brick : bricks) {
             if (!brick.isDestroyed()) {
@@ -284,14 +291,17 @@ public class GameController {
             }
         }
 
-        for (Ball ball : balls) {
-            renderer.render(ball);
+        for (int i = 0; i < balls.size(); i++) {
+
+            renderer.render(balls.get(i));
             // System.out.println(ball.getImageLocation());
         }
 
         renderer.render(paddle);
 
         renderer.renderHUD(score, lives);
+
+        renderer.renderEffect(effect);
 
         if (gameOver || won) {
             renderer.renderGameOver(won);
@@ -312,7 +322,7 @@ public class GameController {
         gameStarted = false;
         paddle.setX(WIDTH / 2 - (paddle.getWidth() / 2));
         balls.clear();
-        balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 10, 8, 165));
+        balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
         initBricks();
     }
 
@@ -322,13 +332,10 @@ public class GameController {
         hardResetGame();
     }
 
-
-
     private void initBricks() {
         String path = "src/main/resources/layout/normal/";
         path += Integer.toString(curLevels) + ".txt";
         File levels = new File(path);
-
 
         try (Scanner sc = new Scanner(levels)) {
             bricks = new ArrayList<>();
@@ -340,7 +347,7 @@ public class GameController {
             int hitPoints;
 
             n = sc.nextInt();
-            
+
             for (int i = 0; i < n; i++) {
                 x = sc.nextInt();
                 y = sc.nextInt();
@@ -350,8 +357,7 @@ public class GameController {
 
                 if (type.equals("normal")) {
                     bricks.add(new NormalBrick(x, y));
-                }
-                else if (type.equals("strong")) {
+                } else if (type.equals("strong")) {
                     bricks.add(new StrongBrick(x, y, hitPoints));
                 }
             }

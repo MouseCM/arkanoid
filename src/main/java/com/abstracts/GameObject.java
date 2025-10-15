@@ -25,7 +25,7 @@ public abstract class GameObject {
     public void update() {
     }
 
-    public void render(GraphicsContext gc) {
+    public void render(GraphicsContext gc, int LEFT) {
     }
 
     public float getX() {

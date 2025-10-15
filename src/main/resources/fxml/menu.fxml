@@ -10,8 +10,8 @@
 <StackPane xmlns="http://javafx.com/javafx/17" 
            xmlns:fx="http://javafx.com/fxml/1" 
            fx:controller="com.controller.MenuController"
-           prefWidth="720" 
-           prefHeight="600"
+           prefWidth="1080" 
+           prefHeight="720"
            style="-fx-background-color: linear-gradient(to bottom, #1a1a2e, #16213e);">
     
     <VBox alignment="CENTER" spacing="30">
