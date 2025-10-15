@@ -19,8 +19,8 @@ public class FireBall extends Ball {
         setImg("file:assets/ball/fireball.png");
         setActiveTime(curTime+5000);
     }
-    
 
+    
     @Override
     public void render(GraphicsContext gc) {
         gc.drawImage(getImg(), getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);

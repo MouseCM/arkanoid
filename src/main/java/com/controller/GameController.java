@@ -270,7 +270,7 @@ public class GameController {
 
         renderer.clear();
 
-        // renderer.renderBackground(bg);
+     // renderer.renderBackground(bg);
 
         for (Brick brick : bricks) {
             if (!brick.isDestroyed()) {
