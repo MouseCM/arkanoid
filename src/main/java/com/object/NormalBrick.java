@@ -18,15 +18,13 @@ public class NormalBrick extends Brick {
 
     public NormalBrick(float x, float y, float width, float height) {
         super(x, y, width, height, 1, "normal", 10);
-        setImageLocation("file:assets/iceburg/normalbrick.png");
-        img = new Image(getImageLocation());
+        img = new Image("file:assets/iceburg/normalbrick.png");
         setHasPowerUp(false);
     }
 
     public NormalBrick(float x, float y) {
         super(x, y, 70, 20, 1, "normal", 10);
-        setImageLocation("file:assets/iceburg/normalbrick.png");
-        img = new Image(getImageLocation());
+        img = new Image("file:assets/iceburg/normalbrick.png");
         setHasPowerUp(false);
     }
 

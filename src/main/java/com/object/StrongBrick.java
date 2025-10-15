@@ -27,20 +27,16 @@ public class StrongBrick extends Brick {
 
     public void setImage(int hitPoints) {
         if (hitPoints == 1) {
-            setImageLocation("file:assets/iceburg/brick1.png");
-            img = new Image(getImageLocation());
+            img = new Image("file:assets/iceburg/brick1.png");
         }
         else if (hitPoints == 2) {
-            setImageLocation("file:assets/iceburg/brick2.png");
-            img = new Image(getImageLocation());
+            img = new Image("file:assets/iceburg/brick2.png");
         }
         else if (hitPoints == 3) {
-            setImageLocation("file:assets/iceburg/brick3.png");
-            img = new Image(getImageLocation());
+            img = new Image("file:assets/iceburg/brick3.png");
         }
         else {
-            setImageLocation("file:assets/iceburg/brick1.png");
-            img = new Image(getImageLocation());
+            img = new Image("file:assets/iceburg/brick1.png");
         }
     }
 
