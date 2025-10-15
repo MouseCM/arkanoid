@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 public class Ball extends MovableObject {
     private float radius;
     private float angle;
+    
 
     public Ball() {
         super();
