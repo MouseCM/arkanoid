@@ -9,12 +9,12 @@ import java.util.Scanner;
 import com.abstracts.Brick;
 import com.arkanoid.Renderer;
 import com.object.Ball;
+import com.object.Effect;
 import com.object.FireBall;
 import com.object.NormalBrick;
 import com.object.Paddle;
 import com.object.PowerUp;
 import com.object.StrongBrick;
-import com.object.Effect;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
@@ -38,7 +38,7 @@ public class GameController {
     private final long FPS = 60;
     private long timePerFrame = 1000000000 / FPS;
     private long lasttime = 0;
-    private Effect effect = new Effect();
+    
 
     private boolean aPressed = false;
     private boolean dPressed = false;
@@ -54,6 +54,7 @@ public class GameController {
     private Paddle paddle;
     private List<Brick> bricks;
     private List<PowerUp> powerUps;
+    private Effect effect;
 
     Image bg = new Image("file:assets/iceburg/background.png");
 
@@ -248,7 +249,6 @@ public class GameController {
             }
             
             balls.get(i).update();
-
         }
     }
 

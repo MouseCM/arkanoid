@@ -6,7 +6,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import com.object.Effect;
 
 public class Renderer {
     private GraphicsContext gc;
@@ -63,9 +62,11 @@ public class Renderer {
         long fireball = effect.getFireballEffect();
         gc.setFill(Color.BLACK);
         gc.setFont(Font.font("Arial", 20));
-        if (effect.getFireballEffect() >0 ){
-            gc.fillText("FireBall :" + effect.getFireballEffect(), WIDTH + LEFT*2 - 120, 50);
+        if (effect.getFireballEffect() > 0 ){
+            gc.fillText("FireBall :" + effect.getFireballEffect(), WIDTH + LEFT*2, 50);
         }
-       effect.setFireballEffect(fireball - 25);
+
+
+        effect.setFireballEffect(fireball - 25);
     }
 }
