@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 public class Ball extends MovableObject {
     private float radius;
     private float angle;
-
+    private Image img;
     public Ball() {
         super();
         this.radius = 0;
@@ -23,7 +23,20 @@ public class Ball extends MovableObject {
         super(x, y, 0, 0, dx, dy, speed);
         this.radius = radius;
         setImageLocation("file:assets/ball/normalball.png");
+        img = new Image(getImageLocation());
         setAngle(angle);
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
+    }
+
+    public Image getImg() {
+        return img;
+    }
+
+    public void setImg(String location) {
+        img = new Image(location);
     }
 
     public float getRadius() {
@@ -47,8 +60,7 @@ public class Ball extends MovableObject {
 
     @Override
     public void render(GraphicsContext gc) {
-        Image image = new Image(getImageLocation());
-        gc.drawImage(image,getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
+        gc.drawImage(img, getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
     }
 
     public boolean willCollision(GameObject other) {

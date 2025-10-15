@@ -32,7 +32,7 @@ public class GameController {
     private static final int HEIGHT = 600;
 
 
-    private int curLevels = 9;
+    private int curLevels = 7;
     private final long FPS = 90;
     private long timePerFrame = 1000000000 / FPS;
     private long lasttime = 0;
@@ -186,6 +186,7 @@ public class GameController {
 
             paddle.setX(mouseX);
         });
+        
 
         if (!gameStarted) {
             for (Ball ball : balls) {
@@ -236,12 +237,15 @@ public class GameController {
 
                     int x = rand.nextInt(100);
                     brick.setHasPowerUp(false);
-                    if (x <= 0) {
-                        powerUps.add(new PowerUp(brick.getX(), brick.getY(), "HP"));
+                    if (x <= 10) {
+                        powerUps.add(new PowerUp(brick.getX(), brick.getY(), "HP", 0));
                     }
-                    else if (x <= 100) {
-                        powerUps.add(new PowerUp(brick.getX(), brick.getY(), "x3Ball"));
+                    else if (x <= 80) {
+                        powerUps.add(new PowerUp(brick.getX(), brick.getY(), "FireBall", 5000));
                     }
+                          else if (x <= 40) {
+                        powerUps.add(new PowerUp(brick.getX(), brick.getY(), "x3Ball", 0));
+                    }   
                 }
 
                 if (!brick.isDestroyed() && ball.willCollision(brick)) {
@@ -312,6 +316,7 @@ public class GameController {
 
         for (Ball ball : balls) {
             renderer.render(ball);
+            System.out.println(ball.getImageLocation());
         }
 
         renderer.render(paddle);
