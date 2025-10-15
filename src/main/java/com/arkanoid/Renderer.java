@@ -34,7 +34,7 @@ public class Renderer {
         gc.setFill(Color.BLACK);
         gc.setFont(Font.font("Arial", 20));
         gc.fillText("Score: " + score, 20, 25);
-        gc.fillText("Lives: " + lives, WIDTH + LEFT*2 - 80, 25);
+        gc.fillText("Lives: " + lives, 20, 45);
     }
 
 
@@ -61,10 +61,13 @@ public class Renderer {
 
     public void renderEffect (Effect effect){
         long fireball = effect.getFireballEffect();
+        long high = 25;
         gc.setFill(Color.BLACK);
         gc.setFont(Font.font("Arial", 20));
+       
         if (effect.getFireballEffect() >0 ){
-            gc.fillText("FireBall :" + effect.getFireballEffect(), WIDTH + LEFT*2 - 120, 50);
+            gc.fillText("FireBall :" + effect.getFireballEffect(), WIDTH + LEFT*2 - 170, high);
+            high += 20;
         }
        effect.setFireballEffect(fireball - 25);
     }

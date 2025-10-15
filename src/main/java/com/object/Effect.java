@@ -11,6 +11,7 @@ public class Effect {
     public  void setFireballEffect(long fireballEffect) {
         this.fireballEffect = fireballEffect;
     }
-        
+    
+    
 
 }
