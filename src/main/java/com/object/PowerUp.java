@@ -128,12 +128,12 @@ public class PowerUp extends MovableObject {
                 break;
             case "FireBall":
                 long curTime =System.currentTimeMillis();
-                for (Ball ball : balls){
-                    if (!(ball instanceof FireBall )){
-                        ball = new FireBall (ball.getX(), ball.getY(), ball.getDx(), ball.getDy(),ball.getRadius(),ball.getSpeed(),ball.getAngle(),curTime);
+                for (int i = 0; i < balls.size(); i++){
+                    if (!(balls.get(i) instanceof FireBall )){
+                        balls.set(i, new FireBall(balls.get(i).getX(), balls.get(i).getY(), balls.get(i).getDx(), balls.get(i).getDy(),balls.get(i).getRadius(),balls.get(i).getSpeed(),balls.get(i).getAngle(), curTime));
                     }
                 }
-
+                
             default:
                 break;
         }
