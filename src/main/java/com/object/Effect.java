@@ -1,11 +1,8 @@
 package com.object;
 
-import javafx.animation.PathTransition;
 
 public class Effect {
-
-    private static long fireballEffect;
-    
+    private long fireballEffect;
 
     public  long getFireballEffect() {
         return fireballEffect;
@@ -14,6 +11,7 @@ public class Effect {
     public  void setFireballEffect(long fireballEffect) {
         this.fireballEffect = fireballEffect;
     }
-        
+    
+    
 
 }

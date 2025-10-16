@@ -1,6 +1,7 @@
 package com.arkanoid;
 
 import com.abstracts.GameObject;
+import com.object.Effect;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -30,10 +31,10 @@ public class Renderer {
 
 
     public void renderHUD(int score, int lives) {
-        gc.setFill(Color.BLACK);
+        gc.setFill(Color.WHITE);
         gc.setFont(Font.font("Arial", 20));
         gc.fillText("Score: " + score, 20, 25);
-        gc.fillText("Lives: " + lives, WIDTH + LEFT*2 - 80, 25);
+        gc.fillText("Lives: " + lives, 20, 45);
     }
 
 
@@ -55,15 +56,18 @@ public class Renderer {
     }
 
     public void renderBackground(Image image) {
-        gc.drawImage(image, 0, 0, 720, 600);
+        gc.drawImage(image, 180, 0, 720, 720);
     }
 
     public void renderEffect (Effect effect){
         long fireball = effect.getFireballEffect();
+        long high = 25;
         gc.setFill(Color.BLACK);
         gc.setFont(Font.font("Arial", 20));
-        if (effect.getFireballEffect() > 0 ){
-            gc.fillText("FireBall :" + effect.getFireballEffect(), WIDTH + LEFT*2, 50);
+       
+        if (effect.getFireballEffect() >0 ){
+            gc.fillText("FireBall: " + effect.getFireballEffect(), WIDTH + LEFT*2 - 170, high);
+            high += 20;
         }
 
 

@@ -8,47 +8,46 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 public class MenuController {
+    @FXML
+    private Button newGameButton;
     
     @FXML
-    private Button startButton;
+    private Button continueButton;
     
     @FXML
-    private Button settingsButton;
+    private Button themeButton;
     
+    // Hover effect for NewGame button
     @FXML
-    private Button aboutButton;
-    
-    // Hover effect for Start button
-    @FXML
-    private void onStartHover() {
-        applyHoverEffect(startButton);
+    private void onNewGameHover() {
+        applyHoverEffect(newGameButton);
     }
     
     @FXML
-    private void onStartExit() {
-        removeHoverEffect(startButton);
+    private void onNewGameExit() {
+        removeHoverEffect(newGameButton);
     }
     
-    // Hover effect for Settings button
+    // Hover effect for Continue button
     @FXML
-    private void onSettingsHover() {
-        applyHoverEffect(settingsButton);
-    }
-    
-    @FXML
-    private void onSettingsExit() {
-        removeHoverEffect(settingsButton);
-    }
-    
-    // Hover effect for About button
-    @FXML
-    private void onAboutHover() {
-        applyHoverEffect(aboutButton);
+    private void onContinueHover() {
+        applyHoverEffect(continueButton);
     }
     
     @FXML
-    private void onAboutExit() {
-        removeHoverEffect(aboutButton);
+    private void onContinueExit() {
+        removeHoverEffect(continueButton);
+    }
+    
+    // Hover effect for Theme button
+    @FXML
+    private void onThemeHover() {
+        applyHoverEffect(themeButton);
+    }
+    
+    @FXML
+    private void onThemeExit() {
+        removeHoverEffect(themeButton);
     }
     
     // Apply hover animation
@@ -88,19 +87,19 @@ public class MenuController {
     
     // Button click handlers
     @FXML
-    private void onStartClicked() {
+    private void onNewGameClicked() {
         ScreenController.loadScreen("/fxml/game.fxml");
 
     }
     
     @FXML
-    private void onSettingsClicked() {
+    private void onContinueClicked() {
         
 
     }
     
     @FXML
-    private void onAboutClicked() {
+    private void onThemeClicked() {
         
 
     }

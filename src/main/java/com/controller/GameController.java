@@ -24,7 +24,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
 
 public class GameController {
     @FXML
@@ -56,7 +55,7 @@ public class GameController {
     private List<PowerUp> powerUps;
     private Effect effect;
 
-    Image bg = new Image("file:assets/iceburg/background.png");
+    Image bg = new Image("file:assets/bg.png");
 
     @FXML
     public void initialize() {
@@ -70,7 +69,9 @@ public class GameController {
 
         balls = new ArrayList<>();
         balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
-        paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 20, 1, 0, 100, 10, 10);
+        paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 30, 1, 0, 100, 15, 10);
+
+        effect = new Effect();
 
         initBricks();
 
@@ -159,9 +160,9 @@ public class GameController {
     }
 
     private void update(Scene scene) {
-        if (gameOver || won) {
-            return;
-        }
+        // if (gameOver || won) {
+        //     return;
+        // }
 
         // handle mouse events
         handleMouse(ScreenController.getCurrentScene());
@@ -270,14 +271,19 @@ public class GameController {
     }
 
     private void render() {
+        // if(gameOver || won) {
+        //     return;
+        // }
+
+
         FPS();
 
         renderer.clear();
 
-        gc.setFill(Color.BLACK);
-        gc.fillRect(180, 0, 720, 720);
+        // gc.setFill(Color.BLACK);
+        // gc.fillRect(180, 0, 720, 720);
 
-        // renderer.renderBackground(bg);
+        renderer.renderBackground(bg);
 
         for (Brick brick : bricks) {
             if (!brick.isDestroyed()) {
@@ -312,6 +318,7 @@ public class GameController {
         powerUps.clear();
         balls.clear();
         balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
+        effect = new Effect();
         gameStarted = false;
     }
 
@@ -323,6 +330,7 @@ public class GameController {
         paddle.setX(WIDTH / 2 - (paddle.getWidth() / 2));
         balls.clear();
         balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
+        effect = new Effect();
         initBricks();
     }
 
