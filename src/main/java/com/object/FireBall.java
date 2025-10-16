@@ -20,7 +20,7 @@ public class FireBall extends Ball {
         gc.save();
         gc.translate(getX() + LEFT, getY());
         gc.rotate(Math.toDegrees(Math.atan2(getDy(), getDx()))+180);
-        gc.drawImage(getLightImage(), -getRadius(),  -getRadius(), 100, 20);
+        gc.drawImage(getLightImage(), -getRadius(),  -getRadius() - 2, 100, 20);
         gc.restore();
         
         gc.drawImage(getImg(), getX() - getRadius() + LEFT, getY() - getRadius(), getRadius() * 2, getRadius() * 2);
