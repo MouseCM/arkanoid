@@ -158,9 +158,9 @@ public class GameController {
     }
 
     private void update(Scene scene) {
-        if (gameOver || won) {
-            return;
-        }
+        // if (gameOver || won) {
+        //     return;
+        // }
 
         // handle mouse events
         handleMouse(ScreenController.getCurrentScene());
@@ -248,7 +248,7 @@ public class GameController {
             }
             
             balls.get(i).update();
-
+            
         }
     }
 
