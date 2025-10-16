@@ -89,7 +89,6 @@ public class MenuController {
     @FXML
     private void onNewGameClicked() {
         ScreenController.loadScreen("/fxml/game.fxml");
-
     }
     
     @FXML

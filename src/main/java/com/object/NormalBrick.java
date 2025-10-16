@@ -23,7 +23,7 @@ public class NormalBrick extends Brick {
     }
 
     public NormalBrick(float x, float y) {
-        super(x, y, 70, 20, 1, "normal", 10);
+        super(x, y, 50, 25, 1, "normal", 10);
         img = new Image("file:assets/iceburg/normalbrick.png");
         setHasPowerUp(false);
     }

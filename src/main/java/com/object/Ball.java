@@ -4,10 +4,10 @@ package com.object;
 import com.abstracts.Brick;
 import com.abstracts.GameObject;
 import com.abstracts.MovableObject;
+import com.controller.Sound;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 
 public class Ball extends MovableObject {
@@ -103,8 +103,10 @@ public class Ball extends MovableObject {
         if (getX() + getDx() * getSpeed() - getRadius() <= 0 || 
             getX() + getDx() * getSpeed() + getRadius() >= WIDTH) {
             setAngle(-getAngle());
+            Sound.getInstance().playWallHit();
         } else if (getY() + getDy() * getSpeed() - getRadius() <= 0) {
             setAngle(180 - getAngle());
+            Sound.getInstance().playWallHit();
         }
     }
 

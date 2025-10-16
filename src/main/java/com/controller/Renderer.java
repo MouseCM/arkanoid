@@ -1,4 +1,4 @@
-package com.arkanoid;
+package com.controller;
 
 import com.abstracts.GameObject;
 import com.object.Effect;

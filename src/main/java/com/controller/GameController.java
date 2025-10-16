@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.abstracts.Brick;
-import com.arkanoid.Renderer;
 import com.object.Ball;
 import com.object.Effect;
 import com.object.FireBall;
@@ -30,6 +29,7 @@ public class GameController {
     private Canvas gameCanvas;
     private GraphicsContext gc;
     private Renderer renderer;
+    private Sound sound;
     private static final int WIDTH = 720;
     private static final int HEIGHT = 720;
 
@@ -62,6 +62,7 @@ public class GameController {
         gc = gameCanvas.getGraphicsContext2D();
 
         renderer = new Renderer(gc, WIDTH, HEIGHT);
+        sound = Sound.getInstance();
 
         gameCanvas.setFocusTraversable(true);
         gameCanvas.setOnKeyPressed(e -> handleKeyPressed(e.getCode()));
@@ -160,9 +161,9 @@ public class GameController {
     }
 
     private void update(Scene scene) {
-        // if (gameOver || won) {
-        //     return;
-        // }
+        if (gameOver || won) {
+            return;
+        }
 
         // handle mouse events
         handleMouse(ScreenController.getCurrentScene());
@@ -187,6 +188,7 @@ public class GameController {
             Ball ball = balls.get(i);
 
             if (ball.isDeath(HEIGHT)) {
+                sound.playDeath();
                 balls.remove(i);
             }
 
@@ -194,6 +196,7 @@ public class GameController {
                 lives--;
                 if (lives <= 0) {
                     gameOver = true;
+                    sound.playGameOver();
                     return;
                 } else {
                     resetGame();
@@ -204,6 +207,7 @@ public class GameController {
 
         for (Ball ball : balls) {
             if (ball.willCollision(paddle)) {
+                sound.playPaddleHit();
                 ball.bouncePaddle(paddle);
             }
         }
@@ -218,6 +222,7 @@ public class GameController {
                 }
 
                 if (!brick.isDestroyed() && ball.willCollision(brick)) {
+                    sound.playBrickHit();
                     ball.bounceBrick(brick);
 
                     if (brick.takeHit()) {
@@ -226,6 +231,7 @@ public class GameController {
 
                     if (bricks.stream().allMatch(b -> b == null || b.isDestroyed())) {
                         won = true;
+                        sound.playGameWon();
                     }
                 }
             }
@@ -250,7 +256,6 @@ public class GameController {
             }
             
             balls.get(i).update();
-            
         }
     }
 
