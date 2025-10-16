@@ -65,7 +65,7 @@ public class MenuController {
         button.setEffect(glow);
         
         // Change background color
-        button.setStyle("-fx-background-color: #e94560; -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;");
+        button.setStyle("-fx-background-color: #e94560; -fx-text-fill: navi; -fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;");
         
         scaleTransition.play();
     }
@@ -80,7 +80,7 @@ public class MenuController {
         button.setEffect(null);
         
         // Restore original background
-        button.setStyle("-fx-background-color: #0f3460; -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;");
+        button.setStyle("-fx-background-color: #0f3460; -fx-text-fill: navi; -fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;");
         
         scaleTransition.play();
     }

@@ -250,6 +250,7 @@ public class GameController {
             }
             
             balls.get(i).update();
+            
         }
     }
 
