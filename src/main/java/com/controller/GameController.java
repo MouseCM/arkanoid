@@ -188,7 +188,6 @@ public class GameController {
             Ball ball = balls.get(i);
 
             if (ball.isDeath(HEIGHT)) {
-                sound.playDeath();
                 balls.remove(i);
             }
 
@@ -199,6 +198,7 @@ public class GameController {
                     sound.playGameOver();
                     return;
                 } else {
+                    sound.playDeath();
                     resetGame();
                     return;
                 }
