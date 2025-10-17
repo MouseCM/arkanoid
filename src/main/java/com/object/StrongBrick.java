@@ -20,7 +20,7 @@ public class StrongBrick extends Brick {
     }
     
     public StrongBrick (float x, float y, int hitPoints){
-        super(x, y, 70, 20, hitPoints, "strong", 10);
+        super(x, y, 50, 25, hitPoints, "strong", 10);
         setHasPowerUp(false);
         setImage(hitPoints);
     }

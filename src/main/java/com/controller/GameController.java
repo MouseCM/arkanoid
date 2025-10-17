@@ -7,14 +7,13 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.abstracts.Brick;
-import com.arkanoid.Renderer;
 import com.object.Ball;
+import com.object.Effect;
 import com.object.FireBall;
 import com.object.NormalBrick;
 import com.object.Paddle;
 import com.object.PowerUp;
 import com.object.StrongBrick;
-import com.object.Effect;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
@@ -24,13 +23,13 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
 
 public class GameController {
     @FXML
     private Canvas gameCanvas;
     private GraphicsContext gc;
     private Renderer renderer;
+    private Sound sound;
     private static final int WIDTH = 720;
     private static final int HEIGHT = 720;
 
@@ -38,7 +37,7 @@ public class GameController {
     private final long FPS = 60;
     private long timePerFrame = 1000000000 / FPS;
     private long lasttime = 0;
-    private Effect effect = new Effect();
+    
 
     private boolean aPressed = false;
     private boolean dPressed = false;
@@ -54,6 +53,7 @@ public class GameController {
     private Paddle paddle;
     private List<Brick> bricks;
     private List<PowerUp> powerUps;
+    private Effect effect;
 
     Image bg = new Image("file:assets/iceburg/background.png");
     Image leftWall = new Image("file:assets/iceburg/wall.png");
@@ -63,6 +63,7 @@ public class GameController {
         gc = gameCanvas.getGraphicsContext2D();
 
         renderer = new Renderer(gc, WIDTH, HEIGHT);
+        sound = Sound.getInstance();
 
         gameCanvas.setFocusTraversable(true);
         gameCanvas.setOnKeyPressed(e -> handleKeyPressed(e.getCode()));
@@ -70,7 +71,9 @@ public class GameController {
 
         balls = new ArrayList<>();
         balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
-        paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 20, 1, 0, 100, 10, 10);
+        paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 30, 1, 0, 100, 15, 10);
+
+        effect = new Effect();
 
         initBricks();
 
@@ -159,9 +162,9 @@ public class GameController {
     }
 
     private void update(Scene scene) {
-        // if (gameOver || won) {
-        //     return;
-        // }
+        if (gameOver || won) {
+            return;
+        }
 
         // handle mouse events
         handleMouse(ScreenController.getCurrentScene());
@@ -193,8 +196,10 @@ public class GameController {
                 lives--;
                 if (lives <= 0) {
                     gameOver = true;
+                    sound.playGameOver();
                     return;
                 } else {
+                    sound.playDeath();
                     resetGame();
                     return;
                 }
@@ -203,6 +208,7 @@ public class GameController {
 
         for (Ball ball : balls) {
             if (ball.willCollision(paddle)) {
+                sound.playPaddleHit();
                 ball.bouncePaddle(paddle);
             }
         }
@@ -217,6 +223,7 @@ public class GameController {
                 }
 
                 if (!brick.isDestroyed() && ball.willCollision(brick)) {
+                    sound.playBrickHit();
                     ball.bounceBrick(brick);
 
                     if (brick.takeHit()) {
@@ -225,6 +232,7 @@ public class GameController {
 
                     if (bricks.stream().allMatch(b -> b == null || b.isDestroyed())) {
                         won = true;
+                        sound.playGameWon();
                     }
                 }
             }
@@ -249,7 +257,6 @@ public class GameController {
             }
             
             balls.get(i).update();
-            
         }
     }
 
@@ -271,12 +278,17 @@ public class GameController {
     }
 
     private void render() {
+        // if(gameOver || won) {
+        //     return;
+        // }
+
+
         FPS();
 
         renderer.clear();
 
-        gc.setFill(Color.BLACK);
-        gc.fillRect(180, 0, 720, 720);
+        // gc.setFill(Color.BLACK);
+        // gc.fillRect(180, 0, 720, 720);
 
        // renderer.renderBackground(bg);
         gc.drawImage(leftWall, 0,  0, 200, 720);
@@ -314,6 +326,7 @@ public class GameController {
         powerUps.clear();
         balls.clear();
         balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
+        effect = new Effect();
         gameStarted = false;
     }
 
@@ -325,6 +338,7 @@ public class GameController {
         paddle.setX(WIDTH / 2 - (paddle.getWidth() / 2));
         balls.clear();
         balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
+        effect = new Effect();
         initBricks();
     }
 

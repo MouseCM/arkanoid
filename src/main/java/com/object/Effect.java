@@ -1,8 +1,8 @@
 package com.object;
 
+
 public class Effect {
-    private static long fireballEffect;
-    
+    private long fireballEffect;
 
     public  long getFireballEffect() {
         return fireballEffect;
