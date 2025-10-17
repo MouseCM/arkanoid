@@ -56,7 +56,8 @@ public class GameController {
     private List<PowerUp> powerUps;
 
     Image bg = new Image("file:assets/iceburg/background.png");
-
+    Image leftWall = new Image("file:assets/iceburg/wall.png");
+    Image rightWall = new Image("file:assets/iceburg/rightwall.png"); 
     @FXML
     public void initialize() {
         gc = gameCanvas.getGraphicsContext2D();
@@ -277,8 +278,9 @@ public class GameController {
         gc.setFill(Color.BLACK);
         gc.fillRect(180, 0, 720, 720);
 
-        // renderer.renderBackground(bg);
-
+       // renderer.renderBackground(bg);
+        gc.drawImage(leftWall, 0,  0, 200, 720);
+        gc.drawImage(rightWall, 880, 0, 200, 720);
         for (Brick brick : bricks) {
             if (!brick.isDestroyed()) {
                 renderer.render(brick);
