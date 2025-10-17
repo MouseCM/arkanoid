@@ -86,7 +86,7 @@ public class Ball extends MovableObject {
 
     public boolean willCollision(GameObject other) {
         return getY() + getRadius() + getDy() * getSpeed() >= other.getY() && 
-            getY() - getRadius() + getDy() * getSpeed() <= other.getY() + other.getHeight() &&
+            getY() - getRadius() + getDy() * getSpeed() <= other.getY() + other.getHeight() && 
             getX() + getRadius() + getDx() * getSpeed() >= other.getX() && 
             getX() - getRadius() + getDx() * getSpeed() <= other.getX() + other.getWidth();
     }
