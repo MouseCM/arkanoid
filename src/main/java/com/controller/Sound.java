@@ -14,13 +14,18 @@ public class Sound {
     private volatile boolean running = true;
     private Thread soundThread;
     
-    // Sound clips
+    // Menu sound
+    private AudioClip clickSound;
+
+
+    // Game sound
     private AudioClip paddleSound;
     private AudioClip wallSound;
     private AudioClip brickSound;
     private AudioClip gameOverSound;
     private AudioClip gameWonSound;
     private AudioClip deathSound;
+
 
     public static Sound getInstance() {
         if (instance == null) {
@@ -34,12 +39,8 @@ public class Sound {
         return instance;
     }
     
-    public void start() {
-        loadSounds();
-        
+    public void start() {        
         soundThread = new Thread(() -> {
-            System.out.println("Sound thread started");
-            
             while (running) {
                 try {
                     // Wait for sound task
@@ -53,15 +54,13 @@ public class Sound {
                     break;
                 }
             }
-            
-            System.out.println("Sound thread stopped");
         }, "SoundThread");
         
         soundThread.setDaemon(true);
         soundThread.start();
     }
     
-    private void loadSounds() {
+    public void loadGameSounds() {
         try {
             paddleSound = new AudioClip(getClass().getResource("/sound/paddle.wav").toString());
             wallSound = new AudioClip(getClass().getResource("/sound/brick.wav").toString());
@@ -69,11 +68,15 @@ public class Sound {
             gameOverSound = new AudioClip(getClass().getResource("/sound/gameOver.wav").toString());
             gameWonSound = new AudioClip(getClass().getResource("/sound/gameWon.wav").toString());
             deathSound = new AudioClip(getClass().getResource("/sound/death.wav").toString());
-
-            System.out.println("Sounds loaded (add actual files to enable)");
         } catch (Exception e) {
             System.err.println("Failed to load sounds: " + e.getMessage());
         }
+    }
+
+    
+
+    public void loadMenuSounds() {
+        clickSound = new AudioClip(getClass().getResource("/sound/click.wav").toString());
     }
     
     // Direct method calls - just queue the task
@@ -135,6 +138,16 @@ public class Sound {
                 if (deathSound != null) {
                     deathSound.play();
                 }
+            });
+        });
+    }
+
+    public void playClick() {
+        soundTasks.offer(() -> {
+            Platform.runLater(() -> {
+                if (clickSound != null) {
+                    clickSound.play();
+                } 
             });
         });
     }

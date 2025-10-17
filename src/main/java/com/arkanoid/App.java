@@ -19,16 +19,9 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         primaryStage = stage;
 
-        // // if (res == null) throw new RuntimeException("sound.wav not found on classpath: /assets/sound.wav");
-        // // else System.out.println("fasfafasdfasdfasdfasdf");
-        // System.out.println("fdasjhfksajkdfhkjasdhfjashdjkf");
-
-        // AudioClip test = new AudioClip(this.getClass().getResource("/sound/brick.wav").toString());
-        // test.play();
-        
-
         Sound sound = Sound.getInstance();
         sound.start();
+        sound.loadMenuSounds();
 
         stage.setTitle("Arkanoid");
         ScreenController.loadScreen("/fxml/menu.fxml");

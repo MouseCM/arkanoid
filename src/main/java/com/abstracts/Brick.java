@@ -87,10 +87,10 @@ public abstract class Brick extends GameObject {
         Random rand = new Random();
         int num = rand.nextInt(100);
 
-        if (num <= 0) {
+        if (num <= 10) {
             powerUps.add(new PowerUp(getX(), getY(), "HP"));
         }
-        else if(num <= 30) {
+        else if(num <= 20) {
             powerUps.add(new PowerUp(getX(), getY(), "FireBall"));
         }
         else if (num <= 100) {
