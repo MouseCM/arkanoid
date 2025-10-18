@@ -97,9 +97,11 @@ public class GameController {
             gameStarted = true;
         }
         if (key == KeyCode.SPACE && gameOver) {
+            gameLoop.start();
             hardResetGame();
         }
         if (key == KeyCode.SPACE && won) {
+            gameLoop.start();
             nextLevel();
         }
         if (key == KeyCode.R) {
@@ -137,10 +139,12 @@ public class GameController {
             }
 
             if (gameOver == true) {
+                gameLoop.start();
                 hardResetGame();
             }
 
             if (won) {
+                gameLoop.start();
                 nextLevel();
             }
         });
@@ -266,6 +270,10 @@ public class GameController {
                         balls.get(i).getDx(), balls.get(i).getDy(), balls.get(i).getRadius(),
                         balls.get(i).getSpeed(), balls.get(i).getAngle()));
             }
+
+            if (balls.get(i).getSpeed() != 8 && effect.getFastBallEffect() <= 0) {
+                balls.get(i).setSpeed(8);
+            }
             
             balls.get(i).update();
         }
@@ -289,10 +297,9 @@ public class GameController {
     }
 
     private void render() {
-        // if(gameOver || won) {
-        //     return;
-        // }
-
+        if(gameOver || won) {
+            gameLoop.stop();
+        }
 
         FPS();
 
