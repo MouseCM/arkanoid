@@ -1,5 +1,10 @@
 package com.controller;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -65,7 +70,7 @@ public class MenuController {
         button.setEffect(glow);
         
         // Change background color
-        button.setStyle("-fx-background-color: #e94560; -fx-text-fill: navi; -fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;");
+        button.setStyle("-fx-background-color: #e94560; -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;");
         
         scaleTransition.play();
     }
@@ -80,7 +85,7 @@ public class MenuController {
         button.setEffect(null);
         
         // Restore original background
-        button.setStyle("-fx-background-color: #0f3460; -fx-text-fill: navi; -fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;");
+        button.setStyle("-fx-background-color: #0f3460; -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;");
         
         scaleTransition.play();
     }
@@ -88,13 +93,31 @@ public class MenuController {
     // Button click handlers
     @FXML
     private void onNewGameClicked() {
+        try(FileWriter writer = new FileWriter("src/main/resources/layout/level.txt")) {
+            writer.write("1");
+        }
+        catch(IOException e) {
+            
+        }
+
+
+        Sound.getInstance().playClick();
         ScreenController.loadScreen("/fxml/game.fxml");
     }
     
     @FXML
     private void onContinueClicked() {
-        
+        File file = new File("src/main/resources/layout/level.txt");
 
+        try(Scanner sc = new Scanner(file)) {
+            GameController.setCurLevel(sc.nextInt());
+        }
+        catch(Exception e) {
+            System.err.println("cant found file");
+        }
+
+        Sound.getInstance().playClick();
+        ScreenController.loadScreen("/fxml/game.fxml");
     }
     
     @FXML

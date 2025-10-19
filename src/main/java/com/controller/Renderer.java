@@ -64,16 +64,29 @@ public class Renderer {
 
     public void renderEffect (Effect effect){
         long fireball = effect.getFireballEffect();
+        long fastBall = effect.getFastBallEffect();
+        long bigBall = effect.getBigBallEffect();
         long high = 25;
-        gc.setFill(Color.WHITE);
-        gc.setFont(pixelFont20);
-       if (effect.getFireballEffect() >0 ){
-            gc.drawImage(effect.getFireballIcon(),WIDTH + LEFT*2 - 160, high - 20 , 30, 30);
-            gc.fillText(": " + effect.getFireballEffect() , WIDTH + LEFT*2 - 125, high);
-            high += 20;
+
+        gc.setFill(Color.BLACK);
+        gc.setFont(Font.font("Arial", 20));
+       
+        if (fireball > 0){
+            gc.fillText("FireBall: " + fireball, WIDTH + LEFT*2 - 170, high);
+            high += 30;
+            effect.setFireballEffect(fireball - 17);
         }
 
-        
-        effect.setFireballEffect(fireball - 25);
+        if (fastBall > 0) {
+            gc.fillText("FastBall: " + fastBall, WIDTH + LEFT*2 - 170, high);
+            high += 30;
+            effect.setFastBallEffect(fastBall - 17);
+        }        
+
+        if (bigBall > 0) {
+            gc.fillText("BigBall: " + bigBall, WIDTH + LEFT*2 - 170, high);
+            high += 30;
+            effect.setBigBallEffect(bigBall - 17);
+        }
     }
 }

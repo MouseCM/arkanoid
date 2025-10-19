@@ -2,6 +2,8 @@ package com.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -33,7 +35,7 @@ public class GameController {
     private static final int WIDTH = 720;
     private static final int HEIGHT = 720;
 
-    private int curLevels = 1;
+    private static int curLevels = 1;
     private final long FPS = 60;
     private long timePerFrame = 1000000000 / FPS;
     private long lasttime = 0;
@@ -64,6 +66,8 @@ public class GameController {
 
         renderer = new Renderer(gc, WIDTH, HEIGHT);
         sound = Sound.getInstance();
+        sound.loadGameSounds();
+        
 
         gameCanvas.setFocusTraversable(true);
         gameCanvas.setOnKeyPressed(e -> handleKeyPressed(e.getCode()));
@@ -93,9 +97,11 @@ public class GameController {
             gameStarted = true;
         }
         if (key == KeyCode.SPACE && gameOver) {
+            gameLoop.start();
             hardResetGame();
         }
         if (key == KeyCode.SPACE && won) {
+            gameLoop.start();
             nextLevel();
         }
         if (key == KeyCode.R) {
@@ -133,10 +139,12 @@ public class GameController {
             }
 
             if (gameOver == true) {
+                gameLoop.start();
                 hardResetGame();
             }
 
             if (won) {
+                gameLoop.start();
                 nextLevel();
             }
         });
@@ -233,6 +241,13 @@ public class GameController {
                     if (bricks.stream().allMatch(b -> b == null || b.isDestroyed())) {
                         won = true;
                         sound.playGameWon();
+
+                        try(FileWriter writer = new FileWriter("src/main/resources/layout/level.txt")) {
+                            writer.write(Integer.toString(curLevels+1));
+                        }
+                        catch(IOException e) {
+                            System.err.println("cant found file");
+                        }
                     }
                 }
             }
@@ -250,10 +265,21 @@ public class GameController {
         powerUps.removeIf(PowerUp::getIsCollected);
 
         for (int i = 0; i < balls.size(); i++) {
+            // fire Ball 
             if ((balls.get(i) instanceof FireBall) && effect.getFireballEffect() <= 0) {
                 balls.set(i, new Ball(balls.get(i).getX(), balls.get(i).getY(),
                         balls.get(i).getDx(), balls.get(i).getDy(), balls.get(i).getRadius(),
                         balls.get(i).getSpeed(), balls.get(i).getAngle()));
+            }
+
+            // fast ball
+            if (balls.get(i).getSpeed() != 8 && effect.getFastBallEffect() <= 0) {
+                balls.get(i).setSpeed(8);
+            }
+
+            // big ball
+            if (balls.get(i).getRadius() != 8 && effect.getBigBallEffect() <= 0) {
+                balls.get(i).setRadius(8);
             }
             
             balls.get(i).update();
@@ -278,10 +304,9 @@ public class GameController {
     }
 
     private void render() {
-        // if(gameOver || won) {
-        //     return;
-        // }
-
+        if(gameOver || won) {
+            gameLoop.stop();
+        }
 
         FPS();
 
@@ -291,8 +316,15 @@ public class GameController {
         // gc.fillRect(180, 0, 720, 720);
 
        // renderer.renderBackground(bg);
+
+        for (int i = 0; i < balls.size(); i++) {
+            renderer.render(balls.get(i));
+        }
+
         gc.drawImage(leftWall, 0,  0, 200, 720);
         gc.drawImage(rightWall, 880, 0, 200, 720);
+
+
         for (Brick brick : bricks) {
             if (!brick.isDestroyed()) {
                 renderer.render(brick);
@@ -305,11 +337,7 @@ public class GameController {
             }
         }
 
-        for (int i = 0; i < balls.size(); i++) {
-
-            renderer.render(balls.get(i));
-            // System.out.println(ball.getImageLocation());
-        }
+        
 
         renderer.render(paddle);
 
@@ -380,5 +408,9 @@ public class GameController {
         } catch (FileNotFoundException e) {
             System.err.println("Error loading brick layout: " + e.getMessage());
         }
+    }
+
+    public static void setCurLevel(int level) {
+        curLevels = level;
     }
 }

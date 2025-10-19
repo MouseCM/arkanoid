@@ -11,8 +11,6 @@ import javafx.scene.image.Image;
 public class PowerUp extends MovableObject {
     private String type;
     private boolean isCollected;
-    private long timeLimit = 0;
-    private long endTime = 0;
     Image image;
 
     public PowerUp() {
@@ -25,8 +23,6 @@ public class PowerUp extends MovableObject {
         super(x, y, 20, 20, dx, dy, 50);
         this.type = type;
         isCollected = false;
-        this.timeLimit = timeLimit;
-        this.endTime = timeLimit + System.currentTimeMillis();
         image = new Image("file:assets/powerup/" + getType() + ".png");
     }
 
@@ -34,7 +30,6 @@ public class PowerUp extends MovableObject {
         super(x, y, 20, 20, dx, dy, speed);
         this.type = type;
         isCollected = false;
-        this.endTime = timeLimit + System.currentTimeMillis();
         image = new Image("file:assets/powerup/" + getType() + ".png");
     }
 
@@ -45,19 +40,8 @@ public class PowerUp extends MovableObject {
         image = new Image("file:assets/powerup/" + getType() + ".png");
     }
 
-    public void setTimeLimit (long timeLimit ) {
-        this.timeLimit = timeLimit;
-    }
 
-    public long getTimeLimit () {
-        return timeLimit;
-    }
 
-    public boolean isExpired (long time){
-        if (getTimeLimit() > 0 )
-        return time >= endTime;
-        return false;
-    }
 
     public boolean isDead() {
         return getY() > 720;
@@ -124,7 +108,22 @@ public class PowerUp extends MovableObject {
                     }
                 }
                 effect.setFireballEffect(5000);
-                
+
+                break;
+            case "FastBall":
+                for (int i = 0; i < balls.size(); i++) {
+                    balls.get(i).setSpeed((float) (balls.get(i).getSpeed() * 1.5));
+                }
+                effect.setFastBallEffect(5000);
+
+                break;
+            case "BigBall":
+                for (int i = 0; i < balls.size(); i++) {
+                    balls.get(i).setRadius(balls.get(i).getRadius() * 2);
+                }
+                effect.setBigBallEffect(5000);
+
+                break;
             default:
                 break;
         }
