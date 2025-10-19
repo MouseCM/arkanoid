@@ -9,6 +9,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class Renderer {
+    private Font pixelFont20 = Font.loadFont("file:assets/fonts/Evil.ttf", 20);
+    private Font pixelFont40 = Font.loadFont("file:assets/fonts/Evil.ttf", 40);
+
     private GraphicsContext gc;
     private int WIDTH;
     private int HEIGHT;
@@ -32,15 +35,15 @@ public class Renderer {
 
     public void renderHUD(int score, int lives) {
         gc.setFill(Color.WHITE);
-        gc.setFont(Font.font("Arial", 20));
-        gc.fillText("Score: " + score, 20, 25);
-        gc.fillText("Lives: " + lives, 20, 45);
+        gc.setFont(pixelFont20);
+        gc.fillText("Score: " + score, 35, 55);
+        gc.fillText("Lives: " + lives, 35, 85);
     }
 
 
     public void renderGameOver(boolean won) {
-        gc.setFont(Font.font("Arial", 30));
-        gc.setFill(Color.YELLOW);
+        gc.setFont(pixelFont40);
+        gc.setFill(Color.WHITE);
 
         if (won) {
             gc.fillText("YOU WIN!", WIDTH / 2 - 70 + LEFT, HEIGHT / 2);
@@ -50,8 +53,8 @@ public class Renderer {
     }
 
     public void renderPaused() {
-        gc.setFont(Font.font("Arial", 30));
-        gc.setFill(Color.YELLOW);
+        gc.setFont(pixelFont20);
+        gc.setFill(Color.WHITE);
         gc.fillText("Game Paused", WIDTH / 2 - 70 + LEFT, HEIGHT / 2);
     }
 
@@ -62,15 +65,15 @@ public class Renderer {
     public void renderEffect (Effect effect){
         long fireball = effect.getFireballEffect();
         long high = 25;
-        gc.setFill(Color.BLACK);
-        gc.setFont(Font.font("Arial", 20));
-       
-        if (effect.getFireballEffect() >0 ){
-            gc.fillText("FireBall: " + effect.getFireballEffect(), WIDTH + LEFT*2 - 170, high);
+        gc.setFill(Color.WHITE);
+        gc.setFont(pixelFont20);
+       if (effect.getFireballEffect() >0 ){
+            gc.drawImage(effect.getFireballIcon(),WIDTH + LEFT*2 - 160, high - 20 , 30, 30);
+            gc.fillText(": " + effect.getFireballEffect() , WIDTH + LEFT*2 - 125, high);
             high += 20;
         }
 
-
+        
         effect.setFireballEffect(fireball - 25);
     }
 }
