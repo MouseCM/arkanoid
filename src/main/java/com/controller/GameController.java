@@ -265,14 +265,21 @@ public class GameController {
         powerUps.removeIf(PowerUp::getIsCollected);
 
         for (int i = 0; i < balls.size(); i++) {
+            // fire Ball 
             if ((balls.get(i) instanceof FireBall) && effect.getFireballEffect() <= 0) {
                 balls.set(i, new Ball(balls.get(i).getX(), balls.get(i).getY(),
                         balls.get(i).getDx(), balls.get(i).getDy(), balls.get(i).getRadius(),
                         balls.get(i).getSpeed(), balls.get(i).getAngle()));
             }
 
+            // fast ball
             if (balls.get(i).getSpeed() != 8 && effect.getFastBallEffect() <= 0) {
                 balls.get(i).setSpeed(8);
+            }
+
+            // big ball
+            if (balls.get(i).getRadius() != 8 && effect.getBigBallEffect() <= 0) {
+                balls.get(i).setRadius(8);
             }
             
             balls.get(i).update();

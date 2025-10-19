@@ -117,6 +117,13 @@ public class PowerUp extends MovableObject {
                 effect.setFastBallEffect(5000);
 
                 break;
+            case "BigBall":
+                for (int i = 0; i < balls.size(); i++) {
+                    balls.get(i).setRadius(balls.get(i).getRadius() * 2);
+                }
+                effect.setBigBallEffect(5000);
+
+                break;
             default:
                 break;
         }

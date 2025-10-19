@@ -62,7 +62,9 @@ public class Renderer {
     public void renderEffect (Effect effect){
         long fireball = effect.getFireballEffect();
         long fastBall = effect.getFastBallEffect();
+        long bigBall = effect.getBigBallEffect();
         long high = 25;
+
         gc.setFill(Color.BLACK);
         gc.setFont(Font.font("Arial", 20));
        
@@ -77,5 +79,11 @@ public class Renderer {
             high += 30;
             effect.setFastBallEffect(fastBall - 17);
         }        
+
+        if (bigBall > 0) {
+            gc.fillText("BigBall: " + bigBall, WIDTH + LEFT*2 - 170, high);
+            high += 30;
+            effect.setBigBallEffect(bigBall - 17);
+        }
     }
 }
