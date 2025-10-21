@@ -9,9 +9,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class Renderer {
-    private Font pixelFont20 = Font.loadFont("file:assets/fonts/Evil.ttf", 20);
+    private Font pixelFont25 = Font.loadFont("file:assets/fonts/Evil.ttf", 25);
     private Font pixelFont40 = Font.loadFont("file:assets/fonts/Evil.ttf", 40);
-
+    
     private GraphicsContext gc;
     private int WIDTH;
     private int HEIGHT;
@@ -35,7 +35,7 @@ public class Renderer {
 
     public void renderHUD(int score, int lives) {
         gc.setFill(Color.WHITE);
-        gc.setFont(pixelFont20);
+        gc.setFont(pixelFont25);
         gc.fillText("Score: " + score, 35, 55);
         gc.fillText("Lives: " + lives, 35, 85);
     }
@@ -53,13 +53,13 @@ public class Renderer {
     }
 
     public void renderPaused() {
-        gc.setFont(pixelFont20);
+        gc.setFont(pixelFont25);
         gc.setFill(Color.WHITE);
         gc.fillText("Game Paused", WIDTH / 2 - 70 + LEFT, HEIGHT / 2);
     }
 
     public void renderBackground(Image image) {
-        gc.drawImage(image, 180, 0, 720, 720);
+        gc.drawImage(image, 180, 0, 725, 725);
     }
 
     public void renderEffect (Effect effect){
@@ -68,23 +68,28 @@ public class Renderer {
         long bigBall = effect.getBigBallEffect();
         long high = 25;
 
-        gc.setFill(Color.BLACK);
-        gc.setFont(Font.font("Arial", 20));
-       
-        if (fireball > 0){
-            gc.fillText("FireBall: " + fireball, WIDTH + LEFT*2 - 170, high);
+        gc.setFill(Color.WHITE);
+        gc.setFont(pixelFont25);
+       if (fireball > 0){
+            gc.drawImage (effect.getBoardImg(), WIDTH + LEFT*2 - 180, high,  180, 28);
+            gc.drawImage(effect.getFireballImg(),  WIDTH + LEFT*2 - 150, high,  25, 25);
+            gc.fillText(": " + fireball, WIDTH + LEFT*2 - 120, high + 25);
             high += 30;
             effect.setFireballEffect(fireball - 17);
         }
 
         if (fastBall > 0) {
-            gc.fillText("FastBall: " + fastBall, WIDTH + LEFT*2 - 170, high);
+            gc.drawImage (effect.getBoardImg(), WIDTH + LEFT*2 - 180, high,  180, 28);
+            gc.drawImage(effect.getFastballImg(),  WIDTH + LEFT*2 - 150, high,  25, 25);
+            gc.fillText(": " + fastBall, WIDTH + LEFT*2 - 120, high + 25);
             high += 30;
             effect.setFastBallEffect(fastBall - 17);
         }        
 
         if (bigBall > 0) {
-            gc.fillText("BigBall: " + bigBall, WIDTH + LEFT*2 - 170, high);
+            gc.drawImage (effect.getBoardImg(), WIDTH + LEFT*2 - 180, high,  180, 28);
+            gc.drawImage (effect.getBigballImg(),  WIDTH + LEFT*2 - 150, high,  25, 25);
+            gc.fillText(": " + bigBall, WIDTH + LEFT*2 - 120, high + 25);
             high += 30;
             effect.setBigBallEffect(bigBall - 17);
         }
