@@ -31,8 +31,9 @@ public class Paddle extends MovableObject {
 
     public void update(Scene scene, int WIDTH, boolean aPressed, boolean dPressed) {
         // move with mouse
+        int LEFT = 180;
         scene.setOnMouseMoved(event -> {
-            float mouseX = (float) event.getSceneX() - getWidth() / 2;
+            float mouseX = (float) event.getSceneX() - getWidth() / 2 - LEFT;
             if (mouseX < 0) {
                 setX(0);
                 return;

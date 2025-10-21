@@ -93,20 +93,20 @@ public class MenuController {
     // Button click handlers
     @FXML
     private void onNewGameClicked() {
+        Sound.getInstance().playClick();
         try(FileWriter writer = new FileWriter("src/main/resources/layout/level.txt")) {
             writer.write("1");
         }
         catch(IOException e) {
             
         }
-
-
-        Sound.getInstance().playClick();
+        
         ScreenController.loadScreen("/fxml/game.fxml");
     }
     
     @FXML
     private void onContinueClicked() {
+        Sound.getInstance().playClick();
         File file = new File("src/main/resources/layout/level.txt");
 
         try(Scanner sc = new Scanner(file)) {
@@ -116,7 +116,6 @@ public class MenuController {
             System.err.println("cant found file");
         }
 
-        Sound.getInstance().playClick();
         ScreenController.loadScreen("/fxml/game.fxml");
     }
     

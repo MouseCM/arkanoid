@@ -99,7 +99,7 @@ public abstract class Brick extends GameObject {
         else if (num <= 40) {
             powerUps.add(new PowerUp(getX(), getY(), "FastBall"));
         }
-        else if (num <= 100) {
+        else if (num <= 50) {
             powerUps.add(new PowerUp(getX(), getY(), "BigBall"));
         }
     }
