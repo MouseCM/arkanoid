@@ -50,7 +50,7 @@ public class Sound {
                         task.run();
                     }
                 } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+                    // Thread.currentThread().interrupt();
                     break;
                 }
             }
