@@ -82,7 +82,7 @@ public class Ball extends MovableObject {
         gc.save();
         gc.translate(getX() + LEFT, getY());
         gc.rotate(Math.toDegrees(Math.atan2(getDy(), getDx())) + 180);
-        gc.drawImage(lightImage, -getRadius(), -getRadius() - 2, 100, 20);
+        gc.drawImage(lightImage, -getRadius(), -getRadius() - 2, 100 * getRadius() / 8 , 20 * getRadius() / 8);
         gc.restore();
     }
 

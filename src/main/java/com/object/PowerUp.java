@@ -84,10 +84,14 @@ public class PowerUp extends MovableObject {
             Ball nextBall = balls.get(i).copy();
 
             nextBall.setAngle(nextBall.getAngle() + 20);
+            
             balls.add(nextBall.copy());
+
 
             nextBall.setAngle(nextBall.getAngle() - 40);
             balls.add(nextBall.copy());
+
+            
         }
     }
 
