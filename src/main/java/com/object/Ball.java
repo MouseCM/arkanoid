@@ -1,6 +1,5 @@
 package com.object;
 
-
 import com.abstracts.Brick;
 import com.abstracts.GameObject;
 import com.abstracts.MovableObject;
@@ -9,18 +8,27 @@ import com.controller.Sound;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-
 public class Ball extends MovableObject {
     private float radius;
     private float angle;
     private Image img;
     private Image lightImage;
+    private float angleRotate;
+
+    public float getAngleRotate() {
+        return angleRotate;
+    }
+
+    public void setAngleRotate(float angleRotate) {
+        this.angleRotate = angleRotate;
+    }
+
     public Image getLightImage() {
         return lightImage;
     }
 
-    public void setLightImage(String lightImageLocation ) {
-        Image limg = new Image (lightImageLocation);
+    public void setLightImage(String lightImageLocation) {
+        Image limg = new Image(lightImageLocation);
         lightImage = limg;
     }
 
@@ -28,15 +36,16 @@ public class Ball extends MovableObject {
         super();
         this.radius = 0;
     }
-    
+
     public Ball(float x, float y, float dx, float dy, float radius, float speed, float angle) {
         super(x, y, 0, 0, dx, dy, speed);
         this.radius = radius;
         img = new Image("file:assets/ball/normalball.png");
-        if (lightImage == null){
+        if (lightImage == null) {
             setLightImage("file:assets/ball/normallight.png");
         }
         setAngle(angle);
+        setAngleRotate(2);
     }
 
     public void setRadius(float radius) {
@@ -69,52 +78,55 @@ public class Ball extends MovableObject {
         setDy((float) Math.cos(Math.toRadians(angle)));
     }
 
+    public void renderTail(GraphicsContext gc, int LEFT) {
+        gc.save();
+        gc.translate(getX() + LEFT, getY());
+        gc.rotate(Math.toDegrees(Math.atan2(getDy(), getDx())) + 180);
+        gc.drawImage(lightImage, -getRadius(), -getRadius() - 2, 100, 20);
+        gc.restore();
+    }
 
     @Override
     public void render(GraphicsContext gc, int LEFT) {
-        // Image image = new Image(getImageLocation());
-        // gc.drawImage(image,getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
-        // gc.fillOval(getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
-
-        
-        // gc.save();
-        // gc.translate(getX() + LEFT, getY());
-        // gc.rotate(Math.toDegrees(Math.atan2(getDy(), getDx()))+180);
-        // gc.drawImage(lightImage, -getRadius() ,  -getRadius() - 2, 100, 20);
-        // gc.restore();
-
         gc.drawImage(img, getX() - getRadius() + LEFT, getY() - getRadius(), getRadius() * 2, getRadius() * 2);
     }
 
+    public void renderStartLine(GraphicsContext gc, int LEFT) {
+        Image startLineImg = new Image("file:assets/ball/startline.png");
+        gc.save();
+        gc.translate(getX() + LEFT, getY());
+        gc.rotate(Math.toDegrees(Math.atan2(getDy(), getDx())));
+        gc.drawImage(startLineImg, -getRadius(), -getRadius() - 2, 100, 20);
+        gc.restore();
+    }
+
     public boolean willCollision(GameObject other) {
-        return getY() + getRadius() + getDy() * getSpeed() >= other.getY() && 
-            getY() - getRadius() + getDy() * getSpeed() <= other.getY() + other.getHeight() && 
-            getX() + getRadius() + getDx() * getSpeed() >= other.getX() && 
-            getX() - getRadius() + getDx() * getSpeed() <= other.getX() + other.getWidth();
+        return getY() + getRadius() + getDy() * getSpeed() >= other.getY() &&
+                getY() - getRadius() + getDy() * getSpeed() <= other.getY() + other.getHeight() &&
+                getX() + getRadius() + getDx() * getSpeed() >= other.getX() &&
+                getX() - getRadius() + getDx() * getSpeed() <= other.getX() + other.getWidth();
     }
 
     public boolean isCollision(GameObject other) {
-        return getY() + getRadius() >= other.getY() && 
-            getY() - getRadius() <= other.getY() + other.getHeight() &&
-            getX() + getRadius() >= other.getX() && 
-            getX() - getRadius() <= other.getX() + other.getWidth();
+        return getY() + getRadius() >= other.getY() &&
+                getY() - getRadius() <= other.getY() + other.getHeight() &&
+                getX() + getRadius() >= other.getX() &&
+                getX() - getRadius() <= other.getX() + other.getWidth();
     }
 
-
     public void bounceWall(int WIDTH) {
-        if (getX() - getRadius() + getDx() * getSpeed() <= 0 || 
-            getX() + getRadius() + getDx() * getSpeed() >= WIDTH) {
+        if (getX() - getRadius() + getDx() * getSpeed() <= 0 ||
+                getX() + getRadius() + getDx() * getSpeed() >= WIDTH) {
             Sound.getInstance().playWallHit();
 
             // reverse Dx
             setAngle(-getAngle());
 
-            if(getX() < WIDTH/2) {
+            if (getX() < WIDTH / 2) {
                 setX(getRadius());
+            } else {
+                setX(WIDTH - getRadius());
             }
-            else {
-                setX(WIDTH-getRadius());
-            }  
         } else if (getY() + getDy() * getSpeed() - getRadius() <= 0) {
             Sound.getInstance().playWallHit();
             setAngle(180 - getAngle());
@@ -130,11 +142,10 @@ public class Ball extends MovableObject {
     public void bouncePaddle(Paddle paddle) {
         if (getX() > paddle.getX() - getRadius() && getX() < paddle.getX() + paddle.getWidth() + getRadius()) {
             float hitPos = (getX() - paddle.getX()) / paddle.getWidth();
-            float angle = (float) ((1 - hitPos) * 120) + 120; 
-            
+            float angle = (float) ((1 - hitPos) * 120) + 120;
+
             setAngle(angle);
-        }
-        else {
+        } else {
             setDx(-getDx());
         }
     }
@@ -151,14 +162,13 @@ public class Ball extends MovableObject {
         }
     }
 
-    
-
     public boolean isDeath(int HEIGHT) {
         return getY() + getRadius() >= HEIGHT;
     }
 
     public static Ball copy(Ball ball) {
-        return new Ball(ball.getX(), ball.getY(), ball.getDx(), ball.getDy(), ball.getRadius(), ball.getSpeed(), ball.getAngle());
+        return new Ball(ball.getX(), ball.getY(), ball.getDx(), ball.getDy(), ball.getRadius(), ball.getSpeed(),
+                ball.getAngle());
     }
 
     public Ball copy() {

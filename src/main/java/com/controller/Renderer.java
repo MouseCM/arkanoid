@@ -31,6 +31,7 @@ public class Renderer {
         obj.render(gc, LEFT);
         return;
     }
+    
 
 
     public void renderHUD(int score, int lives) {
@@ -59,7 +60,7 @@ public class Renderer {
     }
 
     public void renderBackground(Image image) {
-        gc.drawImage(image, 180, 0, 725, 725);
+        gc.drawImage(image, 150, 0, 900, 900);
     }
 
     public void renderEffect (Effect effect){
