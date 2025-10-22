@@ -94,6 +94,7 @@ public class MenuController {
     @FXML
     private void onNewGameClicked() {
         Sound.getInstance().playClick();
+        GameController.setCurLevel(1);
         try(FileWriter writer = new FileWriter("src/main/resources/layout/level.txt")) {
             writer.write("1");
         }

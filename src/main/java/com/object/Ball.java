@@ -44,6 +44,7 @@ public class Ball extends MovableObject {
         if (lightImage == null) {
             setLightImage("file:assets/ball/normallight.png");
         }
+        
         setAngle(angle);
         setAngleRotate(2);
     }
