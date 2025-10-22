@@ -31,6 +31,7 @@ public class Renderer {
         obj.render(gc, LEFT);
         return;
     }
+    
 
 
     public void renderHUD(int score, int lives) {

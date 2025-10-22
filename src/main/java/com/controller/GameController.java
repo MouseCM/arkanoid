@@ -74,7 +74,7 @@ public class GameController {
         gameCanvas.setOnKeyReleased(e -> handleKeyReleased(e.getCode()));
 
         balls = new ArrayList<>();
-        balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
+        balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 120));
         paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 30, 1, 0, 100, 15, 10);
 
         effect = new Effect();
@@ -184,6 +184,13 @@ public class GameController {
         if (!gameStarted) {
             for (Ball ball : balls) {
                 ball.followPaddle(paddle);
+                ball.setAngle(ball.getAngle() + ball.getAngleRotate());
+                if (ball.getAngle() >= 240) {
+                    ball.setAngleRotate(-2);
+                }
+                if (ball.getAngle() <= 120) {
+                    ball.setAngleRotate(2);
+                }
             }
             return;
         }
@@ -215,6 +222,7 @@ public class GameController {
         }
 
         for (Ball ball : balls) {
+
             if (ball.willCollision(paddle)) {
                 sound.playPaddleHit();
                 ball.bouncePaddle(paddle);
@@ -310,6 +318,8 @@ public class GameController {
 
         FPS();
 
+        
+
         renderer.clear();
 
         // gc.setFill(Color.BLACK);
@@ -318,7 +328,16 @@ public class GameController {
         renderer.renderBackground(bg);
 
         for (int i = 0; i < balls.size(); i++) {
+            if(gameStarted) {
+                balls.get(i).renderTail(gc, 180);
+            }
             renderer.render(balls.get(i));
+        }
+
+        if(!gameStarted) {
+            for (int i = 0; i < balls.size(); i++) {
+                balls.get(i).renderStartLine(gc, 180);
+            }
         }
         
         gc.drawImage(leftWall, 0,  0, 200, 720);
