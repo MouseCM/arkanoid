@@ -31,7 +31,6 @@ public class NormalBrick extends Brick {
     public void render(GraphicsContext gc, int LEFT) {
         if (!isDestroyed()) {
             if (getHitPoints() != 0) {
-                
                 gc.drawImage(img, getX() + LEFT, getY(), getWidth(), getHeight());
             }
         }

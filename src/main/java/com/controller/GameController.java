@@ -23,7 +23,6 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
 public class GameController {
@@ -36,9 +35,7 @@ public class GameController {
     private static final int HEIGHT = 720;
 
     private static int curLevels = 1;
-    private final long FPS = 60;
-    private long timePerFrame = 1000000000 / FPS;
-    private long lasttime = 0;
+
     
 
     private boolean aPressed = false;
@@ -51,15 +48,12 @@ public class GameController {
     private int score = 0;
     private int lives = 3;
 
-    private List<Ball> balls;
+    private  List<Ball> balls;
     private Paddle paddle;
     private List<Brick> bricks;
     private List<PowerUp> powerUps;
     private Effect effect;
 
-    Image bg = new Image("file:assets/iceburg/background.png");
-    Image leftWall = new Image("file:assets/iceburg/wall.png");
-    Image rightWall = new Image("file:assets/iceburg/rightwall.png"); 
     @FXML
     public void initialize() {
         gc = gameCanvas.getGraphicsContext2D();
@@ -179,6 +173,8 @@ public class GameController {
 
         // handle paddle movement with mouse and keyboard
         paddle.update(scene, WIDTH, aPressed, dPressed);
+        // big paddle
+        // if (paddle.getWidth() != 100 && effect.getBigPadle)
 
         // ball follow paddle
         if (!gameStarted) {
@@ -294,79 +290,11 @@ public class GameController {
         }
     }
 
-    // fps stabilize
-    private void FPS() {
-        long frameDuration = System.nanoTime() - lasttime;
-        if (frameDuration < timePerFrame) {
-            long sleepTime = (timePerFrame - frameDuration) / 1_000_000; // ns -> ms
-            if (sleepTime > 0) {
-                try {
-                    Thread.sleep(sleepTime);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        lasttime = System.nanoTime();
-    }
 
     private void render() {
-        if(gameOver || won) {
-            gameLoop.stop();
-        }
-
-        FPS();
-
-        
-
-        renderer.clear();
-
-        // gc.setFill(Color.BLACK);
-        // gc.fillRect(180, 0, 720, 720);
-
-        renderer.renderBackground(bg);
-
-        for (int i = 0; i < balls.size(); i++) {
-            if(gameStarted) {
-                balls.get(i).renderTail(gc, 180);
-            }
-            renderer.render(balls.get(i));
-        }
-
-        if(!gameStarted) {
-            for (int i = 0; i < balls.size(); i++) {
-                balls.get(i).renderStartLine(gc, 180);
-            }
-        }
-        
-        gc.drawImage(leftWall, 0,  0, 200, 720);
-        gc.drawImage(rightWall, 880, 0, 200, 720);
-
-
-        for (Brick brick : bricks) {
-            if (!brick.isDestroyed()) {
-                renderer.render(brick);
-            }
-        }
-
-        for (PowerUp powerUp : powerUps) {
-            if (!powerUp.getIsCollected()) {
-                renderer.render(powerUp);
-            }
-        }
-
-        
-
-        renderer.render(paddle);
-
-        renderer.renderHUD(score, lives);
-
-        renderer.renderEffect(effect);
-
-        if (gameOver || won) {
-            renderer.renderGameOver(won);
-        }
+        renderer.renderGame(balls, paddle, bricks, 
+                            powerUps, effect, gameOver, gameStarted, 
+                            gameLoop, won, score, lives);
     }
 
     private void resetGame() {
