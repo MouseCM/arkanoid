@@ -101,6 +101,11 @@ public class GameController {
         if (key == KeyCode.R) {
             hardResetGame();
         }
+        if (key == KeyCode.Q) {
+            gameLoop.stop();
+            ScreenController.getCurrentScene().setCursor(Cursor.DEFAULT);
+            ScreenController.loadScreen("/fxml/menu.fxml");
+        }
 
         if (key == KeyCode.ESCAPE) {
             gamePaused = !gamePaused;
