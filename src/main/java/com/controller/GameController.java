@@ -259,7 +259,7 @@ public class GameController {
 
         for (PowerUp powerUp : powerUps) {
             if (powerUp.isCollision(paddle)) {
-                powerUp.active(lives, balls, effect);
+                powerUp.active(lives, balls, effect, paddle);
             }
 
             powerUp.update();

@@ -85,6 +85,7 @@ public class Renderer {
         long fireball = effect.getFireballEffect();
         long fastBall = effect.getFastBallEffect();
         long bigBall = effect.getBigBallEffect();
+        long bigPaddle = effect.getBigPaddleEffect();
         long high = 25;
 
         gc.setFill(Color.WHITE);
@@ -111,6 +112,14 @@ public class Renderer {
             gc.fillText(": " + bigBall, WIDTH + LEFT*2 - 120, high + 25);
             high += 30;
             effect.setBigBallEffect(bigBall - 17);
+        }
+
+        if (bigPaddle > 0) {
+            gc.drawImage (effect.getBoardImg(), WIDTH + LEFT*2 - 180, high,  180, 28);
+            gc.drawImage (effect.getBigPaddleImg(),  WIDTH + LEFT*2 - 150, high,  25, 25);
+            gc.fillText(": " + bigPaddle, WIDTH + LEFT*2 - 120, high + 25);
+            high += 30;
+            effect.setBigBallEffect(bigPaddle - 17);
         }
     }
 

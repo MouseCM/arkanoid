@@ -91,7 +91,7 @@ public class PowerUp extends MovableObject {
         }
     }
 
-    public void active(int lives, List<Ball> balls, Effect effect) {
+    public void active(int lives, List<Ball> balls, Effect effect, Paddle paddle) {
         switch (getType()) {
             case "HP":
                 lives++;
@@ -124,12 +124,19 @@ public class PowerUp extends MovableObject {
                 effect.setBigBallEffect(5000);
 
                 break;
+
+            case "BigPaddle":
+                paddle.setWidth(paddle.getWidth() * 2);
+                effect.setBigPaddleEffect(5000);
+
+                break;
             default:
                 break;
         }
 
         setIsCollected(true);
     }
+
 
 
 }
