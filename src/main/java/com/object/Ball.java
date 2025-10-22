@@ -72,16 +72,11 @@ public class Ball extends MovableObject {
 
     @Override
     public void render(GraphicsContext gc, int LEFT) {
-        // Image image = new Image(getImageLocation());
-        // gc.drawImage(image,getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
-        // gc.fillOval(getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
-
-        
-        // gc.save();
-        // gc.translate(getX() + LEFT, getY());
-        // gc.rotate(Math.toDegrees(Math.atan2(getDy(), getDx()))+180);
-        // gc.drawImage(lightImage, -getRadius() ,  -getRadius() - 2, 100, 20);
-        // gc.restore();
+        gc.save();
+        gc.translate(getX() + LEFT, getY());
+        gc.rotate(Math.toDegrees(Math.atan2(getDy(), getDx()))+180);
+        gc.drawImage(lightImage, -getRadius() ,  -getRadius() - 2, 100, 20);
+        gc.restore();
 
         gc.drawImage(img, getX() - getRadius() + LEFT, getY() - getRadius(), getRadius() * 2, getRadius() * 2);
     }

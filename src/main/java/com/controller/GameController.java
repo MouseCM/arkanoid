@@ -315,12 +315,12 @@ public class GameController {
         // gc.setFill(Color.BLACK);
         // gc.fillRect(180, 0, 720, 720);
 
-       // renderer.renderBackground(bg);
+        renderer.renderBackground(bg);
 
         for (int i = 0; i < balls.size(); i++) {
             renderer.render(balls.get(i));
         }
-
+        
         gc.drawImage(leftWall, 0,  0, 200, 720);
         gc.drawImage(rightWall, 880, 0, 200, 720);
 

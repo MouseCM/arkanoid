@@ -59,7 +59,7 @@ public class Renderer {
     }
 
     public void renderBackground(Image image) {
-        gc.drawImage(image, 180, 0, 725, 725);
+        gc.drawImage(image, 150, 0, 900, 900);
     }
 
     public void renderEffect (Effect effect){
