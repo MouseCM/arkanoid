@@ -126,7 +126,11 @@ public class PowerUp extends MovableObject {
                 break;
 
             case "BigPaddle":
-                paddle.setWidth(paddle.getWidth() * 2);
+                if(paddle.getWidth() == 100) {
+                    paddle.setX(Math.max(0, paddle.getX() - 50));
+                }
+
+                paddle.setWidth(200);
                 effect.setBigPaddleEffect(5000);
 
                 break;

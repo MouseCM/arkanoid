@@ -119,7 +119,7 @@ public class Renderer {
             gc.drawImage (effect.getBigPaddleImg(),  WIDTH + LEFT*2 - 150, high,  25, 25);
             gc.fillText(": " + bigPaddle, WIDTH + LEFT*2 - 120, high + 25);
             high += 30;
-            effect.setBigBallEffect(bigPaddle - 17);
+            effect.setBigPaddleEffect(bigPaddle - 17);
         }
     }
 
@@ -143,7 +143,7 @@ public class Renderer {
     public void renderGame(List<Ball> balls, Paddle paddle, List<Brick> bricks, 
                             List<PowerUp> powerUps, Effect effect, boolean gameOver, boolean gameStarted, 
                             AnimationTimer gameLoop, boolean won, int score, int lives) {
-                                
+
         if(gameOver || won) {
             gameLoop.stop();
         }

@@ -174,7 +174,10 @@ public class GameController {
         // handle paddle movement with mouse and keyboard
         paddle.update(scene, WIDTH, aPressed, dPressed);
         // big paddle
-        // if (paddle.getWidth() != 100 && effect.getBigPadle)
+        if (paddle.getWidth() != 100 && effect.getBigPaddleEffect() <= 0) {
+            paddle.setWidth(100);
+            paddle.setX(Math.min(paddle.getX() + 50, 620));
+        }
 
         // ball follow paddle
         if (!gameStarted) {

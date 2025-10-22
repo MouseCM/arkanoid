@@ -5,7 +5,8 @@ public class Effect {
     private long fireballEffect;
     private long fastBallEffect;
     private long BigBallEffect; 
-    private long BigPaddleEffect;    
+    private long BigPaddleEffect;  
+      
     private static Image fireballImg = new Image("file:assets/powerup/FireBall.png");
     private static Image fastballImg = new Image("file:assets/powerup/FastBall.png");
     private static Image bigballImg = new Image("file:assets/powerup/BigBall.png");
