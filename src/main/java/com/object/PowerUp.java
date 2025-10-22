@@ -1,19 +1,16 @@
 package com.object;
 
+import java.util.List;
+
 import com.abstracts.GameObject;
 import com.abstracts.MovableObject;
-import com.object.FireBall;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import java.util.List;
-
 public class PowerUp extends MovableObject {
     private String type;
     private boolean isCollected;
-    private long timeLimit = 0;
-    private long endTime = 0;
     Image image;
 
     public PowerUp() {
@@ -26,26 +23,13 @@ public class PowerUp extends MovableObject {
         super(x, y, 20, 20, dx, dy, 50);
         this.type = type;
         isCollected = false;
-        this.timeLimit = timeLimit;
-        this.endTime = timeLimit + System.currentTimeMillis();
         image = new Image("file:assets/powerup/" + getType() + ".png");
     }
 
-    public PowerUp(float x, float y, float dx, float dy, float speed, String type, long timeLimit) {
+    public PowerUp(float x, float y, float dx, float dy, float speed, String type) {
         super(x, y, 20, 20, dx, dy, speed);
         this.type = type;
         isCollected = false;
-        this.timeLimit = timeLimit;
-        this.endTime = timeLimit + System.currentTimeMillis();
-        image = new Image("file:assets/powerup/" + getType() + ".png");
-    }
-
-    public PowerUp(float x, float y, String type, long timeLimit) {
-        super(x, y, 20, 20, 0, 1, 5);
-        this.type = type;
-        isCollected = false;
-        this.timeLimit = timeLimit;
-        this.endTime = timeLimit + System.currentTimeMillis();
         image = new Image("file:assets/powerup/" + getType() + ".png");
     }
 
@@ -56,19 +40,8 @@ public class PowerUp extends MovableObject {
         image = new Image("file:assets/powerup/" + getType() + ".png");
     }
 
-    public void setTimeLimit (long timeLimit ) {
-        this.timeLimit = timeLimit;
-    }
 
-    public long getTimeLimit () {
-        return timeLimit;
-    }
 
-    public boolean isExpired (long time){
-        if (getTimeLimit() > 0 )
-        return time >= endTime;
-        return false;
-    }
 
     public boolean isDead() {
         return getY() > 720;
@@ -100,8 +73,8 @@ public class PowerUp extends MovableObject {
     }
 
     @Override
-    public void render(GraphicsContext gc) {
-        gc.drawImage(image, getX(), getY(), getWidth(), getHeight());
+    public void render(GraphicsContext gc, int LEFT) {
+        gc.drawImage(image, getX() + LEFT, getY(), getWidth(), getHeight());
     }
 
 
@@ -118,7 +91,7 @@ public class PowerUp extends MovableObject {
         }
     }
 
-    public void active(int lives, List<Ball> balls) {
+    public void active(int lives, List<Ball> balls, Effect effect, Paddle paddle) {
         switch (getType()) {
             case "HP":
                 lives++;
@@ -127,19 +100,47 @@ public class PowerUp extends MovableObject {
                 x3Balls(balls);
                 break;
             case "FireBall":
-                long curTime =System.currentTimeMillis();
-                for (Ball ball : balls){
-                    if (!(ball instanceof FireBall )){
-                        ball = new FireBall (ball.getX(), ball.getY(), ball.getDx(), ball.getDy(),ball.getRadius(),ball.getSpeed(),ball.getAngle(),curTime);
+                for (int i = 0; i < balls.size(); i++){
+                    if (!(balls.get(i) instanceof FireBall )){
+                            balls.set(i, new FireBall(balls.get(i).getX(), balls.get(i).getY(), 
+                            balls.get(i).getDx(), balls.get(i).getDy(),balls.get(i).getRadius(),
+                            balls.get(i).getSpeed(),balls.get(i).getAngle()));
                     }
                 }
+                effect.setFireballEffect(5000);
 
+                break;
+            case "FastBall":
+                for (int i = 0; i < balls.size(); i++) {
+                    balls.get(i).setSpeed(12);
+                }
+                effect.setFastBallEffect(5000);
+
+                break;
+            case "BigBall":
+                for (int i = 0; i < balls.size(); i++) {
+                    balls.get(i).setRadius(16);
+                }
+                effect.setBigBallEffect(5000);
+
+                break;
+
+            case "BigPaddle":
+                if(paddle.getWidth() == 100) {
+                    paddle.setX(Math.max(0, paddle.getX() - 50));
+                }
+
+                paddle.setWidth(200);
+                effect.setBigPaddleEffect(5000);
+
+                break;
             default:
                 break;
         }
 
         setIsCollected(true);
     }
+
 
 
 }

@@ -20,7 +20,7 @@ public class StrongBrick extends Brick {
     }
     
     public StrongBrick (float x, float y, int hitPoints){
-        super(x, y, 70, 20, hitPoints, "strong", 10);
+        super(x, y, 40, 20, hitPoints, "strong", 10);
         setHasPowerUp(false);
         setImage(hitPoints);
     }
@@ -41,10 +41,10 @@ public class StrongBrick extends Brick {
     }
 
 
-    public void render(GraphicsContext gc) {
+    public void render(GraphicsContext gc, int left) {
         if (!isDestroyed()) {
             if (getHitPoints() != 0) {
-                gc.drawImage(img, getX(), getY(), getWidth(), getHeight());
+                gc.drawImage(img, getX() + left, getY(), getWidth(), getHeight());
             }
         }
     }

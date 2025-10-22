@@ -1,7 +1,7 @@
 package com.abstracts;
 
-import java.util.Random;
 import java.util.List;
+import java.util.Random;
 
 import com.object.PowerUp;
 
@@ -88,15 +88,23 @@ public abstract class Brick extends GameObject {
         int num = rand.nextInt(100);
 
         if (num <= 10) {
-            powerUps.add(new PowerUp(getX(), getY(), "HP"));
+            powerUps.add(new PowerUp(getX() + rand.nextInt((int)(getWidth()-20)), getY(), "HP"));
         }
-        else if(num <= 100) {
-            powerUps.add(new PowerUp(getX(), getY(), "FireBall"));
+        else if(num <= 20) {
+            powerUps.add(new PowerUp(getX() + rand.nextInt((int)(getWidth()-20)), getY(), "FireBall"));
         }
-        else if (num <= 20) {
-            powerUps.add(new PowerUp(getX(), getY(), "x3Ball"));
+        else if (num <= 30) {
+            powerUps.add(new PowerUp(getX() + rand.nextInt((int)(getWidth()-20)), getY(), "x3Ball"));
         }
-    }
-
-
+        else if (num <= 40) {
+            powerUps.add(new PowerUp(getX() + rand.nextInt((int)(getWidth()-20)), getY(), "FastBall"));
+        }
+        else if (num <= 50) {
+            powerUps.add(new PowerUp(getX() + rand.nextInt((int)(getWidth()-20)), getY(), "BigBall"));
+        }
+        else if (num <= 60) {
+            powerUps.add(new PowerUp(getX() + rand.nextInt((int)(getWidth()-20)), getY(), "BigPaddle"));
+        }
+    }   
+    
 }

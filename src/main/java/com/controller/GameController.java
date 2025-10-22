@@ -2,13 +2,16 @@ package com.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import com.abstracts.Brick;
-import com.arkanoid.Renderer;
 import com.object.Ball;
+import com.object.Effect;
+import com.object.FireBall;
 import com.object.NormalBrick;
 import com.object.Paddle;
 import com.object.PowerUp;
@@ -21,21 +24,19 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-import javafx.scene.image.Image;
 
 public class GameController {
     @FXML
     private Canvas gameCanvas;
     private GraphicsContext gc;
     private Renderer renderer;
+    private Sound sound;
     private static final int WIDTH = 720;
-    private static final int HEIGHT = 600;
+    private static final int HEIGHT = 720;
 
+    private static int curLevels = 1;
 
-    private int curLevels = 1;
-    private final long FPS = 90;
-    private long timePerFrame = 1000000000 / FPS;
-    private long lasttime = 0;
+    
 
     private boolean aPressed = false;
     private boolean dPressed = false;
@@ -47,25 +48,30 @@ public class GameController {
     private int score = 0;
     private int lives = 3;
 
-    private List<Ball> balls;
+    private  List<Ball> balls;
     private Paddle paddle;
     private List<Brick> bricks;
     private List<PowerUp> powerUps;
-    // Image bg = new Image("file:assets/iceburg/background.png");
+    private Effect effect;
 
     @FXML
     public void initialize() {
         gc = gameCanvas.getGraphicsContext2D();
 
         renderer = new Renderer(gc, WIDTH, HEIGHT);
+        sound = Sound.getInstance();
+        sound.loadGameSounds();
+        
 
         gameCanvas.setFocusTraversable(true);
         gameCanvas.setOnKeyPressed(e -> handleKeyPressed(e.getCode()));
         gameCanvas.setOnKeyReleased(e -> handleKeyReleased(e.getCode()));
 
         balls = new ArrayList<>();
-        balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
-        paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 20, 1, 0, 100, 10, 10);
+        balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 120));
+        paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 30, 1, 0, 100, 15, 10);
+
+        effect = new Effect();
 
         initBricks();
 
@@ -85,9 +91,11 @@ public class GameController {
             gameStarted = true;
         }
         if (key == KeyCode.SPACE && gameOver) {
+            gameLoop.start();
             hardResetGame();
         }
         if (key == KeyCode.SPACE && won) {
+            gameLoop.start();
             nextLevel();
         }
         if (key == KeyCode.R) {
@@ -99,7 +107,7 @@ public class GameController {
             if (gamePaused) {
                 gameLoop.stop();
                 ScreenController.getCurrentScene().setCursor(Cursor.DEFAULT);
-
+                renderer.renderPaused();
             } else {
                 gameLoop.start();
                 ScreenController.getCurrentScene().setCursor(Cursor.NONE);
@@ -125,10 +133,12 @@ public class GameController {
             }
 
             if (gameOver == true) {
+                gameLoop.start();
                 hardResetGame();
             }
 
             if (won) {
+                gameLoop.start();
                 nextLevel();
             }
         });
@@ -161,26 +171,33 @@ public class GameController {
         // handle mouse events
         handleMouse(ScreenController.getCurrentScene());
 
-
         // handle paddle movement with mouse and keyboard
         paddle.update(scene, WIDTH, aPressed, dPressed);
-
+        // big paddle
+        if (paddle.getWidth() != 100 && effect.getBigPaddleEffect() <= 0) {
+            paddle.setWidth(100);
+            paddle.setX(Math.min(paddle.getX() + 50, 620));
+        }
 
         // ball follow paddle
         if (!gameStarted) {
             for (Ball ball : balls) {
                 ball.followPaddle(paddle);
+                ball.setAngle(ball.getAngle() + ball.getAngleRotate());
+                if (ball.getAngle() >= 240) {
+                    ball.setAngleRotate(-2);
+                }
+                if (ball.getAngle() <= 120) {
+                    ball.setAngleRotate(2);
+                }
             }
             return;
-        }  
-
+        }
 
         // bounce wall
         for (Ball ball : balls) {
             ball.bounceWall(WIDTH);
         }
-
-
 
         for (int i = balls.size() - 1; i >= 0; i--) {
             Ball ball = balls.get(i);
@@ -193,9 +210,10 @@ public class GameController {
                 lives--;
                 if (lives <= 0) {
                     gameOver = true;
+                    sound.playGameOver();
                     return;
-                } 
-                else {
+                } else {
+                    sound.playDeath();
                     resetGame();
                     return;
                 }
@@ -203,7 +221,9 @@ public class GameController {
         }
 
         for (Ball ball : balls) {
+
             if (ball.willCollision(paddle)) {
+                sound.playPaddleHit();
                 ball.bouncePaddle(paddle);
             }
         }
@@ -218,14 +238,23 @@ public class GameController {
                 }
 
                 if (!brick.isDestroyed() && ball.willCollision(brick)) {
+                    sound.playBrickHit();
                     ball.bounceBrick(brick);
-                    
+
                     if (brick.takeHit()) {
                         score += brick.getScoreValue();
                     }
 
                     if (bricks.stream().allMatch(b -> b == null || b.isDestroyed())) {
                         won = true;
+                        sound.playGameWon();
+
+                        try(FileWriter writer = new FileWriter("src/main/resources/layout/level.txt")) {
+                            writer.write(Integer.toString(curLevels+1));
+                        }
+                        catch(IOException e) {
+                            System.err.println("cant found file");
+                        }
                     }
                 }
             }
@@ -233,7 +262,7 @@ public class GameController {
 
         for (PowerUp powerUp : powerUps) {
             if (powerUp.isCollision(paddle)) {
-                powerUp.active(lives, balls);
+                powerUp.active(lives, balls, effect, paddle);
             }
 
             powerUp.update();
@@ -241,67 +270,41 @@ public class GameController {
 
         powerUps.removeIf(PowerUp::isDead);
         powerUps.removeIf(PowerUp::getIsCollected);
-        
-        for (Ball ball : balls) {
-            ball.update();
-        }
-    }
 
-    // fps stabilize
-    private void FPS() {
-        long frameDuration = System.nanoTime() - lasttime;
-        if (frameDuration < timePerFrame) {
-            long sleepTime = (timePerFrame - frameDuration) / 1_000_000; // ns -> ms
-            if (sleepTime > 0) {
-                try {
-                    Thread.sleep(sleepTime);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        for (int i = 0; i < balls.size(); i++) {
+            // fire Ball 
+            if ((balls.get(i) instanceof FireBall) && effect.getFireballEffect() <= 0) {
+                balls.set(i, new Ball(balls.get(i).getX(), balls.get(i).getY(),
+                        balls.get(i).getDx(), balls.get(i).getDy(), balls.get(i).getRadius(),
+                        balls.get(i).getSpeed(), balls.get(i).getAngle()));
             }
-        }
 
-        lasttime = System.nanoTime();
+            // fast ball
+            if (balls.get(i).getSpeed() != 8 && effect.getFastBallEffect() <= 0) {
+                balls.get(i).setSpeed(8);
+            }
+
+            // big ball
+            if (balls.get(i).getRadius() != 8 && effect.getBigBallEffect() <= 0) {
+                balls.get(i).setRadius(8);
+            }
+            
+            balls.get(i).update();
+        }
     }
 
 
     private void render() {
-        FPS();
-
-        renderer.clear();
-
-        // renderer.renderBackground(bg);
-
-        for (Brick brick : bricks) {
-            if (!brick.isDestroyed()) {
-                renderer.render(brick);
-            }
-        }
-
-        for (PowerUp powerUp : powerUps) {
-            if (!powerUp.getIsCollected()) {
-                renderer.render(powerUp);
-            }
-        }
-
-        for (Ball ball : balls) {
-            renderer.render(ball);
-            // System.out.println(ball.getImageLocation());
-        }
-
-        renderer.render(paddle);
-
-        renderer.renderHUD(score, lives);
-
-        if (gameOver || won) {
-            renderer.renderGameOver(won);
-        }
+        renderer.renderGame(balls, paddle, bricks, 
+                            powerUps, effect, gameOver, gameStarted, 
+                            gameLoop, won, score, lives);
     }
 
     private void resetGame() {
         powerUps.clear();
         balls.clear();
         balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
+        effect = new Effect();
         gameStarted = false;
     }
 
@@ -312,7 +315,8 @@ public class GameController {
         gameStarted = false;
         paddle.setX(WIDTH / 2 - (paddle.getWidth() / 2));
         balls.clear();
-        balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 10, 8, 165));
+        balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
+        effect = new Effect();
         initBricks();
     }
 
@@ -322,13 +326,10 @@ public class GameController {
         hardResetGame();
     }
 
-
-
     private void initBricks() {
         String path = "src/main/resources/layout/normal/";
         path += Integer.toString(curLevels) + ".txt";
         File levels = new File(path);
-
 
         try (Scanner sc = new Scanner(levels)) {
             bricks = new ArrayList<>();
@@ -340,7 +341,7 @@ public class GameController {
             int hitPoints;
 
             n = sc.nextInt();
-            
+
             for (int i = 0; i < n; i++) {
                 x = sc.nextInt();
                 y = sc.nextInt();
@@ -350,13 +351,16 @@ public class GameController {
 
                 if (type.equals("normal")) {
                     bricks.add(new NormalBrick(x, y));
-                }
-                else if (type.equals("strong")) {
+                } else if (type.equals("strong")) {
                     bricks.add(new StrongBrick(x, y, hitPoints));
                 }
             }
         } catch (FileNotFoundException e) {
             System.err.println("Error loading brick layout: " + e.getMessage());
         }
+    }
+
+    public static void setCurLevel(int level) {
+        curLevels = level;
     }
 }

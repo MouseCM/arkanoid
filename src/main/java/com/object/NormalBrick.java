@@ -23,16 +23,15 @@ public class NormalBrick extends Brick {
     }
 
     public NormalBrick(float x, float y) {
-        super(x, y, 70, 20, 1, "normal", 10);
+        super(x, y, 40, 20, 1, "normal", 10);
         img = new Image("file:assets/iceburg/normalbrick.png");
         setHasPowerUp(false);
     }
 
-    public void render(GraphicsContext gc) {
+    public void render(GraphicsContext gc, int LEFT) {
         if (!isDestroyed()) {
             if (getHitPoints() != 0) {
-                
-                gc.drawImage(img, getX(), getY(), getWidth(), getHeight());
+                gc.drawImage(img, getX() + LEFT, getY(), getWidth(), getHeight());
             }
         }
     }

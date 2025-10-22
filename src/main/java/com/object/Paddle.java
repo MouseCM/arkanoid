@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 //import javafx.scene.paint.Color;
 
 public class Paddle extends MovableObject {
-    Image image;
+    private Image image;
 
     public Paddle() {
         super();
@@ -31,8 +31,9 @@ public class Paddle extends MovableObject {
 
     public void update(Scene scene, int WIDTH, boolean aPressed, boolean dPressed) {
         // move with mouse
+        int LEFT = 180;
         scene.setOnMouseMoved(event -> {
-            float mouseX = (float) event.getSceneX() - getWidth() / 2;
+            float mouseX = (float) event.getSceneX() - getWidth() / 2 - LEFT;
             if (mouseX < 0) {
                 setX(0);
                 return;
@@ -54,8 +55,8 @@ public class Paddle extends MovableObject {
         }
     }
 
-    public void render(GraphicsContext gc) {
-        gc.drawImage(image, getX(), getY(), getWidth(), getHeight());
+    public void render(GraphicsContext gc, int LEFT) {
+        gc.drawImage(image, getX() + LEFT, getY(), getWidth(), getHeight());
     }
 
 }

@@ -3,6 +3,7 @@ package com.arkanoid;
 import java.io.IOException;
 
 import com.controller.ScreenController;
+import com.controller.Sound;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -16,8 +17,11 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        // Parent root = FXMLLoader.load(getClass().getResource("/fxml/game.fxml"));
         primaryStage = stage;
+
+        Sound sound = Sound.getInstance();
+        sound.start();
+        sound.loadMenuSounds();
 
         stage.setTitle("Arkanoid");
         ScreenController.loadScreen("/fxml/menu.fxml");
