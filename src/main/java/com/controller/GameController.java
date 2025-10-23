@@ -46,7 +46,7 @@ public class GameController {
     private boolean gamePaused = false;
     private AnimationTimer gameLoop;
     private int score = 0;
-    private int lives = 3;
+    private static int lives = 3;
 
     private  List<Ball> balls;
     private Paddle paddle;
@@ -99,6 +99,7 @@ public class GameController {
             nextLevel();
         }
         if (key == KeyCode.R) {
+            gameLoop.start();
             hardResetGame();
         }
         if (key == KeyCode.Q) {
@@ -367,5 +368,9 @@ public class GameController {
 
     public static void setCurLevel(int level) {
         curLevels = level;
+    }
+
+    public static void setLive(int live) {
+        lives = live;
     }
 }

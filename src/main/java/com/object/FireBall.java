@@ -12,6 +12,7 @@ public class FireBall extends Ball {
         super(x, y, dx, dy, radius, speed, angle);
         setImg("file:assets/ball/fireball2.png");
         setLightImage("file:assets/ball/firelight.png");
+        
 
     }
 
@@ -20,7 +21,7 @@ public class FireBall extends Ball {
         gc.save();
         gc.translate(getX() + LEFT, getY());
         gc.rotate(Math.toDegrees(Math.atan2(getDy(), getDx()))+180);
-        gc.drawImage(getLightImage(), -getRadius(),  -getRadius() - 2, 100, 20);
+        gc.drawImage(getLightImage(), -getRadius(), -getRadius() - 2, 100 * getRadius() / 8 , 20 * getRadius() /8);
         gc.restore();
     }
 
