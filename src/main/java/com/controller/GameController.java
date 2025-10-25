@@ -10,8 +10,10 @@ import java.util.Scanner;
 
 import com.abstracts.Brick;
 import com.object.Ball;
+import com.object.BrickParticle;
 import com.object.Effect;
 import com.object.FireBall;
+import com.object.BrickParticle;
 import com.object.NormalBrick;
 import com.object.Paddle;
 import com.object.PowerUp;
@@ -53,6 +55,7 @@ public class GameController {
     private List<Brick> bricks;
     private List<PowerUp> powerUps;
     private Effect effect;
+    private List<BrickParticle> particles;
 
     @FXML
     public void initialize() {
@@ -70,9 +73,8 @@ public class GameController {
         balls = new ArrayList<>();
         balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 120));
         paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 30, 1, 0, 100, 15, 10);
-
         effect = new Effect();
-
+        particles = new ArrayList<>();
         initBricks();
 
         startGameLoop();
@@ -238,9 +240,9 @@ public class GameController {
         for (Ball ball : balls) {
             for (Brick brick : bricks) {
 
-                // add PowerUp
+                // add PowerUp and break effect
                 if (brick.hasPowerUp() == true) {
-                    brick.addPowerUp(powerUps);
+                    brick.addPowerUp(powerUps,particles);
                 }
 
                 if (!brick.isDestroyed() && ball.willCollision(brick)) {
@@ -297,13 +299,19 @@ public class GameController {
             
             balls.get(i).update();
         }
+        
+        
+        for (int i = 0; i < particles.size(); i++){
+            particles.get(i).update();
+        }
+        particles.removeIf(p -> p.getOpacity() <= 0);
     }
 
 
     private void render() {
         renderer.renderGame(balls, paddle, bricks, 
                             powerUps, effect, gameOver, gameStarted, 
-                            gameLoop, won, score, lives);
+                            gameLoop, won, score, lives, particles);
     }
 
     private void resetGame() {
@@ -311,6 +319,7 @@ public class GameController {
         balls.clear();
         balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
         effect = new Effect();
+        particles.clear();
         gameStarted = false;
     }
 

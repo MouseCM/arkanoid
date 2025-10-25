@@ -3,6 +3,7 @@ package com.abstracts;
 import java.util.List;
 import java.util.Random;
 
+import com.object.BrickParticle;
 import com.object.PowerUp;
 
 public abstract class Brick extends GameObject {
@@ -80,8 +81,14 @@ public abstract class Brick extends GameObject {
         return false;
     }
 
-    public void addPowerUp(List<PowerUp> powerUps) {
+    public void addPowerUp(List<PowerUp> powerUps, List<BrickParticle> particles) {
         setHasPowerUp(false);
+        // add brickBreakEffect
+
+        for (int i = 0; i < 25; i++) {
+        BrickParticle p = new BrickParticle(getX() + 20, getY() + 10 , (float) (Math.random() * 3 + 3), "Ice");
+        particles.add(p);
+        }
 
         // add PowerUp
         Random rand = new Random();
@@ -90,7 +97,7 @@ public abstract class Brick extends GameObject {
         if (num <= 10) {
             powerUps.add(new PowerUp(getX() + rand.nextInt((int)(getWidth()-20)), getY(), "HP"));
         }
-        else if(num <= 10) {
+        else if(num <= 20) {
             powerUps.add(new PowerUp(getX() + rand.nextInt((int)(getWidth()-20)), getY(), "FireBall"));
         }
         else if (num <= 30) {
