@@ -1,4 +1,6 @@
 package com.object;
+import java.util.List;
+
 import com.abstracts.Brick;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -31,7 +33,11 @@ public class FireBall extends Ball {
     }
 
     @Override
-    public void bounceBrick(Brick brick) {
+    public void bounceBrick(Brick brick, List <BallParticle> ballParticles) {
+        for (int i = 0; i < 25; i++) {
+        BallParticle p = new BallParticle(getX(), getY(), (float) (Math.random() * 3 + 3), this);
+        ballParticles.add(p);
+        }
         return;
     }
     
