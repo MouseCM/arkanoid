@@ -13,7 +13,8 @@ import com.object.Ball;
 import com.object.BrickParticle;
 import com.object.Effect;
 import com.object.FireBall;
-import com.object.BrickParticle;
+import com.object.BallParticle;
+
 import com.object.NormalBrick;
 import com.object.Paddle;
 import com.object.PowerUp;
@@ -56,6 +57,7 @@ public class GameController {
     private List<PowerUp> powerUps;
     private Effect effect;
     private List<BrickParticle> particles;
+    private List<BallParticle> ballParticles;
 
     @FXML
     public void initialize() {
@@ -75,6 +77,7 @@ public class GameController {
         paddle = new Paddle(WIDTH / 2 - 50, HEIGHT - 30, 1, 0, 100, 15, 10);
         effect = new Effect();
         particles = new ArrayList<>();
+        ballParticles = new ArrayList<>();
         initBricks();
 
         startGameLoop();
@@ -204,7 +207,7 @@ public class GameController {
 
         // bounce wall
         for (Ball ball : balls) {
-            ball.bounceWall(WIDTH);
+            ball.bounceWall(WIDTH, ballParticles);
         }
 
         for (int i = balls.size() - 1; i >= 0; i--) {
@@ -232,7 +235,7 @@ public class GameController {
 
             if (ball.willCollision(paddle)) {
                 sound.playPaddleHit();
-                ball.bouncePaddle(paddle);
+                ball.bouncePaddle(paddle, ballParticles);
             }
         }
 
@@ -247,7 +250,7 @@ public class GameController {
 
                 if (!brick.isDestroyed() && ball.willCollision(brick)) {
                     sound.playBrickHit();
-                    ball.bounceBrick(brick);
+                    ball.bounceBrick(brick,ballParticles);
 
                     if (brick.takeHit()) {
                         score += brick.getScoreValue();
@@ -299,8 +302,10 @@ public class GameController {
             
             balls.get(i).update();
         }
-        
-        
+        for (int i = 0; i < ballParticles.size(); i++){
+            ballParticles.get(i).update();
+        }
+        ballParticles.removeIf(p -> p.getOpacity() <= 0);
         for (int i = 0; i < particles.size(); i++){
             particles.get(i).update();
         }
@@ -311,7 +316,7 @@ public class GameController {
     private void render() {
         renderer.renderGame(balls, paddle, bricks, 
                             powerUps, effect, gameOver, gameStarted, 
-                            gameLoop, won, score, lives, particles);
+                            gameLoop, won, score, lives, particles, ballParticles);
     }
 
     private void resetGame() {

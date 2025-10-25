@@ -6,6 +6,7 @@ import com.abstracts.Brick;
 import com.abstracts.GameObject;
 import com.object.Ball;
 import com.object.BrickParticle;
+import com.object.BallParticle;
 import com.object.Effect;
 import com.object.Paddle;
 import com.object.PowerUp;
@@ -143,7 +144,7 @@ public class Renderer {
 
     public void renderGame(List<Ball> balls, Paddle paddle, List<Brick> bricks, 
                             List<PowerUp> powerUps, Effect effect, boolean gameOver, boolean gameStarted, 
-                            AnimationTimer gameLoop, boolean won, int score, int lives, List<BrickParticle> particles) {
+                            AnimationTimer gameLoop, boolean won, int score, int lives, List<BrickParticle> particles, List<BallParticle> ballParticles) {
 
         if(gameOver || won) {
             gameLoop.stop();
@@ -194,7 +195,12 @@ public class Renderer {
           }
           gc.setGlobalAlpha(1.0);
         
+          for (BallParticle q : ballParticles) {
+            q.render(gc, LEFT);
+          }
+          gc.setGlobalAlpha(1.0);
 
+    
         render(paddle);
 
         renderHUD(score, lives);

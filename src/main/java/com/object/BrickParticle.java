@@ -33,7 +33,7 @@ public class BrickParticle extends MovableObject {
 
 
     public BrickParticle (float x, float y, float size, String type) {
-        super(x, y, size, size, (float) (Math.random() - 0.5)  , (float) (Math.random() - 0.5) , 7);
+        super(x, y, size, size, (float) (Math.random() - 0.5)  , (float) (Math.random() - 0.5) , 8);
         setOpacity( 1);
         brickPartColor = icePallet[rand.nextInt(4)];
     }
