@@ -10,15 +10,15 @@ import java.util.Scanner;
 
 import com.abstracts.Brick;
 import com.object.Ball;
+import com.object.BallParticle;
 import com.object.BrickParticle;
 import com.object.Effect;
 import com.object.FireBall;
-import com.object.BallParticle;
-
 import com.object.NormalBrick;
 import com.object.Paddle;
 import com.object.PowerUp;
 import com.object.StrongBrick;
+import com.object.UnbreakableBrick;
 
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
@@ -139,9 +139,8 @@ public class GameController {
     private void handleMouse(Scene scene) {
         scene.setOnMousePressed(event -> {
 
-            if (gameStarted == false) {
-                gameStarted = true;
-            }
+            gameStarted = true;
+            
 
             if (gameOver == true) {
                 gameLoop.start();
@@ -205,13 +204,12 @@ public class GameController {
             return;
         }
 
-        // bounce wall
-        for (Ball ball : balls) {
-            ball.bounceWall(WIDTH, ballParticles);
-        }
 
         for (int i = balls.size() - 1; i >= 0; i--) {
             Ball ball = balls.get(i);
+
+            // bounce wall
+            ball.bounceWall(WIDTH, ballParticles);
 
             if (ball.isDeath(HEIGHT)) {
                 balls.remove(i);
@@ -232,7 +230,6 @@ public class GameController {
         }
 
         for (Ball ball : balls) {
-
             if (ball.willCollision(paddle)) {
                 sound.playPaddleHit();
                 ball.bouncePaddle(paddle, ballParticles);
@@ -241,34 +238,49 @@ public class GameController {
 
         // bounce brick
         for (Ball ball : balls) {
-            for (Brick brick : bricks) {
-
-                // add PowerUp and break effect
-                if (brick.hasPowerUp() == true) {
-                    brick.addPowerUp(powerUps,particles);
-                }
+            boolean pass = false;
+            for (int i = bricks.size() - 1; i >= 0; i--) {
+                Brick brick = bricks.get(i);
 
                 if (!brick.isDestroyed() && ball.willCollision(brick)) {
+
                     sound.playBrickHit();
                     ball.bounceBrick(brick,ballParticles);
 
                     if (brick.takeHit()) {
                         score += brick.getScoreValue();
                     }
+                }
 
-                    if (bricks.stream().allMatch(b -> b == null || b.isDestroyed())) {
-                        won = true;
-                        sound.playGameWon();
+                // add PowerUp and break effect
+                if (brick.hasPowerUp() == true) {
+                    brick.addPowerUp(powerUps,particles);
+                }
 
-                        try(FileWriter writer = new FileWriter("src/main/resources/layout/level.txt")) {
-                            writer.write(Integer.toString(curLevels+1));
-                        }
-                        catch(IOException e) {
-                            System.err.println("cant found file");
-                        }
-                    }
+                if (brick.isDestroyed()) {
+                    bricks.remove(i);
                 }
             }
+        }
+
+        boolean pass = true;
+        for (Brick brick : bricks) {
+            if (!(brick instanceof UnbreakableBrick)) {
+                pass = false;
+                break;
+            }
+        }
+
+        if (pass == true) {
+            won = true;
+            sound.playGameWon();
+
+            try(FileWriter writer = new FileWriter("src/main/resources/layout/level.txt")) {
+                writer.write(Integer.toString(curLevels+1));
+            }
+            catch(IOException e) {
+                System.err.println("cant found file");
+            }    
         }
 
         for (PowerUp powerUp : powerUps) {
@@ -302,10 +314,12 @@ public class GameController {
             
             balls.get(i).update();
         }
+
         for (int i = 0; i < ballParticles.size(); i++){
             ballParticles.get(i).update();
         }
         ballParticles.removeIf(p -> p.getOpacity() <= 0);
+
         for (int i = 0; i < particles.size(); i++){
             particles.get(i).update();
         }
@@ -325,6 +339,7 @@ public class GameController {
         balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
         effect = new Effect();
         particles.clear();
+        ballParticles.clear();
         gameStarted = false;
     }
 
@@ -337,6 +352,8 @@ public class GameController {
         balls.clear();
         balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
         effect = new Effect();
+        particles.clear();
+        ballParticles.clear();
         initBricks();
     }
 
@@ -373,7 +390,10 @@ public class GameController {
                     bricks.add(new NormalBrick(x, y));
                 } else if (type.equals("strong")) {
                     bricks.add(new StrongBrick(x, y, hitPoints));
+                } else if (type.equals("unbreakable")) {
+                    bricks.add(new UnbreakableBrick(x, y));
                 }
+
             }
         } catch (FileNotFoundException e) {
             System.err.println("Error loading brick layout: " + e.getMessage());
