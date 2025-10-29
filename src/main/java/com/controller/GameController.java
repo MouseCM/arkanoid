@@ -13,6 +13,7 @@ import com.object.Ball;
 import com.object.BallParticle;
 import com.object.BrickParticle;
 import com.object.Effect;
+import com.object.ExplosionBrick;
 import com.object.FireBall;
 import com.object.NormalBrick;
 import com.object.Paddle;
@@ -392,6 +393,8 @@ public class GameController {
                     bricks.add(new StrongBrick(x, y, hitPoints));
                 } else if (type.equals("unbreakable")) {
                     bricks.add(new UnbreakableBrick(x, y));
+                } else if (type.equals("explosion")) {
+                    bricks.add(new ExplosionBrick(x, y));
                 }
 
             }
