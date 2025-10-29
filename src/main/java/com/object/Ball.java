@@ -1,12 +1,11 @@
 package com.object;
 
+import java.util.List;
+
 import com.abstracts.Brick;
 import com.abstracts.GameObject;
 import com.abstracts.MovableObject;
 import com.controller.Sound;
-import com.object.BallParticle;
-import java.util.ArrayList;
-import java.util.List;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -131,20 +130,23 @@ public class Ball extends MovableObject {
             } else {
                 setX(WIDTH - getRadius());
             }
-                 for (int i = 0; i < 25; i++) {
-                 BallParticle p = new BallParticle(getX(), getY(), (float) (Math.random() * 3 + 3), this);
-                 ballParticles.add(p);
-        }
-        } else if (getY() + getDy() * getSpeed() - getRadius() <= 0) {
+
+            for (int i = 0; i < 25; i++) {
+                BallParticle p = new BallParticle(getX(), getY(), (float) (Math.random() * 3 + 3), this);
+                ballParticles.add(p);
+            }
+        } 
+        else if (getY() + getDy() * getSpeed() - getRadius() <= 0) {
             Sound.getInstance().playWallHit();
             setAngle(180 - getAngle());
             setY(getRadius());
-                  for (int i = 0; i < 25; i++) {
-                 BallParticle p = new BallParticle(getX(), getY(), (float) (Math.random() * 3 + 3), this);
-                 ballParticles.add(p);
-                }
+
+            for (int i = 0; i < 25; i++) {
+                BallParticle p = new BallParticle(getX(), getY(), (float) (Math.random() * 3 + 3), this);
+                ballParticles.add(p);
+            }
+        }
     }
-}
 
     public void followPaddle(Paddle paddle) {
         setX(paddle.getX() + paddle.getWidth() / 2);
@@ -178,8 +180,8 @@ public class Ball extends MovableObject {
         }
 
         for (int i = 0; i < 25; i++) {
-        BallParticle p = new BallParticle(getX(), getY(), (float) (Math.random() * 3 + 3), this);
-        ballParticles.add(p);
+            BallParticle p = new BallParticle(getX(), getY(), (float) (Math.random() * 3 + 3), this);
+            ballParticles.add(p);
         }
     }
 

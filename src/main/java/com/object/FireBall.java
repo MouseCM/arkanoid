@@ -34,9 +34,20 @@ public class FireBall extends Ball {
 
     @Override
     public void bounceBrick(Brick brick, List <BallParticle> ballParticles) {
+        if (brick instanceof UnbreakableBrick) {
+            if (getX() > brick.getX() - getRadius() &&
+                getX() < brick.getX() + brick.getWidth() + getRadius()) {
+                // reverse vertical direction
+                setAngle(180 - getAngle());
+            } else {
+                // reverse horizontal direction
+                setAngle(-getAngle());
+            }
+        }
+
         for (int i = 0; i < 25; i++) {
-        BallParticle p = new BallParticle(getX(), getY(), (float) (Math.random() * 3 + 3), this);
-        ballParticles.add(p);
+            BallParticle p = new BallParticle(getX(), getY(), (float) (Math.random() * 3 + 3), this);
+            ballParticles.add(p);
         }
         return;
     }
