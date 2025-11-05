@@ -1,5 +1,7 @@
 package com.object;
 
+import java.util.List;
+
 import com.abstracts.Brick;
 import com.abstracts.GameObject;
 import com.abstracts.MovableObject;
@@ -44,6 +46,7 @@ public class Ball extends MovableObject {
         if (lightImage == null) {
             setLightImage("file:assets/ball/normallight.png");
         }
+        
         setAngle(angle);
         setAngleRotate(2);
     }
@@ -82,7 +85,7 @@ public class Ball extends MovableObject {
         gc.save();
         gc.translate(getX() + LEFT, getY());
         gc.rotate(Math.toDegrees(Math.atan2(getDy(), getDx())) + 180);
-        gc.drawImage(lightImage, -getRadius(), -getRadius() - 2, 100, 20);
+        gc.drawImage(lightImage, -getRadius(), -getRadius() - 2, 100 * getRadius() / 8 , 20 * getRadius() / 8);
         gc.restore();
     }
 
@@ -114,7 +117,7 @@ public class Ball extends MovableObject {
                 getX() - getRadius() <= other.getX() + other.getWidth();
     }
 
-    public void bounceWall(int WIDTH) {
+    public void bounceWall(int WIDTH, List <BallParticle> ballParticles) {
         if (getX() - getRadius() + getDx() * getSpeed() <= 0 ||
                 getX() + getRadius() + getDx() * getSpeed() >= WIDTH) {
             Sound.getInstance().playWallHit();
@@ -127,10 +130,21 @@ public class Ball extends MovableObject {
             } else {
                 setX(WIDTH - getRadius());
             }
-        } else if (getY() + getDy() * getSpeed() - getRadius() <= 0) {
+
+            for (int i = 0; i < 25; i++) {
+                BallParticle p = new BallParticle(getX(), getY(), (float) (Math.random() * 3 + 3), this);
+                ballParticles.add(p);
+            }
+        } 
+        else if (getY() + getDy() * getSpeed() - getRadius() <= 0) {
             Sound.getInstance().playWallHit();
             setAngle(180 - getAngle());
             setY(getRadius());
+
+            for (int i = 0; i < 25; i++) {
+                BallParticle p = new BallParticle(getX(), getY(), (float) (Math.random() * 3 + 3), this);
+                ballParticles.add(p);
+            }
         }
     }
 
@@ -139,7 +153,7 @@ public class Ball extends MovableObject {
         setY(paddle.getY() - getRadius() - 5);
     }
 
-    public void bouncePaddle(Paddle paddle) {
+    public void bouncePaddle(Paddle paddle, List <BallParticle> ballParticles) {
         if (getX() > paddle.getX() - getRadius() && getX() < paddle.getX() + paddle.getWidth() + getRadius()) {
             float hitPos = (getX() - paddle.getX()) / paddle.getWidth();
             float angle = (float) ((1 - hitPos) * 120) + 120;
@@ -148,9 +162,13 @@ public class Ball extends MovableObject {
         } else {
             setDx(-getDx());
         }
+        for (int i = 0; i < 25; i++) {
+        BallParticle p = new BallParticle(getX(), getY(), (float) (Math.random() * 3 + 3), this);
+        ballParticles.add(p);
+        }
     }
 
-    public void bounceBrick(Brick brick) {
+    public void bounceBrick(Brick brick, List <BallParticle> ballParticles) {
         // determine bounce direction
         if (getX() > brick.getX() - getRadius() &&
                 getX() < brick.getX() + brick.getWidth() + getRadius()) {
@@ -159,6 +177,11 @@ public class Ball extends MovableObject {
         } else {
             // reverse horizontal direction
             setAngle(-getAngle());
+        }
+
+        for (int i = 0; i < 25; i++) {
+            BallParticle p = new BallParticle(getX(), getY(), (float) (Math.random() * 3 + 3), this);
+            ballParticles.add(p);
         }
     }
 

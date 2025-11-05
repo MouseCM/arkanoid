@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.abstracts.GameObject;
 import com.abstracts.MovableObject;
+import com.controller.GameController;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -84,17 +85,21 @@ public class PowerUp extends MovableObject {
             Ball nextBall = balls.get(i).copy();
 
             nextBall.setAngle(nextBall.getAngle() + 20);
+            
             balls.add(nextBall.copy());
+
 
             nextBall.setAngle(nextBall.getAngle() - 40);
             balls.add(nextBall.copy());
+
+            
         }
     }
 
     public void active(int lives, List<Ball> balls, Effect effect, Paddle paddle) {
         switch (getType()) {
             case "HP":
-                lives++;
+                GameController.getInstance().setLive(Math.min(3, lives + 1));
                 break;
             case "x3Ball":
                 x3Balls(balls);
@@ -132,6 +137,11 @@ public class PowerUp extends MovableObject {
 
                 paddle.setWidth(200);
                 effect.setBigPaddleEffect(5000);
+
+                break;
+            case "Shooting":
+                effect.setShootingEffect(5000);
+                effect.setFire(5000);
 
                 break;
             default:
