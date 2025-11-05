@@ -12,6 +12,7 @@ import com.abstracts.Brick;
 import com.object.Ball;
 import com.object.BallParticle;
 import com.object.BrickParticle;
+import com.object.Bullet;
 import com.object.Effect;
 import com.object.ExplosionBrick;
 import com.object.FireBall;
@@ -30,6 +31,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 
 public class GameController {
+    private static GameController instance;
+
     @FXML
     private Canvas gameCanvas;
     private GraphicsContext gc;
@@ -37,10 +40,7 @@ public class GameController {
     private Sound sound;
     private static final int WIDTH = 720;
     private static final int HEIGHT = 720;
-
     private static int curLevels = 1;
-
-    
 
     private boolean aPressed = false;
     private boolean dPressed = false;
@@ -59,6 +59,15 @@ public class GameController {
     private Effect effect;
     private List<BrickParticle> particles;
     private List<BallParticle> ballParticles;
+    private List<Bullet> bullets;
+
+    public static GameController getInstance() {
+        if (instance == null) {
+            instance = new GameController();
+        }
+
+        return instance;
+    }
 
     @FXML
     public void initialize() {
@@ -79,6 +88,7 @@ public class GameController {
         effect = new Effect();
         particles = new ArrayList<>();
         ballParticles = new ArrayList<>();
+        bullets = new ArrayList<>();
         initBricks();
 
         startGameLoop();
@@ -184,6 +194,7 @@ public class GameController {
 
         // handle paddle movement with mouse and keyboard
         paddle.update(scene, WIDTH, aPressed, dPressed);
+        
         // big paddle
         if (paddle.getWidth() != 100 && effect.getBigPaddleEffect() <= 0) {
             paddle.setWidth(100);
@@ -239,7 +250,6 @@ public class GameController {
 
         // bounce brick
         for (Ball ball : balls) {
-            boolean pass = false;
             for (int i = bricks.size() - 1; i >= 0; i--) {
                 Brick brick = bricks.get(i);
 
@@ -247,6 +257,12 @@ public class GameController {
 
                     sound.playBrickHit();
                     ball.bounceBrick(brick,ballParticles);
+
+                    if (brick instanceof ExplosionBrick) {
+                        // explode nearby bricks
+                        brick.takeHit(bricks);
+                        score += brick.getScoreValue();
+                    }
 
                     if (brick.takeHit()) {
                         score += brick.getScoreValue();
@@ -316,6 +332,26 @@ public class GameController {
             balls.get(i).update();
         }
 
+        if(effect.getShootingEffect() < effect.getFire()) {
+            paddle.fire(bullets);
+            effect.setFire(effect.getFire() - 500);
+        }
+
+        for (int i = bullets.size()-1; i >= 0; i--) {
+            if (bullets.get(i).getY() <= 0) {
+                bullets.remove(i);
+            }
+
+            for (Brick brick : bricks) {
+                if (bullets.get(i).willCollision(brick)) {
+                    brick.takeHit();
+                    bullets.remove(i);
+                }
+            }
+
+            bullets.get(i).update();
+        }
+
         for (int i = 0; i < ballParticles.size(); i++){
             ballParticles.get(i).update();
         }
@@ -331,7 +367,8 @@ public class GameController {
     private void render() {
         renderer.renderGame(balls, paddle, bricks, 
                             powerUps, effect, gameOver, gameStarted, 
-                            gameLoop, won, score, lives, particles, ballParticles);
+                            gameLoop, won, score, lives, particles, 
+                            ballParticles, bullets, curLevels);
     }
 
     private void resetGame() {
@@ -341,6 +378,7 @@ public class GameController {
         effect = new Effect();
         particles.clear();
         ballParticles.clear();
+        bullets.clear();
         gameStarted = false;
     }
 
@@ -354,6 +392,7 @@ public class GameController {
         balls.add(new Ball(WIDTH / 2, HEIGHT - 30, 1, -1, 8, 8, 165));
         effect = new Effect();
         particles.clear();
+        bullets.clear();
         ballParticles.clear();
         initBricks();
     }

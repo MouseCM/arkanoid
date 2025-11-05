@@ -139,6 +139,11 @@ public class PowerUp extends MovableObject {
                 effect.setBigPaddleEffect(5000);
 
                 break;
+            case "Shooting":
+                effect.setShootingEffect(5000);
+                effect.setFire(5000);
+
+                break;
             default:
                 break;
         }

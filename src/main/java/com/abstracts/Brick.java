@@ -81,13 +81,15 @@ public abstract class Brick extends GameObject {
         return false;
     }
 
+    public boolean takeHit(List<Brick> bricks) { return true;}
+
     public void addPowerUp(List<PowerUp> powerUps, List<BrickParticle> particles) {
         setHasPowerUp(false);
         // add brickBreakEffect
 
         for (int i = 0; i < 25; i++) {
-        BrickParticle p = new BrickParticle(getX() + 20, getY() + 10 , (float) (Math.random() * 3 + 3), "Ice");
-        particles.add(p);
+            BrickParticle p = new BrickParticle(getX() + 20, getY() + 10 , (float) (Math.random() * 3 + 3), "Ice");
+            particles.add(p);
         }
 
         // add PowerUp
@@ -111,6 +113,9 @@ public abstract class Brick extends GameObject {
         }
         else if (num <= 60) {
             powerUps.add(new PowerUp(getX() + rand.nextInt((int)(getWidth()-20)), getY(), "BigPaddle"));
+        }
+        else if (num <= 100) {
+            powerUps.add(new PowerUp(getX() + rand.nextInt((int)(getWidth()-20)), getY(), "Shooting"));
         }
     }   
     

@@ -1,10 +1,13 @@
 package com.object;
 
+import java.util.List;
+
 import com.abstracts.MovableObject;
 
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+
 //import javafx.scene.paint.Color;
 
 public class Paddle extends MovableObject {
@@ -27,6 +30,11 @@ public class Paddle extends MovableObject {
     public void moveRight() {
         setDx(1);
         update();
+    }
+
+    public void fire(List<Bullet> bullets) {
+        bullets.add(new Bullet(getX(), getY()));
+        bullets.add(new Bullet(getX() + getWidth(), getY()));
     }
 
     public void update(Scene scene, int WIDTH, boolean aPressed, boolean dPressed) {

@@ -111,7 +111,7 @@ public class MenuController {
         File file = new File("src/main/resources/layout/level.txt");
 
         try(Scanner sc = new Scanner(file)) {
-            GameController.setCurLevel(sc.nextInt());
+            GameController.getInstance().setCurLevel(sc.nextInt());
         }
         catch(Exception e) {
             System.err.println("cant found file");

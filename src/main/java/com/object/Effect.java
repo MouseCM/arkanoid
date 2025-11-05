@@ -4,31 +4,61 @@ import javafx.scene.image.Image;
 public class Effect {
     private long fireballEffect;
     private long fastBallEffect;
-    private long BigBallEffect; 
-    private long BigPaddleEffect;  
-      
+    private long bigBallEffect; 
+    private long bigPaddleEffect;  
+    private long shootingEffect;
+    private long fire;
+    
     private static Image fireballImg = new Image("file:assets/powerup/FireBall.png");
     private static Image fastballImg = new Image("file:assets/powerup/FastBall.png");
     private static Image bigballImg = new Image("file:assets/powerup/BigBall.png");
     private static Image boardImg = new Image("file:assets/powerup/Board.png");
     private static Image bigPaddleImg = new Image("file:assets/powerup/BigPaddle.png");
+    private static Image shootingImg = new Image("file:assets/powerup/Shooting.png");
 
     public Effect() {
         fireballEffect = 0;
         fastBallEffect = 0;
-        BigBallEffect = 0;
+        bigBallEffect = 0;
+        shootingEffect = 0;
+        fire = 0;
     }
     
     
+    
+
+    public long getFire() {
+        return fire;
+    }
+
+
+    public void setFire(long fire) {
+        this.fire = fire;
+    }
+
+
+
+
+    public long getShootingEffect() {
+        return shootingEffect;
+    }
+
+
+
+    public void setShootingEffect(long shootingEffect) {
+        this.shootingEffect = shootingEffect;
+    }
+
+
 
     public long getBigPaddleEffect() {
-        return BigPaddleEffect;
+        return bigPaddleEffect;
     }
 
 
 
     public void setBigPaddleEffect(long bigPaddleEffect) {
-        BigPaddleEffect = bigPaddleEffect;
+        this.bigPaddleEffect = bigPaddleEffect;
     }
 
 
@@ -50,11 +80,11 @@ public class Effect {
     }
 
     public long getBigBallEffect() {
-        return BigBallEffect;
+        return bigBallEffect;
     }
 
     public void setBigBallEffect(long bigBallEffect) {
-        BigBallEffect = bigBallEffect;
+        this.bigBallEffect = bigBallEffect;
     }
 
     public static Image getFireballImg() {
@@ -76,6 +106,15 @@ public class Effect {
     public static Image getBoardImg() {
         return boardImg;
     }
+
+
+
+
+    public static Image getShootingImg() {
+        return shootingImg;
+    }
+
+    
 
 
     
