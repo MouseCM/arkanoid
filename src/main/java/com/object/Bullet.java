@@ -11,7 +11,7 @@ public class Bullet extends MovableObject {
     private Image img;
 
     public Bullet() {
-        img = new Image("file:assets/ball/normalball.png");
+        img = new Image("file:assets/ball/bullet.png");
         radius = 5;
         setX(0);
         setY(0);
@@ -21,7 +21,7 @@ public class Bullet extends MovableObject {
     }
 
     public Bullet(float x, float y) {
-        img = new Image("file:assets/ball/normalball.png");
+        img = new Image("file:assets/ball/bullet.png");
         radius = 5;
         setX(x);
         setY(y);
