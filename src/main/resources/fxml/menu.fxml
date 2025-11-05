@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Text?>
@@ -8,51 +9,64 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
 
-
 <StackPane xmlns="http://javafx.com/javafx/17" 
            xmlns:fx="http://javafx.com/fxml/1" 
            fx:controller="com.controller.MenuController"
            prefWidth="1080" 
            prefHeight="720"
            style="-fx-background-color: linear-gradient(to bottom, #1a1a2e, #16213e);
-                    -fx-background-image: url('file:assets/iceburg/Arkanoid.png');
-                    -fx-background-size: 1080 720;">
+                  -fx-background-image: url('file:assets/iceburg/MenuBackground.gif');
+                  -fx-background-position: top center;
+                  -fx-background-size: cover;">
+        
+    <!-- Logo Image -->
+       <!-- <StackPane fx:id="rootPane"
+           prefWidth="1080" prefHeight="720"
+           style="
+               -fx-background-image: url('file:assets/iceburg/Arkanoid.png');
+               -fx-background-repeat: no-repeat;
+               -fx-background-position: center top 50;
+               -fx-background-size: auto;"
+              -fx-background-position: center;">
+       </StackPane> -->
 
+    <!-- VBox buttons -->
     <VBox alignment="CENTER" spacing="10">
         <padding>
             <Insets top="260" bottom="90" left="50" right="50"/>
         </padding>
-        
-        
-        <!-- NewGame Button -->
+
         <Button fx:id="newGameButton" 
                 text="NEW GAME" 
                 prefWidth="300" 
                 prefHeight="40"
-                style="-fx-background-image: url('file:assets/iceburg/NormalButton.png'); -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
+                style="-fx-background-image: url('file:assets/iceburg/NormalButton.png');
+                       -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
                 onMouseEntered="#onNewGameHover"
                 onMouseExited="#onNewGameExit"
                 onAction="#onNewGameClicked"/>
-        
-        <!-- Continue Button -->
+
         <Button fx:id="continueButton" 
                 text="CONTINUE" 
                 prefWidth="300" 
                 prefHeight="40"
-                style="-fx-background-image: url('file:assets/iceburg/NormalButton.png'); -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
+                style="-fx-background-image: url('file:assets/iceburg/NormalButton.png');
+                       -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
                 onMouseEntered="#onContinueHover"
                 onMouseExited="#onContinueExit"
                 onAction="#onContinueClicked"/>
-        
-        <!-- Theme Button -->
+
         <Button fx:id="themeButton" 
-                text="Theme" 
+                text="THEME" 
                 prefWidth="300" 
                 prefHeight="40"
-                style="-fx-background-image: url('file:assets/iceburg/NormalButton.png'); -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
+                style="-fx-background-image: url('file:assets/iceburg/NormalButton.png');
+                       -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
                 onMouseEntered="#onThemeHover"
                 onMouseExited="#onThemeExit"
                 onAction="#onThemeClicked"/>
-
     </VBox>
 </StackPane>

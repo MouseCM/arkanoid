@@ -122,7 +122,7 @@ public class Renderer {
         }
 
         if (effect.getShootingEffect() > 0) {
-            gc.drawImage(effect.getShootingImg(), WIDTH + LEFT * 2 - 180, high, 180, 28);
+            gc.drawImage(effect.getBoardImg(), WIDTH + LEFT * 2 - 180, high, 180, 28);
             gc.drawImage(effect.getShootingImg(), WIDTH + LEFT * 2 - 150, high, 25, 25);
             gc.fillText(" " + Math.round(effect.getShootingEffect() / 100) / 10.0, WIDTH + LEFT * 2 - 120, high + 25);
             high += 30;
