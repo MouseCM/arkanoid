@@ -194,7 +194,7 @@ public class GameController {
 
         // handle paddle movement with mouse and keyboard
         paddle.update(scene, WIDTH, aPressed, dPressed);
-        
+
         // big paddle
         if (paddle.getWidth() != 100 && effect.getBigPaddleEffect() <= 0) {
             paddle.setWidth(100);
@@ -337,15 +337,21 @@ public class GameController {
             effect.setFire(effect.getFire() - 500);
         }
 
+        // handle bullet
         for (int i = bullets.size()-1; i >= 0; i--) {
             if (bullets.get(i).getY() <= 0) {
                 bullets.remove(i);
             }
 
-            for (Brick brick : bricks) {
+            for (int j = bricks.size()-1; j >= 0; j--) {
+                Brick brick = bricks.get(j);
                 if (bullets.get(i).willCollision(brick)) {
                     brick.takeHit();
                     bullets.remove(i);
+
+                    if (brick.isDestroyed()) {
+                        bricks.remove(j);
+                    }
                 }
             }
 

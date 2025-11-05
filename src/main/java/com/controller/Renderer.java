@@ -81,7 +81,7 @@ public class Renderer {
     public void renderLevel(int curLevels) {
         gc.setFill(Color.YELLOW);
         gc.setFont(pixelFont25);
-        gc.fillText(Integer.toString(curLevels), 500, 320);
+        gc.fillText("level " + Integer.toString(curLevels), 530, 320);
     }
 
     public void renderEffect(Effect effect) {

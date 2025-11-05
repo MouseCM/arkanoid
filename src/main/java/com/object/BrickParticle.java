@@ -1,4 +1,5 @@
 package com.object;
+
 import java.util.Random;
 
 import com.abstracts.MovableObject;
@@ -8,33 +9,30 @@ import javafx.scene.paint.Color;
 
 public class BrickParticle extends MovableObject {
     Random rand = new Random();
-    private float opacity;    // độ trong suốt
-    private Color[] icePallet = {Color.web("#AEE4FF"),
-                                 Color.web("#4b98bfff"),
-                                 Color.web("#03a4f5ff"),
-                                 Color.web("#487fecff"),
-                                 Color.web("#1748a9ff"),
-                                 };
+    private float opacity; // độ trong suốt
+    private Color[] icePallet = { Color.web("#AEE4FF"),
+            Color.web("#4b98bfff"),
+            Color.web("#03a4f5ff"),
+            Color.web("#487fecff"),
+            Color.web("#1748a9ff"),
+    };
     public Color brickPartColor;
-    
+
     public float getOpacity() {
         return opacity;
     }
-
 
     public void setOpacity(float opacity) {
         this.opacity = opacity;
     }
 
-
     public Color getBrickPartColor() {
         return brickPartColor;
     }
 
-
-    public BrickParticle (float x, float y, float size, String type) {
-        super(x, y, size, size, (float) (Math.random() - 0.5)  , (float) (Math.random() - 0.5) , 8);
-        setOpacity( 1);
+    public BrickParticle(float x, float y, float size, String type) {
+        super(x, y, size, size, (float) (Math.random() - 0.5), (float) (Math.random() - 0.5), 8);
+        setOpacity(1);
         brickPartColor = icePallet[rand.nextInt(4)];
     }
 
@@ -45,11 +43,11 @@ public class BrickParticle extends MovableObject {
         gc.fillRect(getX() + LEFT, getY(), getWidth(), getHeight());
     }
 
-    @Override 
-    public void update(){
+    @Override
+    public void update() {
         setX(getX() + getSpeed() * getDx());
         setY(getY() + getSpeed() * getDy());
         setOpacity(getOpacity() - (float) 0.1);
     }
-    
+
 }

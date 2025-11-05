@@ -1,4 +1,5 @@
 package com.object;
+
 import java.util.List;
 
 import com.abstracts.Brick;
@@ -7,14 +8,13 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public class FireBall extends Ball {
- 
+
     Image img2;
 
     public FireBall(float x, float y, float dx, float dy, float radius, float speed, float angle) {
         super(x, y, dx, dy, radius, speed, angle);
         setImg("file:assets/ball/fireball2.png");
         setLightImage("file:assets/ball/firelight.png");
-        
 
     }
 
@@ -22,8 +22,8 @@ public class FireBall extends Ball {
     public void renderTail(GraphicsContext gc, int LEFT) {
         gc.save();
         gc.translate(getX() + LEFT, getY());
-        gc.rotate(Math.toDegrees(Math.atan2(getDy(), getDx()))+180);
-        gc.drawImage(getLightImage(), -getRadius(), -getRadius() - 2, 100 * getRadius() / 8 , 20 * getRadius() /8);
+        gc.rotate(Math.toDegrees(Math.atan2(getDy(), getDx())) + 180);
+        gc.drawImage(getLightImage(), -getRadius(), -getRadius() - 2, 100 * getRadius() / 8, 20 * getRadius() / 8);
         gc.restore();
     }
 
@@ -33,10 +33,10 @@ public class FireBall extends Ball {
     }
 
     @Override
-    public void bounceBrick(Brick brick, List <BallParticle> ballParticles) {
+    public void bounceBrick(Brick brick, List<BallParticle> ballParticles) {
         if (brick instanceof UnbreakableBrick) {
             if (getX() > brick.getX() - getRadius() &&
-                getX() < brick.getX() + brick.getWidth() + getRadius()) {
+                    getX() < brick.getX() + brick.getWidth() + getRadius()) {
                 // reverse vertical direction
                 setAngle(180 - getAngle());
             } else {
@@ -51,6 +51,5 @@ public class FireBall extends Ball {
         }
         return;
     }
-    
 
 }
