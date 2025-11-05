@@ -92,7 +92,7 @@ public class Renderer {
         if (effect.getFireballEffect() > 0) {
             gc.drawImage(effect.getBoardImg(), WIDTH + LEFT * 2 - 180, high, 180, 28);
             gc.drawImage(effect.getFireballImg(), WIDTH + LEFT * 2 - 150, high, 25, 25);
-            gc.fillText(": " + effect.getFireballEffect(), WIDTH + LEFT * 2 - 120, high + 25);
+            gc.fillText(" " + Math.round(effect.getFireballEffect() / 100) / 10.0, WIDTH + LEFT * 2 - 120, high + 25);
             high += 30;
             effect.setFireballEffect(effect.getFireballEffect() - 17);
         }
@@ -100,7 +100,7 @@ public class Renderer {
         if (effect.getFastBallEffect() > 0) {
             gc.drawImage(effect.getBoardImg(), WIDTH + LEFT * 2 - 180, high, 180, 28);
             gc.drawImage(effect.getFastballImg(), WIDTH + LEFT * 2 - 150, high, 25, 25);
-            gc.fillText(": " + effect.getFastBallEffect(), WIDTH + LEFT * 2 - 120, high + 25);
+            gc.fillText(" " + Math.round(effect.getFastBallEffect() / 100) / 10.0, WIDTH + LEFT * 2 - 120, high + 25);
             high += 30;
             effect.setFastBallEffect(effect.getFastBallEffect() - 17);
         }
@@ -108,7 +108,7 @@ public class Renderer {
         if (effect.getBigBallEffect() > 0) {
             gc.drawImage(effect.getBoardImg(), WIDTH + LEFT * 2 - 180, high, 180, 28);
             gc.drawImage(effect.getBigballImg(), WIDTH + LEFT * 2 - 150, high, 25, 25);
-            gc.fillText(": " + effect.getBigBallEffect(), WIDTH + LEFT * 2 - 120, high + 25);
+            gc.fillText(" " + Math.round(effect.getBigBallEffect() / 100) / 10.0, WIDTH + LEFT * 2 - 120, high + 25);
             high += 30;
             effect.setBigBallEffect(effect.getBigBallEffect() - 17);
         }
@@ -116,7 +116,7 @@ public class Renderer {
         if (effect.getBigPaddleEffect() > 0) {
             gc.drawImage(effect.getBoardImg(), WIDTH + LEFT * 2 - 180, high, 180, 28);
             gc.drawImage(effect.getBigPaddleImg(), WIDTH + LEFT * 2 - 150, high, 25, 25);
-            gc.fillText(": " + effect.getBigPaddleEffect(), WIDTH + LEFT * 2 - 120, high + 25);
+            gc.fillText(" " + Math.round(effect.getBigPaddleEffect() / 100) / 10.0, WIDTH + LEFT * 2 - 120, high + 25);
             high += 30;
             effect.setBigPaddleEffect(effect.getBigPaddleEffect() - 17);
         }
@@ -124,7 +124,7 @@ public class Renderer {
         if (effect.getShootingEffect() > 0) {
             gc.drawImage(effect.getShootingImg(), WIDTH + LEFT * 2 - 180, high, 180, 28);
             gc.drawImage(effect.getShootingImg(), WIDTH + LEFT * 2 - 150, high, 25, 25);
-            gc.fillText(": " + effect.getShootingEffect(), WIDTH + LEFT * 2 - 120, high + 25);
+            gc.fillText(" " + Math.round(effect.getShootingEffect() / 100) / 10.0, WIDTH + LEFT * 2 - 120, high + 25);
             high += 30;
             effect.setShootingEffect(effect.getShootingEffect() - 17);
         }
