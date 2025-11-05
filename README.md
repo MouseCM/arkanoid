@@ -4,7 +4,7 @@ This is a clone version of arkanoid classic game.
 Technologies used: Java, JavaFX, maven.
 
 # Game architechture
-![game architechture](https://github.com/MouseCM/arkanoid/assets/readme/uml.png)
+![game architechture](https://github.com/MouseCM/arkanoid/blob/main/assets/readme/uml.png)
 
 
 # Feature
