@@ -8,8 +8,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class BallParticle extends MovableObject {
-    Random rand = new Random();
-    private float opacity; // độ trong suốt
+    private float opacity; 
+    private Color ballPartColor;
+    private Random rand = new Random();
     private Color[] normalPallet = { Color.web("#5ddae3ff"),
             Color.web("#18effeff"),
             Color.web("#149099ff"),
@@ -22,7 +23,7 @@ public class BallParticle extends MovableObject {
             Color.web("#dd560cff"),
             Color.web("#ff0000ff"),
     };
-    public Color ballPartColor;
+    
 
     public float getOpacity() {
         return opacity;

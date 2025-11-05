@@ -99,7 +99,7 @@ public class PowerUp extends MovableObject {
     public void active(int lives, List<Ball> balls, Effect effect, Paddle paddle) {
         switch (getType()) {
             case "HP":
-                GameController.setLive(Math.min(3, lives + 1));
+                GameController.getInstance().setLive(Math.min(3, lives + 1));
                 break;
             case "x3Ball":
                 x3Balls(balls);

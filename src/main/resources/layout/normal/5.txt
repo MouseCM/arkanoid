@@ -1,4 +1,4 @@
-80
+70
 10 55 2 strong
 80 55 3 strong
 150 55 3 strong

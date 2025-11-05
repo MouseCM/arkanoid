@@ -1,5 +1,10 @@
 package com.object;
+
+
+import java.util.List;
+
 import javafx.scene.image.Image;
+
 
 public class Effect {
     private long fireballEffect;
@@ -22,6 +27,38 @@ public class Effect {
         bigBallEffect = 0;
         shootingEffect = 0;
         fire = 0;
+    }
+
+    public void deActive(List<Ball> balls, Paddle paddle, List<Bullet> bullets) {
+        // big paddle
+        if (paddle.getWidth() != 100 && getBigPaddleEffect() <= 0) {
+            paddle.setWidth(100);
+            paddle.setX(Math.min(paddle.getX() + 50, 620));
+        }
+
+        for (int i = 0; i < balls.size(); i++) {
+            // fire Ball 
+            if ((balls.get(i) instanceof FireBall) && getFireballEffect() <= 0) {
+                balls.set(i, new Ball(balls.get(i).getX(), balls.get(i).getY(),
+                        balls.get(i).getDx(), balls.get(i).getDy(), balls.get(i).getRadius(),
+                        balls.get(i).getSpeed(), balls.get(i).getAngle()));
+            }
+
+            // fast ball
+            if (balls.get(i).getSpeed() != 8 && getFastBallEffect() <= 0) {
+                balls.get(i).setSpeed(8);
+            }
+
+            // big ball
+            if (balls.get(i).getRadius() != 8 && getBigBallEffect() <= 0) {
+                balls.get(i).setRadius(8);
+            }
+        }
+
+        if(getShootingEffect() < getFire()) {
+            paddle.fire(bullets);
+            setFire(getFire() - 500);
+        }
     }
     
     

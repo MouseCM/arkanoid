@@ -193,14 +193,14 @@ public class Renderer {
 
         
 
-        for (BallParticle q : ballParticles) {
-            q.render(gc, LEFT);
+        for (BallParticle ballParticle : ballParticles) {
+            ballParticle.render(gc, LEFT);
         }
         gc.setGlobalAlpha(1.0);
 
 
-        for (BrickParticle p : particles) {
-            p.render(gc, LEFT);
+        for (BrickParticle brickParticle : particles) {
+            brickParticle.render(gc, LEFT);
         }
         gc.setGlobalAlpha(1.0);
 

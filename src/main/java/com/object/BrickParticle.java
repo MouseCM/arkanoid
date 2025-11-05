@@ -8,15 +8,16 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class BrickParticle extends MovableObject {
-    Random rand = new Random();
-    private float opacity; // độ trong suốt
+
+    private float opacity;
+    private Color brickPartColor;
+    private Random rand = new Random();
     private Color[] icePallet = { Color.web("#AEE4FF"),
             Color.web("#4b98bfff"),
             Color.web("#03a4f5ff"),
             Color.web("#487fecff"),
             Color.web("#1748a9ff"),
     };
-    public Color brickPartColor;
 
     public float getOpacity() {
         return opacity;
