@@ -40,6 +40,7 @@ public class GameController {
     private static final int WIDTH = 720;
     private static final int HEIGHT = 720;
     private static int curLevels = 1;
+    private static final int finalLevels = 11;
 
     private boolean aPressed = false;
     private boolean dPressed = false;
@@ -190,6 +191,12 @@ public class GameController {
     private void update(Scene scene) {
         if (gameOver || won) {
             return;
+        }
+
+        if (curLevels >= finalLevels) {
+            gameLoop.stop();
+            ScreenController.getCurrentScene().setCursor(Cursor.DEFAULT);
+            ScreenController.loadScreen("/fxml/win.fxml");
         }
 
         // handle mouse events
