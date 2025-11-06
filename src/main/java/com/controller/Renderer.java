@@ -27,8 +27,8 @@ public class Renderer {
     private long lasttime = 0;
 
     Image bg = new Image("file:assets/iceburg/background.png");
-    Image leftWall = new Image("file:assets/iceburg/wall.png");
-    Image rightWall = new Image("file:assets/iceburg/rightwall.png");
+    Image leftWall = new Image("file:assets/iceburg/wall.gif");
+    Image rightWall = new Image("file:assets/iceburg/rightwall.gif");
 
     private GraphicsContext gc;
     private int WIDTH;

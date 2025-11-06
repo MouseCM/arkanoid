@@ -15,20 +15,27 @@
            prefWidth="1080" 
            prefHeight="720"
            style="-fx-background-color: linear-gradient(to bottom, #1a1a2e, #16213e);
-                  -fx-background-image: url('file:assets/iceburg/MenuBackground.gif');
+                  -fx-background-image: url('file:assets/iceburg/MenuBackground2.gif');
                   -fx-background-position: top center;
-                  -fx-background-size: cover;">
-        
-    <!-- Logo Image -->
-       <!-- <StackPane fx:id="rootPane"
-           prefWidth="1080" prefHeight="720"
-           style="
-               -fx-background-image: url('file:assets/iceburg/Arkanoid.png');
-               -fx-background-repeat: no-repeat;
-               -fx-background-position: center top 50;
-               -fx-background-size: auto;"
-              -fx-background-position: center;">
-       </StackPane> -->
+                  -fx-background-size: auto;">
+
+       <!-- Left wall -->
+    <Pane prefWidth="200" prefHeight="720"
+          style="
+              -fx-background-image: url('file:assets/iceburg/wall.gif');
+              -fx-background-size: contain;
+              -fx-background-position: left;
+              -fx-background-repeat: no-repeat;"
+          StackPane.alignment="BOTTOM_RIGHT"/>
+
+       <!-- Right wall -->
+    <Pane prefWidth="200" prefHeight="720"
+          style="
+              -fx-background-image: url('file:assets/iceburg/rightwall.gif');
+              -fx-background-size: contain;
+              -fx-background-position: right;
+              -fx-background-repeat: no-repeat;"
+          StackPane.alignment="BOTTOM_RIGHT"/>
 
     <!-- VBox buttons -->
     <VBox alignment="CENTER" spacing="10">
