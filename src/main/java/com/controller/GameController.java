@@ -75,8 +75,6 @@ public class GameController {
 
         renderer = new Renderer(gc, WIDTH, HEIGHT);
         sound = Sound.getInstance();
-        sound.loadGameSounds();
-        
 
         gameCanvas.setFocusTraversable(true);
         gameCanvas.setOnKeyPressed(e -> handleKeyPressed(e.getCode()));

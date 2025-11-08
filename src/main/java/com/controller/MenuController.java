@@ -25,11 +25,21 @@ public class MenuController {
     @FXML
     private Button exitButton;
 
+    // Initialize method
+    @FXML
+    public void initialize() {
+        Sound.getInstance().start();
+        if (!Sound.getInstance().getGameSoundsLoaded()) {
+            Sound.getInstance().loadGameSounds();
+            Sound.getInstance().setGameSoundsLoaded(true);
+        }
+    }
+
     // Hover effect for NewGame button
     @FXML
     private void onNewGameHover() {
         applyHoverEffect(newGameButton);
-    }
+        }
     
     @FXML
     private void onNewGameExit() {
