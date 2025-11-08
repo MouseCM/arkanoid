@@ -20,8 +20,11 @@ public class MenuController {
     private Button continueButton;
     
     @FXML
-    private Button themeButton;
+    private Button settingsButton;
     
+    @FXML
+    private Button exitButton;
+
     // Hover effect for NewGame button
     @FXML
     private void onNewGameHover() {
@@ -31,6 +34,17 @@ public class MenuController {
     @FXML
     private void onNewGameExit() {
         removeHoverEffect(newGameButton);
+    }
+    
+    // Hover effect for Exit button
+    @FXML
+    private void onExitHover() {
+        applyHoverEffect(exitButton);
+    }
+    
+    @FXML
+    private void onExitExit() {
+        removeHoverEffect(exitButton);
     }
     
     // Hover effect for Continue button
@@ -46,17 +60,17 @@ public class MenuController {
     
     // Hover effect for Theme button
     @FXML
-    private void onThemeHover() {
-        applyHoverEffect(themeButton);
+    private void onSettingsHover() {
+        applyHoverEffect(settingsButton);
     }
     
     @FXML
-    private void onThemeExit() {
-        removeHoverEffect(themeButton);
+    private void onSettingsExit() {
+        removeHoverEffect(settingsButton);
     }
     
     // Apply hover animation
-    private void applyHoverEffect(Button button) {
+    public void applyHoverEffect(Button button) {
         // Scale animation
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), button);
         scaleTransition.setToX(1.1);
@@ -76,7 +90,7 @@ public class MenuController {
     }
     
     // Remove hover animation
-    private void removeHoverEffect(Button button) {
+    public void removeHoverEffect(Button button) {
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), button);
         scaleTransition.setToX(1.0);
         scaleTransition.setToY(1.0);
@@ -121,8 +135,16 @@ public class MenuController {
     }
     
     @FXML
-    private void onThemeClicked() {
-        
+    private void onSettingsClicked() {
+        Sound.getInstance().playClick();
+        ScreenController.loadScreen("/fxml/settings.fxml");
 
     }
+
+    @FXML
+    private void onExitClicked() {
+        Sound.getInstance().playClick();
+        System.exit(0);
+    }
+
 }

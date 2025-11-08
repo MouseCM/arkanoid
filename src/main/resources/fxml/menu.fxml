@@ -65,15 +65,26 @@
                 onMouseExited="#onContinueExit"
                 onAction="#onContinueClicked"/>
 
-        <Button fx:id="themeButton" 
-                text="THEME" 
+        <Button fx:id="settingsButton" 
+                text="SETTINGS" 
                 prefWidth="300" 
                 prefHeight="40"
                 style="-fx-background-image: url('file:assets/iceburg/NormalButton.png');
                        -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;
                        -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
-                onMouseEntered="#onThemeHover"
-                onMouseExited="#onThemeExit"
-                onAction="#onThemeClicked"/>
+                onMouseEntered="#onSettingsHover"
+                onMouseExited="#onSettingsExit"
+                onAction="#onSettingsClicked"/>
+        <Button fx:id="exitButton" 
+                text="EXIT" 
+                prefWidth="300" 
+                prefHeight="40"
+                style="-fx-background-image: url('file:assets/iceburg/NormalButton.png');
+                       -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
+                onMouseEntered="#onExitHover"
+                onMouseExited="#onExitExit"
+                onAction="#onExitClicked"/>
     </VBox>
+
 </StackPane>
