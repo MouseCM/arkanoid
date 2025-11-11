@@ -19,6 +19,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.util.Pair;
 
 public class Renderer {
     private Font pixelFont25 = Font.loadFont("file:assets/fonts/Evil.ttf", 25);
@@ -37,13 +38,14 @@ public class Renderer {
     private int HEIGHT;
     private int LEFT = 180;
 
-    //private static Renderer instance;
+    private List<Pair<String, Integer>> scoreboard;
+    // private static Renderer instance;
 
     // public static Renderer getInstance() {
-    //     if (instance == null) {
-    //         instance = new Renderer(gc, 1080, 720);
-    //     }
-    //     return instance;
+    // if (instance == null) {
+    // instance = new Renderer(gc, 1080, 720);
+    // }
+    // return instance;
     // }
 
     public Renderer(GraphicsContext gc, int width, int height) {
@@ -61,11 +63,28 @@ public class Renderer {
         return;
     }
 
-    public void renderHUD(int score, int lives) {
+    public void renderHUD(int score, int lives, Effect effect) {
         gc.setFill(Color.WHITE);
         gc.setFont(pixelFont25);
         gc.fillText("Score: " + score, 35, 55);
         gc.fillText("Lives: " + lives, 35, 85);
+        ScoreboardController.getInstance().addScore(GameController.getInstance().getPlayerName(), score);
+        scoreboard = ScoreboardController.getInstance().getLeaderBoard();
+        gc.fillText("Leaderboard:", 35, 145);
+        for (int i = 0; i < scoreboard.size(); i++) {
+            if (scoreboard.get(i).getKey().equals(GameController.getInstance().getPlayerName())) {
+                gc.drawImage(effect.getBoardScorePlayerImg(), 0, 175 + i * 30 - 25, 180, 28);
+                gc.setFill(Color.ORANGERED);
+                gc.fillText((i + 1) + ". " + scoreboard.get(i).getKey() + " - " + scoreboard.get(i).getValue(), 35,
+                        175 + i * 30);
+                gc.setFill(Color.WHITE);
+            } else {
+                gc.drawImage(effect.getBoardScoreImg(), 0, 175 + i * 30 - 25, 180, 28);
+                gc.fillText((i + 1) + ". " + scoreboard.get(i).getKey() + " - " + scoreboard.get(i).getValue(), 35,
+                        175 + i * 30);
+            }
+
+        }
     }
 
     public void renderGameOver(boolean won) {
@@ -139,7 +158,7 @@ public class Renderer {
             high += 30;
             effect.setShootingEffect(effect.getShootingEffect() - 17);
         }
-        
+
     }
 
     private void FPS() {
@@ -171,7 +190,6 @@ public class Renderer {
 
         clear();
 
-
         renderBackground(bg);
 
         for (int i = 0; i < balls.size(); i++) {
@@ -184,7 +202,7 @@ public class Renderer {
         if (!gameStarted) {
             for (int i = 0; i < balls.size(); i++) {
                 balls.get(i).renderStartLine(gc, 180);
-            }  
+            }
         }
 
         gc.drawImage(leftWall, 0, 0, 200, 720);
@@ -202,24 +220,19 @@ public class Renderer {
             render(bullet);
         }
 
-        
-
         for (BallParticle ballParticle : ballParticles) {
             ballParticle.render(gc, LEFT);
         }
         gc.setGlobalAlpha(1.0);
-
 
         for (BrickParticle brickParticle : particles) {
             brickParticle.render(gc, LEFT);
         }
         gc.setGlobalAlpha(1.0);
 
-        
-
         render(paddle);
 
-        renderHUD(score, lives);
+        renderHUD(score, lives,effect);
 
         renderEffect(effect);
 
@@ -231,27 +244,32 @@ public class Renderer {
             renderGameOver(won);
         }
     }
+
     public void renderScoreboard() {
         clear();
         gc.setFill(Color.WHITE);
         gc.setFont(pixelFont25);
         Scanner scanner = null;
         try {
-            scanner = new Scanner(new File("src/main/resources/layout/Scoreboard.txt"));
-        } catch (Exception e) {
-            System.out.println("Failed to load scoreboard file.");
-            e.printStackTrace(); 
-            return;
+        scanner = new Scanner(ScoreboardController.getInstance().getScoreFile());
+         } catch (Exception e) {
+        System.out.println("wtf");
         }
         int yPosition = 280;
-        while (scanner.hasNext()) {
-            String name = scanner.next();
-            String score = scanner.next();
-            ScoreboardController.getInstance().addScore(name, Integer.parseInt(score));
+        while (scanner.hasNext()) { 
+        String name = scanner.next(); 
+        if (scanner.hasNextInt()) { 
+            int score = scanner.nextInt(); // Đọc Score
             String line = name + " - " + score;
             gc.fillText(line, WIDTH / 2 - 40, yPosition);
             yPosition += 50;
+        } else {
+            System.err.println("⚠ Bỏ qua dữ liệu Scoreboard không hợp lệ: " + name);
+            if(scanner.hasNext()){
+                scanner.next(); 
+            }
         }
+    }
         scanner.close();
     }
 }

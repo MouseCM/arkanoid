@@ -51,7 +51,8 @@
                 prefHeight="40"
                 style="-fx-background-image: url('file:assets/iceburg/NormalButton.png');
                        -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;
-                       -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
+                       -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;
+                       -fx-font-family: 'Arcade';"
                 onMouseEntered="#onNewGameHover"
                 onMouseExited="#onNewGameExit"
                 onAction="#onNewGameClicked"/>
@@ -62,6 +63,7 @@
                 prefHeight="40"
                 style="-fx-background-image: url('file:assets/iceburg/NormalButton.png');
                        -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;
+                       -fx-font-family: 'Arcade';
                        -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
                 onMouseEntered="#onContinueHover"
                 onMouseExited="#onContinueExit"
@@ -73,6 +75,7 @@
                 prefHeight="40"
                 style="-fx-background-image: url('file:assets/iceburg/NormalButton.png');
                        -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;
+                       -fx-font-family: 'Arcade';
                        -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
                 onMouseEntered="#onSettingsHover"
                 onMouseExited="#onSettingsExit"
@@ -83,6 +86,7 @@
                 prefHeight="40"
                 style="-fx-background-image: url('file:assets/iceburg/NormalButton.png');
                        -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;
+                       -fx-font-family: 'Arcade';
                        -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
                 onMouseEntered="#onScoreboardHover"
                 onMouseExited="#onScoreboardExit"
@@ -93,6 +97,7 @@
                 prefHeight="40"
                 style="-fx-background-image: url('file:assets/iceburg/NormalButton.png');
                        -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;
+                       -fx-font-family: 'Arcade';
                        -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
                 onMouseEntered="#onExitHover"
                 onMouseExited="#onExitExit"

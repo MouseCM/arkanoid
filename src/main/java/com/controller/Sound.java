@@ -81,7 +81,7 @@ public class Sound {
             backgroundMusic = new Media(getClass().getResource("/sound/background.mp3").toString());
             mediaPlayer = new MediaPlayer(backgroundMusic);
             mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            mediaPlayer.setVolume(0.7);
+            mediaPlayer.setVolume(1.0 * musicVolume * masterVolume);
             mediaPlayer.play();
             paddleSound = new AudioClip(getClass().getResource("/sound/paddle.wav").toString());
             wallSound = new AudioClip(getClass().getResource("/sound/brick.wav").toString());

@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Button;
-
+import javafx.scene.text.Font;
 public class SettingsController{
 
     @FXML private Slider masterVolumeSlider;
@@ -18,6 +18,7 @@ public class SettingsController{
 
     @FXML private Button resetButton;
     @FXML private Button backButton;
+    @FXML private Button setUsernameButton;
     // Giá trị mặc định
     private static final double DEFAULT_MASTER = 70;
     private static final double DEFAULT_MUSIC = 50;
@@ -26,7 +27,6 @@ public class SettingsController{
     private static MenuController instance = new MenuController();
     @FXML
     public void initialize() {
-
         masterVolumeSlider.setValue(Sound.getInstance().getMasterVolume() * 100);
         musicVolumeSlider.setValue(Sound.getInstance().getMusicVolume() * 100);
         sfxVolumeSlider.setValue(Sound.getInstance().getSfxVolume() * 100);
@@ -76,6 +76,12 @@ public class SettingsController{
         ScreenController.loadScreen("/fxml/menu.fxml");
     }
 
+    @FXML
+    private void onSetUsernameClicked(){
+        Sound.getInstance().playClick();
+        ScreenController.loadScreen("/fxml/nameInput.fxml");
+    }
+
     @FXML 
     private void onExitHover() {
         instance.applyHoverEffect(backButton );
@@ -96,4 +102,14 @@ public class SettingsController{
         instance.removeHoverEffect(resetButton);
     }
 
+    @FXML
+    private void onSetUsernameHover(){
+        instance.applyHoverEffect(setUsernameButton);
+    }
+
+    @FXML
+    private void onSetUsernameExit(){
+        instance.removeHoverEffect(setUsernameButton);
+    }
 }
+

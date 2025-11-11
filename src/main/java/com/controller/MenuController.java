@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

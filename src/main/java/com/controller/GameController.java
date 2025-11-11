@@ -79,10 +79,11 @@ public class GameController {
     public GraphicsContext getGc() {
         return gc;
     }
+
     public static int getScore() {
         return getInstance().score;
     }       
-    
+
     @FXML
     public void initialize() {
         gc = gameCanvas.getGraphicsContext2D();
@@ -435,7 +436,9 @@ public class GameController {
     private void nextLevel() {
         curLevels++;
         won = false;
+        int preScore = score;
         hardResetGame();
+        score = preScore;
     }
 
     private void initBricks() {
