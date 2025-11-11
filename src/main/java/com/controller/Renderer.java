@@ -1,6 +1,8 @@
 package com.controller;
 
 import java.util.List;
+import java.util.Scanner;
+import java.io.File;
 
 import com.abstracts.Brick;
 import com.abstracts.GameObject;
@@ -30,10 +32,19 @@ public class Renderer {
     Image leftWall = new Image("file:assets/iceburg/wall.gif");
     Image rightWall = new Image("file:assets/iceburg/rightwall.gif");
 
-    private GraphicsContext gc;
+    private static GraphicsContext gc;
     private int WIDTH;
     private int HEIGHT;
     private int LEFT = 180;
+
+    //private static Renderer instance;
+
+    // public static Renderer getInstance() {
+    //     if (instance == null) {
+    //         instance = new Renderer(gc, 1080, 720);
+    //     }
+    //     return instance;
+    // }
 
     public Renderer(GraphicsContext gc, int width, int height) {
         this.gc = gc;
@@ -219,5 +230,28 @@ public class Renderer {
         if (gameOver || won) {
             renderGameOver(won);
         }
+    }
+    public void renderScoreboard() {
+        clear();
+        gc.setFill(Color.WHITE);
+        gc.setFont(pixelFont25);
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(new File("src/main/resources/layout/Scoreboard.txt"));
+        } catch (Exception e) {
+            System.out.println("Failed to load scoreboard file.");
+            e.printStackTrace(); 
+            return;
+        }
+        int yPosition = 280;
+        while (scanner.hasNext()) {
+            String name = scanner.next();
+            String score = scanner.next();
+            ScoreboardController.getInstance().addScore(name, Integer.parseInt(score));
+            String line = name + " - " + score;
+            gc.fillText(line, WIDTH / 2 - 40, yPosition);
+            yPosition += 50;
+        }
+        scanner.close();
     }
 }

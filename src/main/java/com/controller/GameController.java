@@ -37,6 +37,7 @@ public class GameController {
     private GraphicsContext gc;
     private Renderer renderer;
     private Sound sound;
+    private String playerName = "Player";
     private static final int WIDTH = 720;
     private static final int HEIGHT = 720;
     private static int curLevels = 1;
@@ -51,7 +52,6 @@ public class GameController {
     private AnimationTimer gameLoop;
     private int score = 0;
     private static int lives = 3;
-
     private  List<Ball> balls;
     private Paddle paddle;
     private List<Brick> bricks;
@@ -61,18 +61,31 @@ public class GameController {
     private List<BallParticle> ballParticles;
     private List<Bullet> bullets;
 
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
     public static GameController getInstance() {
         if (instance == null) {
             instance = new GameController();
         }
-
         return instance;
     }
 
+    public GraphicsContext getGc() {
+        return gc;
+    }
+    public static int getScore() {
+        return getInstance().score;
+    }       
+    
     @FXML
     public void initialize() {
         gc = gameCanvas.getGraphicsContext2D();
-
         renderer = new Renderer(gc, WIDTH, HEIGHT);
         sound = Sound.getInstance();
 

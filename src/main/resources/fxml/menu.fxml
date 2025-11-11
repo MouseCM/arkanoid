@@ -8,6 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.canvas.Canvas?>
 
 <StackPane xmlns="http://javafx.com/javafx/17" 
            xmlns:fx="http://javafx.com/fxml/1" 
@@ -18,6 +19,7 @@
                   -fx-background-image: url('file:assets/iceburg/MenuBackground2.gif');
                   -fx-background-position: top center;
                   -fx-background-size: auto;">
+       <Canvas fx:id="menuCanvas" width="1080" height="720"/>
 
        <!-- Left wall -->
     <Pane prefWidth="200" prefHeight="720"
@@ -75,7 +77,17 @@
                 onMouseEntered="#onSettingsHover"
                 onMouseExited="#onSettingsExit"
                 onAction="#onSettingsClicked"/>
-        <Button fx:id="exitButton" 
+        <Button fx:id="scoreBoardButton" 
+                text="SCOREBOARD" 
+                prefWidth="300" 
+                prefHeight="40"
+                style="-fx-background-image: url('file:assets/iceburg/NormalButton.png');
+                       -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
+                onMouseEntered="#onScoreboardHover"
+                onMouseExited="#onScoreboardExit"
+                onAction="#onScoreboardClicked"/>
+       <Button fx:id="exitButton" 
                 text="EXIT" 
                 prefWidth="300" 
                 prefHeight="40"
