@@ -4,9 +4,11 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+
 import javafx.application.Platform;
 import javafx.scene.media.AudioClip;
-
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class Sound {
     private static Sound instance;
@@ -17,6 +19,7 @@ public class Sound {
     // Menu sound
     private AudioClip clickSound;
 
+    private volatile boolean gameSoundsLoaded = false;
 
     // Game sound
     private AudioClip paddleSound;
@@ -25,8 +28,21 @@ public class Sound {
     private AudioClip gameOverSound;
     private AudioClip gameWonSound;
     private AudioClip deathSound;
+    private Media backgroundMusic;
+    private MediaPlayer mediaPlayer;
 
+    private double masterVolume = 70 / 100.0;
+    private double musicVolume = 50 / 100.0;
+    private double sfxVolume = 60 / 100.0;
 
+    public boolean getGameSoundsLoaded() {
+        return gameSoundsLoaded;
+    }
+
+    public void setGameSoundsLoaded(boolean loaded) {
+        this.gameSoundsLoaded = loaded;
+    }
+    
     public static Sound getInstance() {
         if (instance == null) {
             synchronized (Sound.class) {
@@ -62,6 +78,11 @@ public class Sound {
     
     public void loadGameSounds() {
         try {
+            backgroundMusic = new Media(getClass().getResource("/sound/background.mp3").toString());
+            mediaPlayer = new MediaPlayer(backgroundMusic);
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            mediaPlayer.setVolume(0.7);
+            mediaPlayer.play();
             paddleSound = new AudioClip(getClass().getResource("/sound/paddle.wav").toString());
             wallSound = new AudioClip(getClass().getResource("/sound/brick.wav").toString());
             brickSound = new AudioClip(getClass().getResource("/sound/brick.wav").toString());
@@ -72,8 +93,6 @@ public class Sound {
             System.err.println("Failed to load sounds: " + e.getMessage());
         }
     }
-
-    
 
     public void loadMenuSounds() {
         clickSound = new AudioClip(getClass().getResource("/sound/click.wav").toString());
@@ -158,5 +177,58 @@ public class Sound {
             soundThread.interrupt();
         }
     }
+
+    public void ChangeMusicVolume(double volume) {
+        if (mediaPlayer != null) {
+            mediaPlayer.setVolume(volume);
+        }
+    }
+
+    public void ChangeSFXVolume(double volume) {
+        if (paddleSound != null) {
+            paddleSound.setVolume(volume);
+        }
+        if (wallSound != null) {
+            wallSound.setVolume(volume);
+        }
+        if (brickSound != null) {
+            brickSound.setVolume(volume);
+        }
+        if (gameOverSound != null) {
+            gameOverSound.setVolume(volume);
+        }
+        if (gameWonSound != null) {
+            gameWonSound.setVolume(volume);
+        }
+        if (deathSound != null) {
+            deathSound.setVolume(volume);
+        }
+        if (clickSound != null) {
+            clickSound.setVolume(volume);
+        }
+    }
+
+    public double getMasterVolume() {
+        return masterVolume;
+    }
+
+    public double getMusicVolume() {
+        return musicVolume;
+    }
+
+    public double getSfxVolume() {
+        return sfxVolume;
+    }
+
+    public void setMasterVolume(double masterVolume) {
+        this.masterVolume = masterVolume;
+    }
+
+    public void setMusicVolume(double musicVolume) {
+        this.musicVolume = musicVolume;
+    }
+
+    public void setSfxVolume(double sfxVolume) {
+        this.sfxVolume = sfxVolume;
+    }
 }
-    

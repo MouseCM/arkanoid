@@ -26,9 +26,34 @@ public class SettingsController{
     private static MenuController instance = new MenuController();
     @FXML
     public void initialize() {
+
+        masterVolumeSlider.setValue(Sound.getInstance().getMasterVolume() * 100);
+        musicVolumeSlider.setValue(Sound.getInstance().getMusicVolume() * 100);
+        sfxVolumeSlider.setValue(Sound.getInstance().getSfxVolume() * 100);
+
         bindSlider(masterVolumeSlider, masterVolumeLabel);
         bindSlider(musicVolumeSlider, musicVolumeLabel);
         bindSlider(sfxVolumeSlider, sfxVolumeLabel);
+        
+        masterVolumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            Sound.getInstance().setMasterVolume(newVal.doubleValue() / 100.0);
+            Sound.getInstance().ChangeMusicVolume(Sound.getInstance().getMasterVolume() * Sound.getInstance().getMusicVolume());
+            Sound.getInstance().ChangeSFXVolume(Sound.getInstance().getMasterVolume() * Sound.getInstance().getSfxVolume());
+            System.out.println("Master Volume: " + Sound.getInstance().getMasterVolume());
+            System.out.println("Music Volume: " + Sound.getInstance().getMusicVolume());
+            System.out.println("SFX Volume: " + Sound.getInstance().getSfxVolume());
+        });
+
+        musicVolumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            Sound.getInstance().setMusicVolume(newVal.doubleValue() / 100.0);
+            Sound.getInstance().ChangeMusicVolume(Sound.getInstance().getMasterVolume() * Sound.getInstance().getMusicVolume());
+        });
+
+        sfxVolumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            Sound.getInstance().setSfxVolume(newVal.doubleValue() / 100.0);
+            Sound.getInstance().ChangeSFXVolume(Sound.getInstance().getMasterVolume() * Sound.getInstance().getSfxVolume());
+        });
+
     }
 
     private void bindSlider(Slider slider, Label label) {
