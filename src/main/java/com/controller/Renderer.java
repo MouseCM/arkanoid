@@ -39,14 +39,6 @@ public class Renderer {
     private int LEFT = 180;
 
     private List<Pair<String, Integer>> scoreboard;
-    // private static Renderer instance;
-
-    // public static Renderer getInstance() {
-    // if (instance == null) {
-    // instance = new Renderer(gc, 1080, 720);
-    // }
-    // return instance;
-    // }
 
     public Renderer(GraphicsContext gc, int width, int height) {
         this.gc = gc;
@@ -264,7 +256,6 @@ public class Renderer {
             gc.fillText(line, WIDTH / 2 - 40, yPosition);
             yPosition += 50;
         } else {
-            System.err.println("⚠ Bỏ qua dữ liệu Scoreboard không hợp lệ: " + name);
             if(scanner.hasNext()){
                 scanner.next(); 
             }

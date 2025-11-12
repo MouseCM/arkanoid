@@ -19,7 +19,7 @@ public class SettingsController{
     @FXML private Button resetButton;
     @FXML private Button backButton;
     @FXML private Button setUsernameButton;
-    // Giá trị mặc định
+    
     private static final double DEFAULT_MASTER = 70;
     private static final double DEFAULT_MUSIC = 50;
     private static final double DEFAULT_SFX = 60;

@@ -76,26 +76,21 @@ public void addScore(String name, int score) {
         }
     }
 
-    // 2. Thêm điểm mới (nếu tên chưa tồn tại)
     if (!found) {
         leaderBoard.add(new Pair<>(name, score));
     }
 
-    // 3. Sắp xếp lại Leaderboard (điểm cao nhất lên đầu)
     leaderBoard.sort((a, b) -> b.getValue().compareTo(a.getValue()));
 
-    // 4. SỬA LỖI QUAN TRỌNG: Giới hạn danh sách an toàn về 5 phần tử
     if (leaderBoard.size() > 5) {
-        // Tạo một ArrayList mới, lấy 5 phần tử đầu tiên từ danh sách đã sắp xếp
+
         leaderBoard = new ArrayList<>(leaderBoard.subList(0, 5)); 
     }
 
-    // 5. Lưu Leaderboard vào File
+
     try {
-        // Sử dụng try-with-resources để tự động đóng PrintWriter
         try (PrintWriter writer = new PrintWriter(scoreFile)) { 
             for (Pair<String, Integer> entry : leaderBoard) {
-                // Đảm bảo có khoảng trắng
                 writer.println(entry.getKey() + " " + entry.getValue());
             }
         } 
@@ -120,21 +115,17 @@ public void addScore(String name, int score) {
 
   @FXML
 private void onResetClicked() {
-    // 1. Phát âm thanh
+
     Sound.getInstance().playClick();
 
-    // 2. Xóa dữ liệu file Scoreboard.txt (đảm bảo file sạch)
     try (PrintWriter fileWriter = new PrintWriter(scoreFile)) {
-        // Ghi nội dung rỗng để xóa sạch
         fileWriter.write("");
         System.out.println("✅ Đã xóa sạch dữ liệu trong file Scoreboard.");
     } catch (FileNotFoundException e) {
         System.err.println("⚠ Lỗi: Không tìm thấy file Scoreboard để xóa.");
         e.printStackTrace();
     }
-    
-    // 3. Khôi phục LeaderBoard về trạng thái mặc định trong bộ nhớ
-    // Dữ liệu mẫu đã được định dạng đúng (có khoảng trắng)
+
     leaderBoard.clear();
     leaderBoard.add(new Pair<>("Kin", 99999));
     leaderBoard.add(new Pair<>("Esa", 9999));
@@ -142,10 +133,9 @@ private void onResetClicked() {
     leaderBoard.add(new Pair<>("Ala", 99));
     leaderBoard.add(new Pair<>("Din", 9));
 
-    // 4. Ghi lại dữ liệu mặc định đã khôi phục vào file
     try (PrintWriter fileWriter = new PrintWriter(scoreFile)) {
         for (Pair<String, Integer> entry : leaderBoard) {
-            // Ghi với khoảng trắng phân tách để Scanner đọc đúng
+
             fileWriter.println(entry.getKey() + " " + entry.getValue());
         }
         System.out.println("✅ Đã khôi phục LeaderBoard về mặc định và ghi vào file.");
@@ -154,8 +144,6 @@ private void onResetClicked() {
         e.printStackTrace();
     }
 
-    // 5. Yêu cầu Renderer vẽ lại bảng điểm mới
-    // (Giả định renderer.renderScoreboard() sử dụng dữ liệu từ file hoặc từ leaderBoard)
     renderer.renderScoreboard();
 }
 
