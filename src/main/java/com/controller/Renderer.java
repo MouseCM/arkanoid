@@ -2,7 +2,6 @@ package com.controller;
 
 import java.util.List;
 import java.util.Scanner;
-import java.io.File;
 
 import com.abstracts.Brick;
 import com.abstracts.GameObject;
@@ -251,7 +250,7 @@ public class Renderer {
         while (scanner.hasNext()) { 
         String name = scanner.next(); 
         if (scanner.hasNextInt()) { 
-            int score = scanner.nextInt(); // Đọc Score
+            int score = scanner.nextInt(); 
             String line = name + " - " + score;
             gc.fillText(line, WIDTH / 2 - 40, yPosition);
             yPosition += 50;

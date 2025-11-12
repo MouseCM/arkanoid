@@ -117,9 +117,7 @@ public class ScoreboardController {
 
         try (PrintWriter fileWriter = new PrintWriter(scoreFile)) {
             fileWriter.write("");
-            System.out.println("✅ Đã xóa sạch dữ liệu trong file Scoreboard.");
         } catch (FileNotFoundException e) {
-            System.err.println("⚠ Lỗi: Không tìm thấy file Scoreboard để xóa.");
             e.printStackTrace();
         }
         leaderBoard.clear();
@@ -133,9 +131,7 @@ public class ScoreboardController {
             for (Pair<String, Integer> entry : leaderBoard) {
                 fileWriter.println(entry.getKey() + " " + entry.getValue());
             }
-            System.out.println("✅ Đã khôi phục LeaderBoard về mặc định và ghi vào file.");
         } catch (FileNotFoundException e) {
-            System.err.println("⚠ Lỗi khi ghi lại dữ liệu mặc định vào Scoreboard.");
             e.printStackTrace();
         }
 
