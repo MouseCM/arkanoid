@@ -52,7 +52,7 @@ public class GameController {
     private AnimationTimer gameLoop;
     private int score = 0;
     private static int lives = 3;
-    private  List<Ball> balls;
+    private List<Ball> balls;
     private Paddle paddle;
     private List<Brick> bricks;
     private List<PowerUp> powerUps;
@@ -82,7 +82,7 @@ public class GameController {
 
     public static int getScore() {
         return getInstance().score;
-    }       
+    }
 
     @FXML
     public void initialize() {
@@ -131,6 +131,7 @@ public class GameController {
             hardResetGame();
         }
         if (key == KeyCode.Q) {
+            hardResetGame();
             gameLoop.stop();
             ScreenController.getCurrentScene().setCursor(Cursor.DEFAULT);
             ScreenController.loadScreen("/fxml/menu.fxml");
@@ -163,7 +164,6 @@ public class GameController {
         scene.setOnMousePressed(event -> {
 
             gameStarted = true;
-            
 
             if (gameOver == true) {
                 gameLoop.start();
@@ -185,8 +185,6 @@ public class GameController {
         });
     }
 
-
-
     private void startGameLoop() {
         gameLoop = new AnimationTimer() {
             @Override
@@ -198,17 +196,16 @@ public class GameController {
         gameLoop.start();
     }
 
-
-
     private void update(Scene scene) {
         if (gameOver || won) {
             return;
         }
 
         if (curLevels >= finalLevels) {
-            gameLoop.stop();
             ScreenController.getCurrentScene().setCursor(Cursor.DEFAULT);
-            ScreenController.loadScreen("/fxml/win.fxml");
+            Sound.getInstance().playClick();
+            ScreenController.loadScreen("/fxml/scoreboard.fxml");
+            gameLoop.stop();
         }
 
         // handle mouse events
@@ -217,7 +214,6 @@ public class GameController {
         // handle paddle movement with mouse and keyboard
         paddle.update(scene, WIDTH, aPressed, dPressed);
 
-        
         // ball follow paddle
         if (!gameStarted) {
             for (Ball ball : balls) {
@@ -234,14 +230,12 @@ public class GameController {
             return;
         }
 
-
         // handle ball event
         for (int i = balls.size() - 1; i >= 0; i--) {
             Ball ball = balls.get(i);
 
             // bounce wall
             ball.bounceWall(WIDTH, ballParticles);
-
 
             if (ball.isDeath(HEIGHT)) {
                 balls.remove(i);
@@ -274,7 +268,7 @@ public class GameController {
                 if (!brick.isDestroyed() && ball.willCollision(brick)) {
 
                     sound.playBrickHit();
-                    ball.bounceBrick(brick,ballParticles);
+                    ball.bounceBrick(brick, ballParticles);
 
                     if (brick instanceof ExplosionBrick) {
                         // explode nearby bricks
@@ -297,7 +291,6 @@ public class GameController {
                 }
             }
 
-
         }
 
         // update ball
@@ -305,10 +298,7 @@ public class GameController {
             ball.update();
         }
 
-        
-
-
-        for (int i = powerUps.size()-1; i >= 0; i--) {
+        for (int i = powerUps.size() - 1; i >= 0; i--) {
             if (powerUps.get(i).isCollision(paddle)) {
                 powerUps.get(i).active(lives, balls, effect, paddle);
             }
@@ -320,22 +310,18 @@ public class GameController {
             }
         }
 
-        
-
         effect.deActive(balls, paddle, bullets);
-        
 
         // handle bullet
-        for (int i = bullets.size()-1; i >= 0; i--) {
-            for (int j = bricks.size()-1; j >= 0; j--) {
+        for (int i = bullets.size() - 1; i >= 0; i--) {
+            for (int j = bricks.size() - 1; j >= 0; j--) {
                 Brick brick = bricks.get(j);
                 if (bullets.get(i).willCollision(brick)) {
                     if (brick instanceof ExplosionBrick) {
                         // explode nearby bricks
                         brick.takeHit(bricks);
                         score += brick.getScoreValue();
-                    }
-                    else {
+                    } else {
                         brick.takeHit();
                     }
 
@@ -358,7 +344,7 @@ public class GameController {
             }
         }
 
-        for (int i = ballParticles.size()-1; i >= 0; i--){
+        for (int i = ballParticles.size() - 1; i >= 0; i--) {
             ballParticles.get(i).update();
 
             if (ballParticles.get(i).getOpacity() <= 0) {
@@ -366,15 +352,13 @@ public class GameController {
             }
         }
 
-
-        for (int i = brickParticles.size()-1; i >= 0; i--){
+        for (int i = brickParticles.size() - 1; i >= 0; i--) {
             brickParticles.get(i).update();
 
             if (brickParticles.get(i).getOpacity() <= 0) {
                 brickParticles.remove(i);
             }
         }
-
 
         // check win
         boolean pass = true;
@@ -390,21 +374,19 @@ public class GameController {
             won = true;
             sound.playGameWon();
 
-            try(FileWriter writer = new FileWriter("src/main/resources/layout/level.txt")) {
-                writer.write(Integer.toString(curLevels+1));
-            }
-            catch(IOException e) {
+            try (FileWriter writer = new FileWriter("src/main/resources/layout/level.txt")) {
+                writer.write(Integer.toString(curLevels + 1));
+            } catch (IOException e) {
                 System.err.println("cant found file");
-            }    
+            }
         }
     }
 
-
     private void render() {
-        renderer.renderGame(balls, paddle, bricks, 
-                            powerUps, effect, gameOver, gameStarted, 
-                            gameLoop, won, score, lives, brickParticles, 
-                            ballParticles, bullets, curLevels);
+        renderer.renderGame(balls, paddle, bricks,
+                powerUps, effect, gameOver, gameStarted,
+                gameLoop, won, score, lives, brickParticles,
+                ballParticles, bullets, curLevels);
     }
 
     private void resetGame() {

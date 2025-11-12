@@ -19,14 +19,13 @@ import javafx.util.Duration;
 import javafx.util.Pair;
 
 public class ScoreboardController {
-
     @FXML
     private Canvas scoreboardCanvas;
 
     @FXML
     private VBox scoreList;
 
-    private  File scoreFile = new File("assets/Scoreboard.txt");
+    private File scoreFile = new File("assets/Scoreboard.txt");
 
     private GraphicsContext gc;
 
@@ -51,7 +50,7 @@ public class ScoreboardController {
 
     public List<Pair<String, Integer>> getLeaderBoard() {
         if (leaderBoard.size() == 5)
-        return leaderBoard;
+            return leaderBoard;
         else {
             addScore("Kin", 99999);
             addScore("Esa", 9999);
@@ -62,44 +61,41 @@ public class ScoreboardController {
         return leaderBoard;
     }
 
-public void addScore(String name, int score) {
-    found = false;
+    public void addScore(String name, int score) {
+        found = false;
 
-
-    for (int i = 0; i < leaderBoard.size(); i++) {
-        Pair<String, Integer> entry = leaderBoard.get(i);
-        if (entry.getKey().equals(name)) {
-            found = true;
-            if (score > entry.getValue()) {
-                leaderBoard.set(i, new Pair<>(name, score));
+        for (int i = 0; i < leaderBoard.size(); i++) {
+            Pair<String, Integer> entry = leaderBoard.get(i);
+            if (entry.getKey().equals(name)) {
+                found = true;
+                if (score > entry.getValue()) {
+                    leaderBoard.set(i, new Pair<>(name, score));
+                }
+                break;
             }
-            break; 
+        }
+
+        if (!found) {
+            leaderBoard.add(new Pair<>(name, score));
+        }
+
+        leaderBoard.sort((a, b) -> b.getValue().compareTo(a.getValue()));
+
+        if (leaderBoard.size() > 5) {
+
+            leaderBoard = new ArrayList<>(leaderBoard.subList(0, 5));
+        }
+
+        try {
+            try (PrintWriter writer = new PrintWriter(scoreFile)) {
+                for (Pair<String, Integer> entry : leaderBoard) {
+                    writer.println(entry.getKey() + " " + entry.getValue());
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
-
-
-    if (!found) {
-        leaderBoard.add(new Pair<>(name, score));
-    }
-
-
-    leaderBoard.sort((a, b) -> b.getValue().compareTo(a.getValue()));
-
-
-    if (leaderBoard.size() > 5) {
-        leaderBoard = new ArrayList<>(leaderBoard.subList(0, 5)); 
-    }
-
-    try {
-        try (PrintWriter writer = new PrintWriter(scoreFile)) { 
-            for (Pair<String, Integer> entry : leaderBoard) {
-                writer.println(entry.getKey() + " " + entry.getValue());
-            }
-        } 
-    } catch (FileNotFoundException e) {
-        e.printStackTrace();
-    }
-}
 
     @FXML
     private Button backButton;
@@ -115,37 +111,36 @@ public void addScore(String name, int score) {
         renderer.renderScoreboard();
     }
 
-  @FXML
-private void onResetClicked() {
-    Sound.getInstance().playClick();
+    @FXML
+    private void onResetClicked() {
+        Sound.getInstance().playClick();
 
-    try (PrintWriter fileWriter = new PrintWriter(scoreFile)) {
-        fileWriter.write("");
-        System.out.println("✅ Đã xóa sạch dữ liệu trong file Scoreboard.");
-    } catch (FileNotFoundException e) {
-        System.err.println("⚠ Lỗi: Không tìm thấy file Scoreboard để xóa.");
-        e.printStackTrace();
-    }
-    
-    leaderBoard.clear();
-    leaderBoard.add(new Pair<>("Kin", 99999));
-    leaderBoard.add(new Pair<>("Esa", 9999));
-    leaderBoard.add(new Pair<>("Mouse", 999));
-    leaderBoard.add(new Pair<>("Ala", 99));
-    leaderBoard.add(new Pair<>("Din", 9));
-
-    try (PrintWriter fileWriter = new PrintWriter(scoreFile)) {
-        for (Pair<String, Integer> entry : leaderBoard) {
-            fileWriter.println(entry.getKey() + " " + entry.getValue());
+        try (PrintWriter fileWriter = new PrintWriter(scoreFile)) {
+            fileWriter.write("");
+            System.out.println("✅ Đã xóa sạch dữ liệu trong file Scoreboard.");
+        } catch (FileNotFoundException e) {
+            System.err.println("⚠ Lỗi: Không tìm thấy file Scoreboard để xóa.");
+            e.printStackTrace();
         }
-        System.out.println("✅ Đã khôi phục LeaderBoard về mặc định và ghi vào file.");
-    } catch (FileNotFoundException e) {
-        System.err.println("⚠ Lỗi khi ghi lại dữ liệu mặc định vào Scoreboard.");
-        e.printStackTrace();
-    }
+        leaderBoard.clear();
+        leaderBoard.add(new Pair<>("Kin", 99999));
+        leaderBoard.add(new Pair<>("Esa", 9999));
+        leaderBoard.add(new Pair<>("Mouse", 999));
+        leaderBoard.add(new Pair<>("Ala", 99));
+        leaderBoard.add(new Pair<>("Din", 9));
 
-    renderer.renderScoreboard();
-}
+        try (PrintWriter fileWriter = new PrintWriter(scoreFile)) {
+            for (Pair<String, Integer> entry : leaderBoard) {
+                fileWriter.println(entry.getKey() + " " + entry.getValue());
+            }
+            System.out.println("✅ Đã khôi phục LeaderBoard về mặc định và ghi vào file.");
+        } catch (FileNotFoundException e) {
+            System.err.println("⚠ Lỗi khi ghi lại dữ liệu mặc định vào Scoreboard.");
+            e.printStackTrace();
+        }
+
+        renderer.renderScoreboard();
+    }
 
     @FXML
     private void onBackClicked() {
