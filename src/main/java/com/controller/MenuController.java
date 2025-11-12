@@ -8,11 +8,19 @@ import java.util.Scanner;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 
 public class MenuController {
+
+    @FXML
+    private Canvas menuCanvas;
+
     @FXML
     private Button newGameButton;
     
@@ -20,17 +28,58 @@ public class MenuController {
     private Button continueButton;
     
     @FXML
-    private Button themeButton;
+    private Button settingsButton;
+    
+    @FXML
+    private Button exitButton;
+
+    @FXML
+    private Button scoreBoardButton;
+
+    private static MenuController instance;
+
+    public static MenuController getInstance() {
+        if (instance == null) {
+            instance = new MenuController();
+        }
+        return instance;
+    }
+    
+    public GraphicsContext getGc() {
+        return menuCanvas.getGraphicsContext2D();
+    }
+
+    // Initialize method
+    @FXML
+    public void initialize() {
+        Sound.getInstance().start();
+        if (!Sound.getInstance().getGameSoundsLoaded()) {
+            Sound.getInstance().loadGameSounds();
+            Sound.getInstance().setGameSoundsLoaded(true);
+        }
+       // Renderer.getInstance().renderUsername();
+    }
     
     // Hover effect for NewGame button
     @FXML
     private void onNewGameHover() {
         applyHoverEffect(newGameButton);
-    }
+        }
     
     @FXML
     private void onNewGameExit() {
         removeHoverEffect(newGameButton);
+    }
+    
+    // Hover effect for Exit button
+    @FXML
+    private void onExitHover() {
+        applyHoverEffect(exitButton);
+    }
+    
+    @FXML
+    private void onExitExit() {
+        removeHoverEffect(exitButton);
     }
     
     // Hover effect for Continue button
@@ -46,17 +95,17 @@ public class MenuController {
     
     // Hover effect for Theme button
     @FXML
-    private void onThemeHover() {
-        applyHoverEffect(themeButton);
+    private void onSettingsHover() {
+        applyHoverEffect(settingsButton);
     }
     
     @FXML
-    private void onThemeExit() {
-        removeHoverEffect(themeButton);
+    private void onSettingsExit() {
+        removeHoverEffect(settingsButton);
     }
     
     // Apply hover animation
-    private void applyHoverEffect(Button button) {
+    public void applyHoverEffect(Button button) {
         // Scale animation
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), button);
         scaleTransition.setToX(1.1);
@@ -76,7 +125,7 @@ public class MenuController {
     }
     
     // Remove hover animation
-    private void removeHoverEffect(Button button) {
+    public void removeHoverEffect(Button button) {
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), button);
         scaleTransition.setToX(1.0);
         scaleTransition.setToY(1.0);
@@ -99,9 +148,12 @@ public class MenuController {
             writer.write("1");
         }
         catch(IOException e) {
-            
+            System.err.println("cant found file");
         }
-        
+        if (GameController.getInstance().getPlayerName().equals("Player")) {
+            ScreenController.loadScreen("/fxml/nameInput.fxml");
+            return;
+        }
         ScreenController.loadScreen("/fxml/game.fxml");
     }
     
@@ -121,8 +173,32 @@ public class MenuController {
     }
     
     @FXML
-    private void onThemeClicked() {
-        
+    private void onSettingsClicked() {
+        Sound.getInstance().playClick();
+        ScreenController.loadScreen("/fxml/settings.fxml");
 
     }
+
+    @FXML
+    private void onExitClicked() {
+        Sound.getInstance().playClick();
+        System.exit(0);
+    }
+
+    @FXML
+    private void onScoreboardClicked() {
+        Sound.getInstance().playClick();
+        ScreenController.loadScreen("/fxml/scoreboard.fxml");
+    }
+
+    @FXML
+    private void onScoreboardHover() {
+        applyHoverEffect(scoreBoardButton);
+    }
+
+    @FXML
+    private void onScoreboardExit() {
+        removeHoverEffect(scoreBoardButton);
+    }
+
 }

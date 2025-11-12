@@ -1,0 +1,41 @@
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.controller.ScoreboardController"
+           prefWidth="1080" prefHeight="720"
+           style="-fx-background-color: linear-gradient(to bottom, #1a1a2e, #16213e);
+                  -fx-background-image: url('file:assets/iceburg/Scoreboard.png');
+                  -fx-background-size: 1080 720;
+                  -fx-background-position: center;">
+
+        <Canvas fx:id="scoreboardCanvas" width="1080" height="720"/>
+    <VBox alignment="BOTTOM_CENTER" spacing="20">
+        <padding>
+            <Insets top="0" right="0" bottom="80" left="0"/>
+        </padding>
+        <HBox alignment="CENTER" spacing="20">
+            <Button fx:id="resetButton" text="RESET"
+                prefWidth="200" prefHeight="50"
+                onAction="#onResetClicked"
+                style="-fx-background-image: url('file:assets/iceburg/NormalButton.png');
+                       -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
+                onMouseEntered="#onResetHover"
+                onMouseExited="#onResetExit"/>
+        <Button fx:id="backButton" text="BACK"
+                prefWidth="200" prefHeight="50"
+                onAction="#onBackClicked"
+                style="-fx-background-image: url('file:assets/iceburg/NormalButton.png');
+                       -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;
+                       -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;"
+                onMouseEntered="#onBackHover"
+                onMouseExited="#onBackExit"/>
+        </HBox>
+    </VBox>
+</StackPane>

@@ -1,6 +1,8 @@
 package com.controller;
 
 import java.util.List;
+import java.util.Scanner;
+import java.io.File;
 
 import com.abstracts.Brick;
 import com.abstracts.GameObject;
@@ -17,6 +19,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.util.Pair;
 
 public class Renderer {
     private Font pixelFont25 = Font.loadFont("file:assets/fonts/Evil.ttf", 25);
@@ -27,13 +30,15 @@ public class Renderer {
     private long lasttime = 0;
 
     Image bg = new Image("file:assets/iceburg/background.png");
-    Image leftWall = new Image("file:assets/iceburg/wall.png");
-    Image rightWall = new Image("file:assets/iceburg/rightwall.png");
+    Image leftWall = new Image("file:assets/iceburg/wall.gif");
+    Image rightWall = new Image("file:assets/iceburg/rightwall.gif");
 
-    private GraphicsContext gc;
+    private static GraphicsContext gc;
     private int WIDTH;
     private int HEIGHT;
     private int LEFT = 180;
+
+    private List<Pair<String, Integer>> scoreboard;
 
     public Renderer(GraphicsContext gc, int width, int height) {
         this.gc = gc;
@@ -50,11 +55,28 @@ public class Renderer {
         return;
     }
 
-    public void renderHUD(int score, int lives) {
+    public void renderHUD(int score, int lives, Effect effect) {
         gc.setFill(Color.WHITE);
         gc.setFont(pixelFont25);
         gc.fillText("Score: " + score, 35, 55);
         gc.fillText("Lives: " + lives, 35, 85);
+        ScoreboardController.getInstance().addScore(GameController.getInstance().getPlayerName(), score);
+        scoreboard = ScoreboardController.getInstance().getLeaderBoard();
+        gc.fillText("Leaderboard:", 35, 145);
+        for (int i = 0; i < scoreboard.size(); i++) {
+            if (scoreboard.get(i).getKey().equals(GameController.getInstance().getPlayerName())) {
+                gc.drawImage(effect.getBoardScorePlayerImg(), 0, 175 + i * 30 - 25, 180, 28);
+                gc.setFill(Color.ORANGERED);
+                gc.fillText((i + 1) + ". " + scoreboard.get(i).getKey() + " - " + scoreboard.get(i).getValue(), 35,
+                        175 + i * 30);
+                gc.setFill(Color.WHITE);
+            } else {
+                gc.drawImage(effect.getBoardScoreImg(), 0, 175 + i * 30 - 25, 180, 28);
+                gc.fillText((i + 1) + ". " + scoreboard.get(i).getKey() + " - " + scoreboard.get(i).getValue(), 35,
+                        175 + i * 30);
+            }
+
+        }
     }
 
     public void renderGameOver(boolean won) {
@@ -122,13 +144,13 @@ public class Renderer {
         }
 
         if (effect.getShootingEffect() > 0) {
-            gc.drawImage(effect.getShootingImg(), WIDTH + LEFT * 2 - 180, high, 180, 28);
+            gc.drawImage(effect.getBoardImg(), WIDTH + LEFT * 2 - 180, high, 180, 28);
             gc.drawImage(effect.getShootingImg(), WIDTH + LEFT * 2 - 150, high, 25, 25);
             gc.fillText(" " + Math.round(effect.getShootingEffect() / 100) / 10.0, WIDTH + LEFT * 2 - 120, high + 25);
             high += 30;
             effect.setShootingEffect(effect.getShootingEffect() - 17);
         }
-        
+
     }
 
     private void FPS() {
@@ -160,7 +182,6 @@ public class Renderer {
 
         clear();
 
-
         renderBackground(bg);
 
         for (int i = 0; i < balls.size(); i++) {
@@ -173,7 +194,7 @@ public class Renderer {
         if (!gameStarted) {
             for (int i = 0; i < balls.size(); i++) {
                 balls.get(i).renderStartLine(gc, 180);
-            }  
+            }
         }
 
         gc.drawImage(leftWall, 0, 0, 200, 720);
@@ -191,24 +212,19 @@ public class Renderer {
             render(bullet);
         }
 
-        
-
         for (BallParticle ballParticle : ballParticles) {
             ballParticle.render(gc, LEFT);
         }
         gc.setGlobalAlpha(1.0);
-
 
         for (BrickParticle brickParticle : particles) {
             brickParticle.render(gc, LEFT);
         }
         gc.setGlobalAlpha(1.0);
 
-        
-
         render(paddle);
 
-        renderHUD(score, lives);
+        renderHUD(score, lives,effect);
 
         renderEffect(effect);
 
@@ -219,5 +235,32 @@ public class Renderer {
         if (gameOver || won) {
             renderGameOver(won);
         }
+    }
+
+    public void renderScoreboard() {
+        clear();
+        gc.setFill(Color.WHITE);
+        gc.setFont(pixelFont25);
+        Scanner scanner = null;
+        try {
+        scanner = new Scanner(ScoreboardController.getInstance().getScoreFile());
+         } catch (Exception e) {
+        System.out.println("wtf");
+        }
+        int yPosition = 280;
+        while (scanner.hasNext()) { 
+        String name = scanner.next(); 
+        if (scanner.hasNextInt()) { 
+            int score = scanner.nextInt(); // Đọc Score
+            String line = name + " - " + score;
+            gc.fillText(line, WIDTH / 2 - 40, yPosition);
+            yPosition += 50;
+        } else {
+            if(scanner.hasNext()){
+                scanner.next(); 
+            }
+        }
+    }
+        scanner.close();
     }
 }

@@ -1,0 +1,5 @@
+Kin 99999
+Esa 9999
+Mouse 999
+Player 310
+Ala 99

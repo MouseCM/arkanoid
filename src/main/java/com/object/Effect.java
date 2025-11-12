@@ -20,6 +20,9 @@ public class Effect {
     private static Image boardImg = new Image("file:assets/powerup/Board.png");
     private static Image bigPaddleImg = new Image("file:assets/powerup/BigPaddle.png");
     private static Image shootingImg = new Image("file:assets/powerup/Shooting.png");
+    private static Image boardScoreImg = new Image("file:assets/powerup/bscore.png");
+    private static Image boardScorePlayerImg = new Image("file:assets/powerup/bscoreplayer.png");
+    
 
     public Effect() {
         fireballEffect = 0;
@@ -144,8 +147,13 @@ public class Effect {
         return boardImg;
     }
 
+    public static Image getBoardScoreImg() {
+        return boardScoreImg;
+    }
 
-
+    public static Image getBoardScorePlayerImg() {
+        return boardScorePlayerImg;
+    }
 
     public static Image getShootingImg() {
         return shootingImg;
