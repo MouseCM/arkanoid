@@ -1,21 +1,16 @@
 package com.object;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class BallTest {
     @Test
     public void testBallMovement() {
-        System.out.println(Math.cos(Math.toRadians(165)));
-        System.out.println(Math.sin(Math.toRadians(165)));
+        Ball ball = new Ball();
+        ball.update();
+        Assert.assertEquals(ball.getX(), 0);
 
-        System.out.println(Math.cos(Math.toRadians(-165)));
-        System.out.println(Math.sin(Math.toRadians(-165)));
-
-        // System.out.println(Math.cos(Math.toRadians(165 + 30)));
-        // System.out.println(Math.sin(Math.toRadians(165 + 30)));
-
-        // System.out.println(Math.cos(Math.toRadians(165 - 30)));
-        // System.out.println(Math.sin(Math.toRadians(165 - 30)));
+        // Paddle paddle = new Paddle(50, 100, 10, 50);
 
     }
 }
