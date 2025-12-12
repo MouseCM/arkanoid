@@ -446,6 +446,8 @@ public class GameController {
                 type = sc.next();
                 type.strip();
 
+                // create brick
+    
                 if (type.equals("normal")) {
                     bricks.add(new NormalBrick(x, y));
                 } else if (type.equals("strong")) {

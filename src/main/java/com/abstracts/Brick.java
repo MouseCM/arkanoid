@@ -81,7 +81,9 @@ public abstract class Brick extends GameObject {
         return false;
     }
 
-    public boolean takeHit(List<Brick> bricks) { return true;}
+    public boolean takeHit(List<Brick> bricks) { 
+        return true;
+    }
 
     public void addPowerUp(List<PowerUp> powerUps, List<BrickParticle> particles) {
         setHasPowerUp(false);

@@ -4,7 +4,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-
 import javafx.application.Platform;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
@@ -98,7 +97,6 @@ public class Sound {
         clickSound = new AudioClip(getClass().getResource("/sound/click.wav").toString());
     }
     
-    // Direct method calls - just queue the task
     public void playPaddleHit() {
         soundTasks.offer(() -> {
             Platform.runLater(() -> {

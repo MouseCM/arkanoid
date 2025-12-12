@@ -1,11 +1,13 @@
 package com.controller;
 
+import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.Slider;
 import javafx.scene.control.Button;
-import javafx.scene.text.Font;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 public class SettingsController{
 
     @FXML private Slider masterVolumeSlider;
@@ -24,7 +26,6 @@ public class SettingsController{
     private static final double DEFAULT_MUSIC = 50;
     private static final double DEFAULT_SFX = 60;
 
-    private static MenuController instance = new MenuController();
     @FXML
     public void initialize() {
         masterVolumeSlider.setValue(Sound.getInstance().getMasterVolume() * 100);
@@ -84,32 +85,65 @@ public class SettingsController{
 
     @FXML 
     private void onExitHover() {
-        instance.applyHoverEffect(backButton );
+        applyHoverEffect(backButton);
     }
 
     @FXML
     private void onExitExit() {
-        instance.removeHoverEffect(backButton);
+        removeHoverEffect(backButton);
     }
 
     @FXML
     private void onResetHover() {
-        instance.applyHoverEffect(resetButton);
+        applyHoverEffect(resetButton);
     }
 
     @FXML
     private void onResetExit() {
-        instance.removeHoverEffect(resetButton);
+        removeHoverEffect(resetButton);
     }
 
     @FXML
     private void onSetUsernameHover(){
-        instance.applyHoverEffect(setUsernameButton);
+        applyHoverEffect(setUsernameButton);
     }
 
     @FXML
     private void onSetUsernameExit(){
-        instance.removeHoverEffect(setUsernameButton);
+        removeHoverEffect(setUsernameButton);
+    }
+
+    public void applyHoverEffect(Button button) {
+        // Scale animation
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), button);
+        scaleTransition.setToX(1.1);
+        scaleTransition.setToY(1.1);
+        
+        // Apply glow effect
+        DropShadow glow = new DropShadow();
+        glow.setColor(Color.rgb(46, 213, 255, 0.8));
+        glow.setRadius(20);
+        glow.setSpread(0.5);
+        button.setEffect(glow);
+        
+        // Change background color
+        button.setStyle("-fx-background-image: url('file:assets/iceburg/ClickButton.png'); -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;");
+        
+        scaleTransition.play();
+    }
+    
+    public void removeHoverEffect(Button button) {
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), button);
+        scaleTransition.setToX(1.0);
+        scaleTransition.setToY(1.0);
+        
+        // Remove effect
+        button.setEffect(null);
+        
+        // Restore original background
+        button.setStyle("-fx-background-image: url('file:assets/iceburg/NormalButton.png'); -fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-cursor: hand;");
+        
+        scaleTransition.play();
     }
 }
 

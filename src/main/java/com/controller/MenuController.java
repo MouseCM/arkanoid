@@ -7,14 +7,12 @@ import java.util.Scanner;
 
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.util.Duration;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 public class MenuController {
 
@@ -64,7 +62,7 @@ public class MenuController {
     @FXML
     private void onNewGameHover() {
         applyHoverEffect(newGameButton);
-        }
+    }
     
     @FXML
     private void onNewGameExit() {
@@ -104,7 +102,6 @@ public class MenuController {
         removeHoverEffect(settingsButton);
     }
     
-    // Apply hover animation
     public void applyHoverEffect(Button button) {
         // Scale animation
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), button);
@@ -124,7 +121,6 @@ public class MenuController {
         scaleTransition.play();
     }
     
-    // Remove hover animation
     public void removeHoverEffect(Button button) {
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(200), button);
         scaleTransition.setToX(1.0);
